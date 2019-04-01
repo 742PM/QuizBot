@@ -19,7 +19,7 @@ namespace QuizWebHookBot.Commands
                         "Приятно познакомиться)" +
                         "У меня тут есть тема, хочешь порешать?", 
                  replyMarkup: new InlineKeyboardMarkup(
-                     InlineKeyboardButton.WithUrl("Complexity", "")
+                     new InlineKeyboardButton[]{"Complexity", "History"}
                  ));
         }
 
