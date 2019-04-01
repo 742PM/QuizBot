@@ -20,7 +20,6 @@ namespace QuizWebHookBot.Services
             _botService = botService;
             _logger = logger;
             commands.Add(new Start());
-            commands.Add(new Echo());
         }
 
         public ICommand RecognizeCommand(Message message)
