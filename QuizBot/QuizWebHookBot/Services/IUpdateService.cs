@@ -5,6 +5,7 @@ namespace QuizWebHookBot.Services
 {
     public interface IUpdateService
     {
-        Task EchoAsync(Update update);
+        ICommand RecognizeCommand(Message message);
+        Task ExecuteCommand(ICommand command, Message message);
     }
 }

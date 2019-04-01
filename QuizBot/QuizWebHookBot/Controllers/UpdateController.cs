@@ -20,24 +20,11 @@ namespace QuizWebHookBot.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]Update update)
         {
-//            await updateService.EchoAsync(update);
-//            return Ok();
             if (update == null) return Ok();
-
-            var commands = Bot.Commands;
             var message = update.Message;
-            var botClient = await Bot.GetBotClientAsync();
-
-            foreach (var command in commands)
-            {
-                if (command.Contains(message))
-                {
-                    await command.Execute(message, botClient);
-                    break;
-                }
-            }
+            var recognizeCommand = updateService.RecognizeCommand(message);
+            await updateService.ExecuteCommand(recognizeCommand, message);
             return Ok();
-            
         }
     }
 }
