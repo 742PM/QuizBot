@@ -6,6 +6,7 @@ namespace QuizBot
     {
         static void Main(string[] args)
         {
+            //EntryPoint
             Console.WriteLine("Hello World!");
         }
     }
