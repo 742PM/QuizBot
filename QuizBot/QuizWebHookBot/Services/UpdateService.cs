@@ -19,6 +19,7 @@ namespace QuizWebHookBot.Services
         {
             _botService = botService;
             _logger = logger;
+            commands = new List<ICommand>();
             commands.Add(new Start());
         }
 
