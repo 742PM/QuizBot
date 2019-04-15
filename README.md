@@ -1,2 +1,37 @@
-# QuizBot
-https://github.com/TelegramBots/Telegram.Bot.Examples/tree/master/Telegram.Bot.Examples.DotNetCoreWebHook
+Погнали. Сейчас Ромуля поведует вам как запускать этот буллщит через ngrok + TunnelBear
+## 1. Установка нужного софта:
+
+* VPN сервис TunnelBear - (Легко юзается, 1гб если сделаете твит)
+* ngrok - тут все просто (делает доступным в интернете ваш логальный стаф)
+
+## 2. после установки ngrok, прописываем команду в консольке
+```
+ngrok http 5001
+```
+И видем вот примерно такую картину:
+![](https://pp.userapi.com/c855736/v855736039/22ca3/phOg7oKfPOc.jpg)
+
+Копируем указанный адрес и делаем setWebhook для тележки на данный адрес
+(копируем ссылку, подставляем на место констант значения и через браузер делаем запрос(тоже с vpn, так как живем в РФ)):
+
+https://api.telegram.org/bot{АПИ_КЛЮЧ_ТЕЛЕГРАМ_БОТА}/setWebhook?url={ТО_ЧТО_СКОПИРОВАЛИ_ИЗ_NGROK}/api/update
+
+Если все успешно, увидите вот такой json-чик:
+
+```
+{"ok":true,"result":true,"description":"Webhook was set"}
+```
+
+## 3. Залетаем в свою любимую IDE и в параметрах запуска прописываем вот такую штуку
+```
+--urls=http://localhost:5001/
+```
+Скриншотик для Rider:
+
+![](https://pp.userapi.com/c855736/v855736039/22c8a/0Gl38uaTIT4.jpg)
+
+## 4. Залетам в tunnelBear, выбираем ШТАТЫ и тыкаем в рубильник:
+
+![](https://pp.userapi.com/c855736/v855736039/22c91/fKLNQBbprMI.jpg)
+
+## 5. Запускаем .NetCore приложение
