@@ -5,17 +5,17 @@ namespace QuizWebHookBot.Database
 {
     public class UserEntity
     {
-        public UserEntity(Guid serviceId, State currentState, string telegramToken)
+        public UserEntity(Guid serviceId, State currentState, int telegramId)
         {
             ServiceId = serviceId;
             CurrentState = currentState;
-            TelegramToken = telegramToken;
+            TelegramId = telegramId;
         }
 
         public Guid ServiceId { get; set; }
 
         public State CurrentState { get; set; }
 
-        public string TelegramToken { get; set; }
+        public int TelegramId { get; set; }
     }
 }

@@ -7,12 +7,9 @@ namespace QuizWebHookBot.StateMachine
 {
     public class State
     {
-        public State(Guid userId)
+        public State()
         {
-            UserId = userId;
         }
 
-        public Guid UserId { get; }
-       
     }
 }

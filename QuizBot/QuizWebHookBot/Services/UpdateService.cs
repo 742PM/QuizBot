@@ -6,7 +6,9 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using QuizWebHookBot.Commands;
+using QuizWebHookBot.Database;
 using QuizWebHookBot.StateMachine;
+using QuizWebHookBot.StateMachine.States;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
@@ -14,43 +16,43 @@ namespace QuizWebHookBot.Services
 {
     public class UpdateService : IUpdateService
     {
-        private readonly IBotService _botService;
-        private readonly ILogger<UpdateService> _logger;
+        private readonly IBotService botService;
+        private readonly IUserRepository userRepository;
+        private readonly ILogger<UpdateService> logger;
         private readonly List<ICommand> commands;
 
-        public UpdateService(IBotService botService, ILogger<UpdateService> logger)
+        public UpdateService(IBotService botService, ILogger<UpdateService> logger, IUserRepository userRepository)
         {
-            _botService = botService;
-            _logger = logger;
+            this.botService = botService;
+            this.logger = logger;
+            this.userRepository = userRepository;
             commands = new List<ICommand>();
             commands.Add(new Welcome());
         }
 
-        public ICommand RecognizeCommand(Message message)
+        public ICommand GetUserState(Message message)
         {
-            foreach (var command in commands)
-            {
-                if (command.Contains(message))
-                {
-                    return command;
-                }
-            }
-            return new Echo();
+            var userId = message.From.Id;
+            //TODO: Get user last state from DB by chatId
+            var userGuid = Guid.NewGuid();
+            var userEntity = userRepository.FindById(userId) 
+                             ?? userRepository.Insert(new UserEntity(userGuid, new GodState(), userId));
+            var parsedMessage = MessageParser.Parse(message, userEntity.CurrentState);
+
+            var (currentState, currentCommand) = userEntity.CurrentState.GetNextState();
+            userEntity.CurrentState = currentState;
+            userRepository.Insert(userEntity);
+            return currentCommand;
         }
 
-        public State GetUserState(Message message)
+        public ICommand RecognizeCommand(Message message)
         {
-            var chatId = message.Chat.Id;
-            //TODO: Get user last state from DB by chatId
-            var userId = Guid.NewGuid();
-            var command = new Welcome();
-            var userState = new WelcomeState(userId, command, message, _botService.Client);
-            return userState;
+            throw new NotImplementedException();
         }
-        
+
         public async Task ExecuteCommand(ICommand command, Message message)
         {
-            await command.Execute(message, _botService.Client);
+            await command.Execute(message, botService.Client);
         }
        
     }
