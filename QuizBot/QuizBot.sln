@@ -3,9 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28721.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizBot", "QuizBot\QuizBot.csproj", "{6D9A5C36-E8FB-448E-8CED-A0BAD8970F53}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizWebHookBot", "QuizWebHookBot\QuizWebHookBot.csproj", "{E819B9CE-9484-400A-BF74-AEFE98DB31D0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizWebHookBot", "QuizWebHookBot\QuizWebHookBot.csproj", "{E819B9CE-9484-400A-BF74-AEFE98DB31D0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,10 +11,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{6D9A5C36-E8FB-448E-8CED-A0BAD8970F53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6D9A5C36-E8FB-448E-8CED-A0BAD8970F53}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6D9A5C36-E8FB-448E-8CED-A0BAD8970F53}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6D9A5C36-E8FB-448E-8CED-A0BAD8970F53}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E819B9CE-9484-400A-BF74-AEFE98DB31D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E819B9CE-9484-400A-BF74-AEFE98DB31D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E819B9CE-9484-400A-BF74-AEFE98DB31D0}.Release|Any CPU.ActiveCfg = Release|Any CPU

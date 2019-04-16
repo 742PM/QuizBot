@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QuizWebHookBot.Services;
+using QuizWebHookBot.StateMachine;
 using Telegram.Bot.Types;
 
 namespace QuizWebHookBot.Controllers
@@ -20,6 +21,9 @@ namespace QuizWebHookBot.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]Update update)
         {
+            State state = default;
+            var nextState = state.GetNextState();
+            //блаблабла чета сделать с новым состоянием
             await updateService.EchoAsync(update);
             return Ok();
         }
