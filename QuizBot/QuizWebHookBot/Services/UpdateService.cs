@@ -1,7 +1,9 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using QuizWebHookBot.Commands;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
@@ -11,44 +13,32 @@ namespace QuizWebHookBot.Services
     {
         private readonly IBotService _botService;
         private readonly ILogger<UpdateService> _logger;
+        private readonly List<ICommand> commands;
 
         public UpdateService(IBotService botService, ILogger<UpdateService> logger)
         {
             _botService = botService;
             _logger = logger;
+            commands = new List<ICommand>();
+            commands.Add(new Start());
         }
 
-        public async Task EchoAsync(Update update)
+        public ICommand RecognizeCommand(Message message)
         {
-            if (update.Type != UpdateType.Message)
+            foreach (var command in commands)
             {
-                return;
-            }
-
-            var message = update.Message;
-
-            _logger.LogInformation("Received Message from {0}", message.Chat.Id);
-
-            if (message.Type == MessageType.Text)
-            {
-                // Echo each Message
-                await _botService.Client.SendTextMessageAsync(message.Chat.Id, message.Text);
-            }
-            else if (message.Type == MessageType.Photo)
-            {
-                // Download Photo
-                var fileId = message.Photo.LastOrDefault()?.FileId;
-                var file = await _botService.Client.GetFileAsync(fileId);
-
-                var filename = file.FileId + "." + file.FilePath.Split('.').Last();
-
-                using (var saveImageStream = System.IO.File.Open(filename, FileMode.Create))
+                if (command.Contains(message))
                 {
-                    await _botService.Client.DownloadFileAsync(file.FilePath, saveImageStream);
+                    return command;
                 }
-
-                await _botService.Client.SendTextMessageAsync(message.Chat.Id, "Thx for the Pics");
             }
+            return new Echo();
         }
+
+        public async Task ExecuteCommand(ICommand command, Message message)
+        {
+            await command.Execute(message, _botService.Client);
+        }
+       
     }
 }

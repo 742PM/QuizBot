@@ -21,6 +21,10 @@ namespace QuizWebHookBot.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]Update update)
         {
+            if (update == null) return Ok();
+            var message = update.Message;
+            var recognizeCommand = updateService.RecognizeCommand(message);
+            await updateService.ExecuteCommand(recognizeCommand, message);
             State state = default;
             var nextState = state.GetNextState();
             //блаблабла чета сделать с новым состоянием
