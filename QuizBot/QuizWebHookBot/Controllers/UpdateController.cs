@@ -28,7 +28,6 @@ namespace QuizWebHookBot.Controllers
             State state = default;
             var nextState = state.GetNextState();
             //блаблабла чета сделать с новым состоянием
-            await updateService.EchoAsync(update);
             return Ok();
         }
     }
