@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using QuizWebHookBot.Commands;
+using QuizWebHookBot.StateMachine;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
@@ -20,7 +23,7 @@ namespace QuizWebHookBot.Services
             _botService = botService;
             _logger = logger;
             commands = new List<ICommand>();
-            commands.Add(new Start());
+            commands.Add(new Welcome());
         }
 
         public ICommand RecognizeCommand(Message message)
@@ -35,6 +38,16 @@ namespace QuizWebHookBot.Services
             return new Echo();
         }
 
+        public State GetUserState(Message message)
+        {
+            var chatId = message.Chat.Id;
+            //TODO: Get user last state from DB by chatId
+            var userId = Guid.NewGuid();
+            var command = new Welcome();
+            var userState = new WelcomeState(userId, command, message, _botService.Client);
+            return userState;
+        }
+        
         public async Task ExecuteCommand(ICommand command, Message message)
         {
             await command.Execute(message, _botService.Client);

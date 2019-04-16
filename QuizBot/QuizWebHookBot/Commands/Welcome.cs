@@ -9,7 +9,7 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace QuizWebHookBot.Commands
 {
-    public class Start : ICommand
+    public class Welcome : ICommand
     {
         public string Command => @"/start";
 

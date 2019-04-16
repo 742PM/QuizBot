@@ -23,6 +23,7 @@ namespace QuizWebHookBot.Controllers
         {
             if (update == null) return Ok();
             var message = update.Message;
+            var currentUserState = updateService.GetUserState(message);
             var recognizeCommand = updateService.RecognizeCommand(message);
             await updateService.ExecuteCommand(recognizeCommand, message);
             State state = default;

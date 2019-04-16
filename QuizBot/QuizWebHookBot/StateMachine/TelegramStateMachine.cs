@@ -9,7 +9,7 @@ namespace QuizWebHookBot.StateMachine
             switch (currentState)                 //c C# 8.0 будет более красиво
             {
                 case WelcomeState welcome:
-                    return ProcessWelcomeState(welcome);// я хз какое следующее состояние
+                    return welcome.ProcessState();// я хз какое следующее состояние
                         // ... много других состояний, каждое обработать по такой же схеме
                 default:
                     throw new ArgumentException("Как-то обработать неизвестное состояние");
@@ -17,9 +17,5 @@ namespace QuizWebHookBot.StateMachine
         }
 
 
-        private static State ProcessWelcomeState(WelcomeState welcomeState)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
