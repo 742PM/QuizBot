@@ -1,13 +1,15 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using QuizWebHookBot.QuizBackendRequests;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace QuizWebHookBot.Commands
 {
-    public class Welcome
+    public class Welcome : ICommand
     {
         public async Task Execute(Message message, TelegramBotClient client)
         {
@@ -19,13 +21,10 @@ namespace QuizWebHookBot.Commands
                               "Приятно познакомиться)" +
                               "В наличие вот такое добро, хочешь порешать?";
             await client.SendTextMessageAsync(chatId, messageText,
-                                              replyMarkup: new InlineKeyboardMarkup(topics.Select(x => x.Name)
-                                                                                          .Select(x =>
-                                                                                                      new
-                                                                                                          InlineKeyboardButton
-                                                                                                          {
-                                                                                                              Text = x
-                                                                                                          })));
+                replyMarkup: new InlineKeyboardMarkup(
+                    topics
+                    .Select(x => x.Name)
+                    .Select(x => new InlineKeyboardButton {Text = x})
+                ));
         }
     }
-}
