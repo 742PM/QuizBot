@@ -1,7 +1,7 @@
-﻿using QuizWebHookBot.StateMachine;
+﻿using QuizBotCore.States;
 using Telegram.Bot.Types;
 
-namespace QuizWebHookBot.Services
+namespace QuizBotCore
 {
     public interface IMessageParser
     {

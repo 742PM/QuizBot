@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace QuizWebHookBot.Database
+namespace QuizBotCore.Database
 {
     public interface IUserRepository
     {

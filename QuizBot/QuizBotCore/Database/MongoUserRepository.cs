@@ -1,7 +1,7 @@
 ﻿using System;
 using MongoDB.Driver;
 
-namespace QuizWebHookBot.Database
+namespace QuizBotCore.Database
 {
     internal class MongoUserRepository : IUserRepository
     {

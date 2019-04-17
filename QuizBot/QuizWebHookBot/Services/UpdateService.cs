@@ -1,8 +1,9 @@
 ﻿using System;
 using Microsoft.Extensions.Logging;
-using QuizWebHookBot.Database;
-using QuizWebHookBot.StateMachine;
-using QuizWebHookBot.StateMachine.States;
+using QuizBotCore;
+using QuizBotCore.Commands;
+using QuizBotCore.Database;
+using QuizBotCore.States;
 using Telegram.Bot.Types;
 
 namespace QuizWebHookBot.Services

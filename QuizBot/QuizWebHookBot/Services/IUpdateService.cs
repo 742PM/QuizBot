@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using QuizWebHookBot.StateMachine;
+﻿using QuizBotCore.Commands;
 using Telegram.Bot.Types;
 
 namespace QuizWebHookBot.Services

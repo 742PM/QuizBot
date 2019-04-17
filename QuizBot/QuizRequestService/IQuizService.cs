@@ -1,4 +1,4 @@
-﻿namespace QuizWebHookBot.Services
+﻿namespace QuizRequestService
 {
     public interface IQuizService
     {

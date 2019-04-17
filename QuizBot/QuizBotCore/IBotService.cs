@@ -1,6 +1,6 @@
 ﻿using Telegram.Bot;
 
-namespace QuizWebHookBot.Services
+namespace QuizBotCore
 {
     public interface IBotService
     {

@@ -1,7 +1,7 @@
 ﻿using System;
-using QuizWebHookBot.StateMachine;
+using QuizBotCore.States;
 
-namespace QuizWebHookBot.Database
+namespace QuizBotCore.Database
 {
     public class UserEntity
     {
