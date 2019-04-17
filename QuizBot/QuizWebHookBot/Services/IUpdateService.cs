@@ -6,8 +6,6 @@ namespace QuizWebHookBot.Services
 {
     public interface IUpdateService
     {
-        ICommand GetUserState(Message message);
-        ICommand RecognizeCommand(Message message);
-        Task ExecuteCommand(ICommand command, Message message);
+        ICommand ProcessMessage(Message message);
     }
 }

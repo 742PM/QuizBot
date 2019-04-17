@@ -3,10 +3,9 @@ using Telegram.Bot.Types;
 
 namespace QuizWebHookBot.Services
 {
-    public static class MessageParser
+    public class MessageParser : IMessageParser
     {
-        public static void Parse(Message message, State currentState)
-        {
-        }
+        /// <inheritdoc />
+        public Transition Parse(State currentState, Message message) => throw new System.NotImplementedException();
     }
 }

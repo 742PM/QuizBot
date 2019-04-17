@@ -1,8 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using QuizWebHookBot.Services;
-using QuizWebHookBot.StateMachine;
 using Telegram.Bot.Types;
 
 namespace QuizWebHookBot.Controllers
@@ -10,22 +8,23 @@ namespace QuizWebHookBot.Controllers
     [Route("api/[controller]")]
     public class UpdateController : Controller
     {
+        private readonly IBotService botService;
         private readonly IUpdateService updateService;
 
-        public UpdateController(IUpdateService updateService)
+        public UpdateController(IUpdateService updateService, IBotService botService)
         {
             this.updateService = updateService;
+            this.botService = botService;
         }
 
         // POST api/update
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]Update update)
+        public async Task<IActionResult> Post([FromBody] Update update)
         {
             if (update == null) return Ok();
             var message = update.Message;
-            var userCommand = updateService.GetUserState(message);
-//            var recognizeCommand = updateService.RecognizeCommand(message);
-            await updateService.ExecuteCommand(userCommand, message);
+            var userCommand = updateService.ProcessMessage(message);
+            await userCommand.ExecuteAsync(message.Chat, botService);
             return Ok();
         }
     }

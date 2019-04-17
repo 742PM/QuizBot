@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using QuizWebHookBot.Services;
+using QuizWebHookBot.StateMachine;
 
 namespace QuizWebHookBot
 {
@@ -30,6 +31,9 @@ namespace QuizWebHookBot
 
             services.AddScoped<IUpdateService, UpdateService>();
             services.AddSingleton<IBotService, BotService>();
+            services.AddScoped<IQuizService, QuizService>();
+            services.AddScoped<IStateMachine<ICommand>, TelegramStateMachine>();
+            services.AddScoped<IMessageParser, MessageParser>();
 
             services.Configure<BotConfiguration>(Configuration.GetSection("BotConfiguration"));
         }

@@ -1,36 +1,26 @@
 ﻿using System;
 using System.Diagnostics;
 using QuizWebHookBot.Commands;
+using QuizWebHookBot.Database;
+using QuizWebHookBot.Services;
 using QuizWebHookBot.StateMachine.States;
 
 namespace QuizWebHookBot.StateMachine
 {
-    public static class TelegramStateMachine        //пока сделал такой класс, возможно будет лучше делать для каждого юзера вообще отдельную стейт-машину и не хранить ИД
+    public class TelegramStateMachine : IStateMachine<ICommand>
     {
-        public static (State, ICommand) GetNextState(this State currentState)    //едиственный доступный снаружи метод
-        {
-            switch (currentState)                 //c C# 8.0 будет более красиво
-            {
-                case GodState state:
-                    return ProcessGodState(state);
-                case WelcomeState state:
-                    return ProcessWelcomeState(state);
-                case AboutState state:
-                    return ProcessAboutState(state);
-                case AdminState state:
-                    return ProcessAdminState(state);
-                case TopicSelectionState state:
-                    return ProcessTopicSelectionState(state);
-                case LevelSelectionState state:
-                    return ProcessLevelSelectionState(state);
-                case TaskState state:
-                    return ProcessTaskState(state);
-                default:
-                    return ProcessUnrecognizedState();
-            }
-        }
+        private readonly IQuizService service;
+        private readonly IUserRepository userRepository;
 
-        private static (State, ICommand) ProcessGodState(GodState state)
+        public TelegramStateMachine(IQuizService service, IUserRepository userRepository)
+        {
+            this.service = service;
+            this.userRepository = userRepository;
+        }
+        public (State state, ICommand command) GetNextState<TState, TTransition>(TState currentState, TTransition transition) where TState : State where TTransition : Transition => throw new NotImplementedException();
+
+
+        private static (State, ICommand) ProcessGodState(UnknownState state)
         {
             return (new WelcomeState(), new Welcome());
         }
@@ -70,8 +60,6 @@ namespace QuizWebHookBot.StateMachine
             var command = new Welcome();
             return (state, command);
         }
-        
-        
 
     }
 }

@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using QuizWebHookBot.Services;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
@@ -6,6 +7,6 @@ namespace QuizWebHookBot
 {
     public interface ICommand
     {
-        Task Execute(Message message, TelegramBotClient client);
+        Task ExecuteAsync(Chat message, IBotService client);
     }
 }
