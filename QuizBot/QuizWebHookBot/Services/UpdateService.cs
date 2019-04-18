@@ -31,7 +31,7 @@ namespace QuizWebHookBot.Services
         {
             var userId = message.From.Id;
             var userEntity = userRepository.FindById(userId) ??
-                             userRepository.Insert(new UserEntity(Guid.NewGuid(), new UnknownState(), userId));
+                             userRepository.Insert(new UserEntity(Guid.NewGuid(), new UnknownUserState(), userId));
 
             var state = userEntity.CurrentState;
 

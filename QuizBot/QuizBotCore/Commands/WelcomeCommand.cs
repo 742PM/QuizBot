@@ -6,7 +6,7 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace QuizBotCore.Commands
 {
-    public class Welcome : ICommand
+    public class WelcomeCommand : ICommand
     {
         public async Task Execute(Message message, TelegramBotClient client)
         {
@@ -26,9 +26,9 @@ namespace QuizBotCore.Commands
         }
 
         /// <inheritdoc />
-        public Task ExecuteAsync(Chat chat, IBotService client, IQuizService quizService) => throw new System.NotImplementedException();
+        public Task ExecuteAsync(Chat chat, TelegramBotClient client, IQuizService quizService) => throw new System.NotImplementedException();
 
         /// <inheritdoc />
-        public Task ExecuteAsync(Message message, IBotService client, IQuizService quizService) => throw new System.NotImplementedException();
+        public Task ExecuteAsync(Message message, TelegramBotClient client, IQuizService quizService) => throw new System.NotImplementedException();
     }
 }

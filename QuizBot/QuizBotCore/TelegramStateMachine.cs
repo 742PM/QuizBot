@@ -19,10 +19,22 @@ namespace QuizBotCore
 
         public (State state, ICommand command) GetNextState<TState, TTransition>(
             TState currentState,
-            TTransition transition) where TState : State where TTransition : Transition =>
-            throw new NotImplementedException();
+            TTransition transition) where TState : State where TTransition : Transition
+        {
+            switch ((state: currentState, transition: transition))
+            {
+                case var t when t.transition is InvalidTransition:
+                    return (currentState, new InvalidActionCommand("You got the wrong door buddy!"));
+                case var t when t.state is UnknownUserState:
+                    return (new WelcomeState(), new WelcomeCommand());
+                case var t when t.transition is BackTransition && t.state is WelcomeState:
+                    return (currentState, new InvalidActionCommand("The leatherman club is two blocks below"));
+            }
 
-        private static (State, ICommand) ProcessGodState(UnknownState state) => (new WelcomeState(), new Welcome());
+            return default;
+        }
+
+        private static (State, ICommand) ProcessGodState(UnknownUserState state) => (new WelcomeState(), new WelcomeCommand());
 
         private static (State, ICommand) ProcessUnrecognizedState() => throw new NotImplementedException();
 
@@ -40,7 +52,7 @@ namespace QuizBotCore
 
         private static (State, ICommand) ProcessWelcomeState(WelcomeState state)
         {
-            var command = new Welcome();
+            var command = new WelcomeCommand();
             return (state, command);
         }
     }

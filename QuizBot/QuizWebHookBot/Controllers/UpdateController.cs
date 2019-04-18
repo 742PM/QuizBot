@@ -28,7 +28,7 @@ namespace QuizWebHookBot.Controllers
             if (update == null) return Ok();
             var message = update.Message;
             var userCommand = updateService.ProcessMessage(message);
-            await userCommand.ExecuteAsync(message.Chat, botService, quizService);
+            await userCommand.ExecuteAsync(message.Chat, botService.Client, quizService);
             return Ok();
         }
     }

@@ -17,7 +17,7 @@ namespace QuizBotCore.Database
         public UserEntity Insert(UserEntity user) => throw new NotImplementedException();
 
         /// <inheritdoc />
-        public UserEntity FindById(int id) => throw new NotImplementedException();
+        public UserEntity? FindById(int id) => throw new NotImplementedException();
 
         /// <inheritdoc />
         public void Update(UserEntity user)
