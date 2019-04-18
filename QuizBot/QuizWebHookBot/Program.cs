@@ -11,6 +11,6 @@ namespace QuizWebHookBot
         }
 
         private static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args).UseStartup<Startup>().UseUrls("https://localhot:8443");
+            WebHost.CreateDefaultBuilder(args).UseStartup<Startup>();
     }
 }

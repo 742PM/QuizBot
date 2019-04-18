@@ -3,7 +3,7 @@ using MongoDB.Driver;
 
 namespace QuizBotCore.Database
 {
-    internal class MongoUserRepository : IUserRepository
+    public class MongoUserRepository : IUserRepository
     {
         public const string CollectionName = "users";
         private readonly IMongoCollection<UserEntity> userCollection;
