@@ -5,7 +5,8 @@ namespace QuizBotCore.Database
 {
     public class MongoUserRepository : IUserRepository
     {
-        public const string CollectionName = "users";
+        public const string CollectionName = "Users";
+
         private readonly IMongoCollection<UserEntity> userCollection;
 
         public MongoUserRepository(IMongoDatabase database)
@@ -13,25 +14,31 @@ namespace QuizBotCore.Database
             userCollection = database.GetCollection<UserEntity>(CollectionName);
         }
 
-        /// <inheritdoc />
-        public UserEntity Insert(UserEntity user) => throw new NotImplementedException();
-
-        /// <inheritdoc />
-        public UserEntity? FindById(int id) => throw new NotImplementedException();
-
-        /// <inheritdoc />
-        public void Update(UserEntity user)
+        public UserEntity Insert(UserEntity user)
         {
-            throw new NotImplementedException();
+            userCollection.InsertOne(user);
+            return user;
         }
 
-        /// <inheritdoc />
-        public UserEntity UpdateOrInsert(UserEntity user) => throw new NotImplementedException();
+        public UserEntity? FindById(Guid id)
+        {
+            return userCollection.Find(u => u.Id == id).SingleOrDefault();
+        }
 
-        /// <inheritdoc />
+        public void Update(UserEntity user)
+        {
+            userCollection.ReplaceOne(u => u.Id == user.Id, user);
+        }
+
         public void Delete(Guid id)
         {
-            throw new NotImplementedException();
+            userCollection.DeleteOne(u => u.Id == id);
+        }
+
+        public UserEntity UpdateOrInsert(UserEntity user)
+        {
+            userCollection.ReplaceOne(u => u.Id == user.Id, user, new UpdateOptions {IsUpsert = true});
+            return user;
         }
     }
 }

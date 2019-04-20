@@ -33,7 +33,7 @@ namespace QuizWebHookBot
             services.AddScoped<IUpdateService, UpdateService>();
             services.AddSingleton<IBotService, BotService>();
             services.AddScoped<IQuizService, Requester>();
-            services.AddSingleton<IMongoDatabase>(CreateDatabase(""));
+            services.AddSingleton(CreateDatabase(""));
 
             services.AddSingleton<IUserRepository, MongoUserRepository>();
             services.AddScoped<IStateMachine<ICommand>, TelegramStateMachine>();
