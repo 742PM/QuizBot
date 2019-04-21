@@ -25,6 +25,11 @@ namespace QuizBotCore.Database
             return userCollection.Find(u => u.Id == id).SingleOrDefault();
         }
 
+        public UserEntity? FindByTelegramId(int telegramId)
+        {
+            return userCollection.Find(u => u.TelegramId == telegramId).SingleOrDefault();
+        }
+
         public void Update(UserEntity user)
         {
             userCollection.ReplaceOne(u => u.Id == user.Id, user);

@@ -30,8 +30,8 @@ namespace QuizWebHookBot.Services
         public ICommand ProcessMessage(Message message)
         {
             var userId = message.From.Id;
-            var userEntity = userRepository.FindById(userId) ??
-                             userRepository.Insert(new UserEntity(Guid.NewGuid(), new UnknownUserState(), userId));
+            var userEntity = userRepository.FindByTelegramId(userId) ??
+                             userRepository.Insert(new UserEntity(new UnknownUserState(), userId, Guid.NewGuid()));
 
             var state = userEntity.CurrentState;
 
@@ -39,7 +39,7 @@ namespace QuizWebHookBot.Services
 
             var (currentState, currentCommand) = stateMachine.GetNextState(state, transition);
 
-            userRepository.Insert(new UserEntity(userEntity.ServiceId, currentState, userId));
+            userRepository.Update(new UserEntity(currentState, userId, userEntity.Id));
 
             return currentCommand;
         }

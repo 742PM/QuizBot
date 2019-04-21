@@ -11,18 +11,14 @@ namespace QuizBotCore.Database
     public struct UserEntity 
     {
         [BsonConstructor]
-        public UserEntity(Guid serviceId, State currentState, int telegramId, Guid id)
+        public UserEntity(State currentState, int telegramId, Guid id)
         {
-            ServiceId = serviceId;
             CurrentState = currentState;
             TelegramId = telegramId;
             Id = id;
         }
         [BsonId]
         public Guid Id { get; }
-
-        [BsonElement]
-        public Guid ServiceId { get;  }
 
         public State CurrentState { get;  }
 
