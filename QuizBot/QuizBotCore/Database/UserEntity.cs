@@ -8,7 +8,7 @@ using QuizBotCore.States;
 
 namespace QuizBotCore.Database
 {
-    public struct UserEntity 
+    public class UserEntity 
     {
         [BsonConstructor]
         public UserEntity(State currentState, int telegramId, Guid id)
@@ -18,11 +18,11 @@ namespace QuizBotCore.Database
             Id = id;
         }
         [BsonId]
-        public Guid Id { get; }
+        public Guid Id { get; private set; }
 
-        public State CurrentState { get;  }
+        public State CurrentState { get; private set; }
 
-        public int TelegramId { get;  }
+        public int TelegramId { get; private set; }
     }
     
 

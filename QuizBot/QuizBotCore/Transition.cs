@@ -4,19 +4,19 @@ namespace QuizBotCore
 {
     public abstract class Transition
     {
-        public abstract UserEntity? User { get; }
+        public abstract UserEntity User { get; }
     }
 
     class BackTransition
         : Transition
     {
-        public BackTransition(UserEntity? user)
+        public BackTransition(UserEntity user)
         {
             User = user;
         }
 
         /// <inheritdoc />
-        public override UserEntity? User  { get; }
+        public override UserEntity User  { get; }
     }
 
     class InvalidTransition : Transition
@@ -25,6 +25,6 @@ namespace QuizBotCore
         {
             User = user;
         }
-        public override UserEntity? User { get; }
+        public override UserEntity User { get; }
     }
 }

@@ -32,8 +32,14 @@ namespace QuizWebHookBot
 
             services.AddScoped<IUpdateService, UpdateService>();
             services.AddSingleton<IBotService, BotService>();
-            services.AddScoped<IQuizService, Requester>();
-            services.AddSingleton(CreateDatabase(""));
+            services.AddScoped<IQuizService> (_ => new Requester("https://complexitybot.azurewebsites.net"));
+            services.AddSingleton(_ => new MongoClient(
+                "mongodb://<login>:<pass>" +
+                               "@quizcluster-shard-00-00-kzjb8.azure.mongodb.net:27017," +
+                               "quizcluster-shard-00-01-kzjb8.azure.mongodb.net:27017," +
+                               "quizcluster-shard-00-02-kzjb8.azure.mongodb.net:27017/" +
+                               "ComplexityBot?ssl=true&replicaSet=QuizCluster-shard-0&authSource=admin&retryWrites=true")
+                .GetDatabase("QuizDatabase"));
 
             services.AddSingleton<IUserRepository, MongoUserRepository>();
             services.AddScoped<IStateMachine<ICommand>, TelegramStateMachine>();

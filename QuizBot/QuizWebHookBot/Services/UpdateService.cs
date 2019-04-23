@@ -30,6 +30,7 @@ namespace QuizWebHookBot.Services
         public ICommand ProcessMessage(Message message)
         {
             var userId = message.From.Id;
+            
             var userEntity = userRepository.FindByTelegramId(userId) ??
                              userRepository.Insert(new UserEntity(new UnknownUserState(), userId, Guid.NewGuid()));
 

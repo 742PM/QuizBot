@@ -5,7 +5,7 @@ namespace QuizBotCore.Database
 {
     public class MongoUserRepository : IUserRepository
     {
-        public const string CollectionName = "Users";
+        public const string CollectionName = "telegramUsers";
 
         private readonly IMongoCollection<UserEntity> userCollection;
 
@@ -20,12 +20,12 @@ namespace QuizBotCore.Database
             return user;
         }
 
-        public UserEntity? FindById(Guid id)
+        public UserEntity FindById(Guid id)
         {
             return userCollection.Find(u => u.Id == id).SingleOrDefault();
         }
 
-        public UserEntity? FindByTelegramId(int telegramId)
+        public UserEntity FindByTelegramId(int telegramId)
         {
             return userCollection.Find(u => u.TelegramId == telegramId).SingleOrDefault();
         }
