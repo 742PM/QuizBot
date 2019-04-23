@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using QuizRequestService;
 using QuizWebHookBot.Services;
-using Telegram.Bot.Args;
 using Telegram.Bot.Types;
 
 namespace QuizWebHookBot.Controllers
@@ -19,20 +18,6 @@ namespace QuizWebHookBot.Controllers
             this.updateService = updateService;
             this.botService = botService;
             this.quizService = quizService;
-            botService.Client.OnCallbackQuery += BotOnCallbackQueryReceived;
-        }
-
-        private async void BotOnCallbackQueryReceived(object sender, CallbackQueryEventArgs e)
-        {
-            var callbackQuery = e.CallbackQuery;
-
-//            await botService.Client.AnswerCallbackQueryAsync(
-//                callbackQuery.Id,
-//                $"Received {callbackQuery.Data}");
-
-            await botService.Client.SendTextMessageAsync(
-                callbackQuery.Message.Chat.Id,
-                $"Received {callbackQuery.Data}");
         }
 
         // POST api/update
@@ -46,6 +31,12 @@ namespace QuizWebHookBot.Controllers
 //            {
 //                await botService.Client.SendTextMessageAsync(message.Chat.Id, message.Text);
 //            }
+            if (update.CallbackQuery != null)
+            {
+                await botService.Client.SendTextMessageAsync(
+                    update.Message.Chat.Id,
+                    $"Received {update.CallbackQuery.Data}");
+            }
             var userCommand = updateService.ProcessMessage(message);
             await userCommand.ExecuteAsync(message.Chat, botService.Client, quizService);
             return Ok();
