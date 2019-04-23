@@ -11,11 +11,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\QuizRequestService\QuizRequestService.csproj" />
+    <Folder Include="Transitions\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Transitions\" />
+    <ProjectReference Include="..\QuizRequestService\QuizRequestService.csproj" />
   </ItemGroup>
 
 </Project>
