@@ -5,6 +5,7 @@ using QuizBotCore;
 using QuizRequestService;
 using QuizWebHookBot.Services;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
 
 namespace QuizWebHookBot.Controllers
 {
@@ -28,8 +29,13 @@ namespace QuizWebHookBot.Controllers
         {
             if (update == null) return Ok();
             var message = update.Message;
-            var userCommand = updateService.ProcessMessage(message);
-            await userCommand.ExecuteAsync(message.Chat, botService.Client, quizService);
+            if (message.Type == MessageType.Text)
+            {
+                // Echo each Message
+                await botService.Client.SendTextMessageAsync(message.Chat.Id, message.Text);
+            }
+//            var userCommand = updateService.ProcessMessage(message);
+//            await userCommand.ExecuteAsync(message.Chat, botService.Client, quizService);
             return Ok();
         }
     }

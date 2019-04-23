@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using RestSharp;
 
 namespace QuizRequestService
 {
     public interface IQuizService
     {
-        string GetTopics();
+        IEnumerable<TopicDTO> GetTopics();
 
         string GetLevels(Guid topicId);
 

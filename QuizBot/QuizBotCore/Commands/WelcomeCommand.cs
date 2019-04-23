@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using QuizRequestService;
 using Telegram.Bot;
@@ -8,25 +10,25 @@ namespace QuizBotCore.Commands
 {
     public class WelcomeCommand : ICommand
     {
-        public async Task Execute(Message message, TelegramBotClient client)
+        /// <inheritdoc />
+        public async Task ExecuteAsync(Chat chat, TelegramBotClient client, IQuizService quizService)
         {
-            var chatId = message.Chat.Id;
-            var userName = message.From.Username;
+            var chatId = chat.Id;
+            var userName = chat.Username;
             var messageText = $"Привет. Я QuibbleBot, а ты {userName}. " +
                               "Приятно познакомиться)" +
                               "В наличие вот такое добро, хочешь порешать?";
-            //await client.SendTextMessageAsync(chatId, messageText,
-              //                                replyMarkup: new InlineKeyboardMarkup(topics.Select(x => x.Name)
-                //                                                                          .Select(x =>
-                  //                                                                                    new
-                    //                                                                                      InlineKeyboardButton
-                      //                                                                                    {
-                        //                                                                                      Text = x
-                          //                                                                                })));
+            Console.WriteLine(messageText);
+            await client.SendTextMessageAsync(chatId, messageText);
+//            await client.SendTextMessageAsync(chatId, messageText,
+//                replyMarkup: new InlineKeyboardMarkup(quizService.GetTopics().Select(x => x.Name)
+//                    .Select(x =>
+//                        new
+//                            InlineKeyboardButton
+//                            {
+//                                Text = x
+//                            })));
         }
-
-        /// <inheritdoc />
-        public Task ExecuteAsync(Chat chat, TelegramBotClient client, IQuizService quizService) => throw new System.NotImplementedException();
 
         /// <inheritdoc />
         public Task ExecuteAsync(Message message, TelegramBotClient client, IQuizService quizService) => throw new System.NotImplementedException();

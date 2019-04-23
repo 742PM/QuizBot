@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 using RestSharp;
 
 namespace QuizRequestService
@@ -12,10 +14,12 @@ namespace QuizRequestService
             this.serverUri = serverUri;
         }
 
-        public string GetTopics()
+        public IEnumerable<TopicDTO> GetTopics()
         {
             var client = new RestClient(serverUri + "/api/topics");
-            return SendGetRequest(client, Method.GET);
+            var content = SendGetRequest(client, Method.GET);
+            var topics = JsonConvert.DeserializeObject<List<TopicDTO>>(content);
+            return topics;
         }
 
         public string GetLevels(Guid topicId)
