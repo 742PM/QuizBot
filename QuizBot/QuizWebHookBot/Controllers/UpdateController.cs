@@ -1,11 +1,9 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using QuizBotCore;
 using QuizRequestService;
 using QuizWebHookBot.Services;
+using Telegram.Bot.Args;
 using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
 
 namespace QuizWebHookBot.Controllers
 {
@@ -21,6 +19,20 @@ namespace QuizWebHookBot.Controllers
             this.updateService = updateService;
             this.botService = botService;
             this.quizService = quizService;
+            botService.Client.OnCallbackQuery += BotOnCallbackQueryReceived;
+        }
+
+        private async void BotOnCallbackQueryReceived(object sender, CallbackQueryEventArgs e)
+        {
+            var callbackQuery = e.CallbackQuery;
+
+            await botService.Client.AnswerCallbackQueryAsync(
+                callbackQuery.Id,
+                $"Received {callbackQuery.Data}");
+
+            await botService.Client.SendTextMessageAsync(
+                callbackQuery.Message.Chat.Id,
+                $"Received {callbackQuery.Data}");
         }
 
         // POST api/update
@@ -29,13 +41,13 @@ namespace QuizWebHookBot.Controllers
         {
             if (update == null) return Ok();
             var message = update.Message;
-            if (message.Type == MessageType.Text)
-            {
-                // Echo each Message
-                await botService.Client.SendTextMessageAsync(message.Chat.Id, message.Text);
-            }
-//            var userCommand = updateService.ProcessMessage(message);
-//            await userCommand.ExecuteAsync(message.Chat, botService.Client, quizService);
+            if (message == null) return Ok();
+//            if (message.Type == MessageType.Text)
+//            {
+//                await botService.Client.SendTextMessageAsync(message.Chat.Id, message.Text);
+//            }
+            var userCommand = updateService.ProcessMessage(message);
+            await userCommand.ExecuteAsync(message.Chat, botService.Client, quizService);
             return Ok();
         }
     }

@@ -33,6 +33,7 @@ namespace QuizWebHookBot
             services.AddScoped<IUpdateService, UpdateService>();
             services.AddSingleton<IBotService, BotService>();
             services.AddScoped<IQuizService> (_ => new Requester("https://complexitybot.azurewebsites.net"));
+//            services.AddSingleton(_ => new MongoClient("mongodb://localhost:27017").GetDatabase("QuizDatabase"));
             services.AddSingleton(_ => new MongoClient(
                 "mongodb://romutchio:romaha434" +
                                "@quizcluster-shard-00-00-kzjb8.azure.mongodb.net:27017," +

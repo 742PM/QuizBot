@@ -26,7 +26,7 @@ namespace QuizBotCore
                 case var t when t.transition is InvalidTransition:
                     return (currentState, new InvalidActionCommand("You got the wrong door buddy!"));
                 case var t when t.state is UnknownUserState:
-                    return (new WelcomeState(), new WelcomeCommand());
+                    return (new UnknownUserState(), new WelcomeCommand());
                 case var t when t.transition is BackTransition && t.state is WelcomeState:
                     return (currentState, new InvalidActionCommand("The leatherman club is two blocks below"));
             }

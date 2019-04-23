@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using QuizRequestService;
@@ -16,18 +15,11 @@ namespace QuizBotCore.Commands
             var chatId = chat.Id;
             var userName = chat.Username;
             var messageText = $"Привет. Я QuibbleBot, а ты {userName}. " +
-                              "Приятно познакомиться)" +
+                              "Приятно познакомиться) " +
                               "В наличие вот такое добро, хочешь порешать?";
-            Console.WriteLine(messageText);
-            await client.SendTextMessageAsync(chatId, messageText);
-//            await client.SendTextMessageAsync(chatId, messageText,
-//                replyMarkup: new InlineKeyboardMarkup(quizService.GetTopics().Select(x => x.Name)
-//                    .Select(x =>
-//                        new
-//                            InlineKeyboardButton
-//                            {
-//                                Text = x
-//                            })));
+            await client.SendTextMessageAsync(chatId, messageText,
+                replyMarkup: new InlineKeyboardMarkup(quizService.GetTopics().Select(x => x.Name)
+                    .Select(x => new InlineKeyboardButton{Text = x, CallbackData = x})));
         }
 
         /// <inheritdoc />
