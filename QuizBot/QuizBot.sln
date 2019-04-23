@@ -4,10 +4,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.28721.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizWebHookBot", "QuizWebHookBot\QuizWebHookBot.csproj", "{E819B9CE-9484-400A-BF74-AEFE98DB31D0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{520AFC9C-3336-46B1-993B-9D75189E32F4} = {520AFC9C-3336-46B1-993B-9D75189E32F4}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizBotCore", "QuizBotCore\QuizBotCore.csproj", "{BC648F0B-8764-4CC1-BA15-4518643FF893}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizBotCore", "QuizBotCore\QuizBotCore.csproj", "{BC648F0B-8764-4CC1-BA15-4518643FF893}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizRequestService", "QuizRequestService\QuizRequestService.csproj", "{520AFC9C-3336-46B1-993B-9D75189E32F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizRequestService", "QuizRequestService\QuizRequestService.csproj", "{520AFC9C-3336-46B1-993B-9D75189E32F4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\QuizBotCore\QuizBotCore.csproj" />
+    <ProjectReference Include="..\QuizRequestService\QuizRequestService.csproj" />
   </ItemGroup>
 
 </Project>
