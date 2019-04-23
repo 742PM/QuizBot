@@ -26,9 +26,9 @@ namespace QuizWebHookBot.Controllers
         {
             var callbackQuery = e.CallbackQuery;
 
-            await botService.Client.AnswerCallbackQueryAsync(
-                callbackQuery.Id,
-                $"Received {callbackQuery.Data}");
+//            await botService.Client.AnswerCallbackQueryAsync(
+//                callbackQuery.Id,
+//                $"Received {callbackQuery.Data}");
 
             await botService.Client.SendTextMessageAsync(
                 callbackQuery.Message.Chat.Id,
