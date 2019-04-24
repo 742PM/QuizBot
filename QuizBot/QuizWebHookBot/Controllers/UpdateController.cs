@@ -29,31 +29,18 @@ namespace QuizWebHookBot.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Update update)
         {
-            logger.LogInformation("Entering POST request");
-            logger.LogInformation($"Update Type: {update.Type}");
-            
-            if (update.Type == UpdateType.CallbackQuery)
+            Chat chat = null;
+            switch (update.Type)
             {
-                logger.LogInformation("CallbackQuery processing");
-                await botService.Client.SendTextMessageAsync(
-                    update.CallbackQuery.Message.Chat.Id,
-                    $"Received {update.CallbackQuery.Data}");
-                logger.LogInformation("CallbackQuery processed");
-                return Ok();
+                case UpdateType.Message:
+                    chat = update.Message.Chat;
+                    break;
+                case UpdateType.CallbackQuery:
+                    chat = update.CallbackQuery.Message.Chat;
+                    break;
             }
-
-            if (update.Type != UpdateType.Message)
-                return BadRequest();
-            
-            var message = update.Message;
-            
-            if (message.Type == MessageType.Text)
-            {
-                logger.LogInformation("TextMessage processing");
-                var userCommand = updateService.ProcessMessage(message);
-                await userCommand.ExecuteAsync(message.Chat, botService.Client, quizService);
-                logger.LogInformation("TextMessage processed");
-            }
+            var userCommand = updateService.ProcessMessage(update);
+            await userCommand.ExecuteAsync(chat, botService.Client, quizService);
 
             return Ok();
         }

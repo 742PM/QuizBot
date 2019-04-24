@@ -23,12 +23,16 @@ namespace QuizBotCore
         {
             switch ((state: currentState, transition: transition))
             {
-                case var t when t.transition is InvalidTransition:
-                    return (currentState, new InvalidActionCommand("You got the wrong door buddy!"));
+//                case var t when t.transition is InvalidTransition:
+//                    return (currentState, new InvalidActionCommand("You got the wrong door buddy!"));
                 case var t when t.state is UnknownUserState:
-                    return (new UnknownUserState(), new WelcomeCommand());
-                case var t when t.transition is BackTransition && t.state is WelcomeState:
-                    return (currentState, new InvalidActionCommand("The leatherman club is two blocks below"));
+                    return (new WelcomeState(), new WelcomeCommand());
+                case var t when t.state is WelcomeState:
+                    return ProcessWelcomeState(t.state, t.transition);
+                case var t when t.state is TopicSelectionState:
+                    return (new LevelSelectionState(), new SelectLevelCommand());
+//                case var t when t.transition is BackTransition && t.state is WelcomeState:
+//                    return (currentState, new InvalidActionCommand("The leatherman club is two blocks below"));
             }
 
             return default;
@@ -50,10 +54,24 @@ namespace QuizBotCore
 
         private static (State, ICommand) ProcessAboutState(AboutState state) => throw new NotImplementedException();
 
-        private static (State, ICommand) ProcessWelcomeState(WelcomeState state)
+        private static (State, ICommand) ProcessWelcomeState(State state, Transition transition)
         {
-            var command = new WelcomeCommand();
-            return (state, command);
+            switch (transition)
+            {
+                case CorrectTransition correctTransition:
+                    switch (correctTransition.Content)
+                    {
+                        case "topics":
+                            return (new TopicSelectionState(), new SelectTopicCommand());
+                        case "info":
+                            return (new AboutState(), new AboutCommand());
+                        case "feedback":
+                            return (new FeedBackState(), new FeedBackCommand());
+                    }
+
+                    break;
+            }
+            return (new WelcomeState(), new EmptyCommand()); 
         }
     }
 }

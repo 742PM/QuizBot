@@ -5,6 +5,7 @@ using QuizBotCore.Commands;
 using QuizBotCore.Database;
 using QuizBotCore.States;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
 
 namespace QuizWebHookBot.Services
 {
@@ -27,15 +28,25 @@ namespace QuizWebHookBot.Services
             this.stateMachine = stateMachine;
         }
 
-        public ICommand ProcessMessage(Message message)
+        public ICommand ProcessMessage(Update update)
         {
-            var userId = message.From.Id;
+            var userId = -1;
+            switch (update.Type)
+            {
+                case UpdateType.CallbackQuery:
+                    userId = update.CallbackQuery.Message.From.Id;
+                    break;
+                case UpdateType.Message:
+                    userId = update.Message.From.Id;
+                    break;
+            }
+
             var userEntity = userRepository.FindByTelegramId(userId) ??
                             userRepository.Insert(new UserEntity(new UnknownUserState(), userId, Guid.NewGuid()));
 
             var state = userEntity.CurrentState;
 
-            var transition = parser.Parse(state, message);
+            var transition = parser.Parse(state, update);
 
             var (currentState, currentCommand) = stateMachine.GetNextState(state, transition);
 

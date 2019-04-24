@@ -5,6 +5,6 @@ namespace QuizBotCore
 {
     public interface IMessageParser
     {
-        Transition Parse(State currentState, Message message);
+        Transition Parse(State currentState, Update update);
     }
 }

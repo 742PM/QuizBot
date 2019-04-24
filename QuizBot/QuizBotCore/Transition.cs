@@ -1,6 +1,4 @@
-﻿using QuizBotCore.Database;
-
-namespace QuizBotCore
+﻿namespace QuizBotCore
 {
     public abstract class Transition
     {
@@ -9,6 +7,16 @@ namespace QuizBotCore
     class BackTransition
         : Transition
     {
+    }
+
+    class CorrectTransition : Transition
+    {
+        public CorrectTransition(string content)
+        {
+            Content = content;
+        }
+        
+        public string Content { get;  }
     }
 
     class InvalidTransition : Transition

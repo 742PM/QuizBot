@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Threading.Tasks;
 using QuizRequestService;
 using Telegram.Bot;
@@ -16,12 +15,21 @@ namespace QuizBotCore.Commands
             var userName = chat.Username;
             var messageText = $"Привет. Я QuibbleBot, а ты {userName}. " +
                               "Приятно познакомиться) " +
-                              "В наличие вот такое добро, хочешь порешать?";
-            var keyboard = new InlineKeyboardMarkup(new[]
+                              "Выбирай, чем сегодня будем заниматься)";
+            var inlineKeyboard = new InlineKeyboardMarkup(new[]
             {
-                quizService.GetTopics().Select(x => x.Name).Select(x => InlineKeyboardButton.WithCallbackData(x,x))
+                new [] // first row
+                {
+                    InlineKeyboardButton.WithCallbackData("Порешать задачки", "topics"),
+                    InlineKeyboardButton.WithCallbackData("Справка", "info"),
+                    InlineKeyboardButton.WithCallbackData("Обратная связь", "feedback")
+                },
             });
-            await client.SendTextMessageAsync(chatId, messageText, replyMarkup: keyboard);
+//            var keyboard = new InlineKeyboardMarkup(new[]
+//            {
+//                quizService.GetTopics().Select(x => x.Name).Select(x => InlineKeyboardButton.WithCallbackData(x))
+//            });
+            await client.SendTextMessageAsync(chatId, messageText, replyMarkup: inlineKeyboard);
         }
 
         /// <inheritdoc />
