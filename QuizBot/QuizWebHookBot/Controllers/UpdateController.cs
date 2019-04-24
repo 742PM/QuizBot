@@ -25,18 +25,17 @@ namespace QuizWebHookBot.Controllers
         public async Task<IActionResult> Post([FromBody] Update update)
         {
             if (update == null) return Ok();
-            var message = update.Message;
-            if (message == null) return Ok();
-//            if (message.Type == MessageType.Text)
-//            {
-//                await botService.Client.SendTextMessageAsync(message.Chat.Id, message.Text);
-//            }
+            
             if (update.CallbackQuery != null)
             {
                 await botService.Client.SendTextMessageAsync(
                     update.Message.Chat.Id,
                     $"Received {update.CallbackQuery.Data}");
             }
+            
+            var message = update.Message;
+            if (message == null) return Ok();
+            
             var userCommand = updateService.ProcessMessage(message);
             await userCommand.ExecuteAsync(message.Chat, botService.Client, quizService);
             return Ok();
