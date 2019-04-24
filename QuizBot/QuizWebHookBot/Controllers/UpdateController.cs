@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using QuizRequestService;
 using QuizWebHookBot.Services;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
 
 namespace QuizWebHookBot.Controllers
 {
@@ -22,23 +23,26 @@ namespace QuizWebHookBot.Controllers
 
         // POST api/update
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Update update)
+        public async Task Post([FromBody] Update update)
         {
-            if (update == null) return Ok();
-            
-            if (update.CallbackQuery != null)
+            if (update.Type == UpdateType.CallbackQuery)
             {
                 await botService.Client.SendTextMessageAsync(
                     update.Message.Chat.Id,
                     $"Received {update.CallbackQuery.Data}");
+                return;
             }
+
+            if (update.Type != UpdateType.Message)
+                return;
             
             var message = update.Message;
-            if (message == null) return Ok();
             
-            var userCommand = updateService.ProcessMessage(message);
-            await userCommand.ExecuteAsync(message.Chat, botService.Client, quizService);
-            return Ok();
+            if (message.Type == MessageType.Text)
+            {
+                var userCommand = updateService.ProcessMessage(message);
+                await userCommand.ExecuteAsync(message.Chat, botService.Client, quizService);
+            }
         }
     }
 }
