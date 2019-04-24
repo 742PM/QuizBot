@@ -14,10 +14,10 @@ namespace QuizWebHookBot.Controllers
         private readonly IBotService botService;
         private readonly IUpdateService updateService;
         private readonly IQuizService quizService;
-        private readonly ILogger logger;
+        private readonly ILogger<UpdateController> logger;
 
         public UpdateController(IUpdateService updateService, IBotService botService, IQuizService quizService, 
-            ILogger logger)
+            ILogger<UpdateController> logger)
         {
             this.updateService = updateService;
             this.botService = botService;
@@ -27,7 +27,7 @@ namespace QuizWebHookBot.Controllers
 
         // POST api/update
         [HttpPost]
-        public async Task Post([FromBody] Update update)
+        public async Task<IActionResult> Post([FromBody] Update update)
         {
             logger.LogInformation("Entering POST request");
             logger.LogInformation($"Update Type: {update.Type}");
@@ -38,11 +38,11 @@ namespace QuizWebHookBot.Controllers
                     update.Message.Chat.Id,
                     $"Received {update.CallbackQuery.Data}");
                 logger.LogInformation("CallbackQuery processed");
-                return;
+                return Ok();
             }
 
             if (update.Type != UpdateType.Message)
-                return;
+                return BadRequest();
             
             var message = update.Message;
             
@@ -53,6 +53,8 @@ namespace QuizWebHookBot.Controllers
                 await userCommand.ExecuteAsync(message.Chat, botService.Client, quizService);
                 logger.LogInformation("TextMessage processed");
             }
+
+            return Ok();
         }
     }
 }
