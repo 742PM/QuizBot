@@ -78,7 +78,6 @@ namespace QuizBotCore
                         case "feedback":
                             return (new WelcomeState(), new FeedBackCommand());
                     }
-
                     break;
             }
             return (new WelcomeState(), new EmptyCommand()); 
