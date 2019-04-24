@@ -45,7 +45,6 @@ namespace QuizWebHookBot.Controllers
                 return BadRequest();
             
             var message = update.Message;
-            
             if (message.Type == MessageType.Text)
             {
                 logger.LogInformation("TextMessage processing");
