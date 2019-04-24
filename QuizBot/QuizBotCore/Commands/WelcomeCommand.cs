@@ -19,7 +19,7 @@ namespace QuizBotCore.Commands
                               "В наличие вот такое добро, хочешь порешать?";
             var keyboard = new InlineKeyboardMarkup(new[]
             {
-                quizService.GetTopics().Select(x => x.Name).Select(InlineKeyboardButton.WithCallbackData)
+                quizService.GetTopics().Select(x => x.Name).Select(x => InlineKeyboardButton.WithCallbackData(x,x))
             });
             await client.SendTextMessageAsync(chatId, messageText, replyMarkup: keyboard);
         }
