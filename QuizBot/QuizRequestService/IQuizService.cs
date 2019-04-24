@@ -13,7 +13,7 @@ namespace QuizRequestService
 
         string GetCurrentProgress(Guid userId, Guid topicId, Guid levelId);
 
-        string GetTaskInfo(Guid userId, Guid topicId, Guid levelId);
+        TaskDTO GetTaskInfo(Guid userId, Guid topicId, Guid levelId);
 
         string GetNextTaskInfo(Guid userId);
 

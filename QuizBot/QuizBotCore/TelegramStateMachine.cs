@@ -31,6 +31,8 @@ namespace QuizBotCore
                     return ProcessWelcomeState(t.state, t.transition);
                 case var t when t.state is TopicSelectionState:
                     return ProcessTopicSelectionState(t.state, t.transition);
+                case var t when t.state is LevelSelectionState:
+                    return ProcessLevelSelectionState(t.state, t.transition);
 //                case var t when t.transition is BackTransition && t.state is WelcomeState:
 //                    return (currentState, new InvalidActionCommand("The leatherman club is two blocks below"));
             }
@@ -44,8 +46,18 @@ namespace QuizBotCore
 
         private static (State, ICommand) ProcessTaskState(TaskState state) => throw new NotImplementedException();
 
-        private static (State, ICommand) ProcessLevelSelectionState(LevelSelectionState state) =>
-            throw new NotImplementedException();
+        private static (State, ICommand) ProcessLevelSelectionState(State state, Transition transition)
+        {
+            switch (transition)
+            {
+                case CorrectTransition correctTransition:
+//                    if (correctTransition.Content == "back")
+                        return (new WelcomeState(), new WelcomeCommand());
+//                    else return (new LevelSelectionState(), new ShowTaskCommand(correctTransition.Content));
+                
+            }
+            return (new WelcomeState(), new EmptyCommand()); 
+        }
 
         private static (State, ICommand) ProcessTopicSelectionState(State state, Transition transition)
         {

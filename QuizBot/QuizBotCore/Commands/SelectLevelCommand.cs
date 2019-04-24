@@ -19,14 +19,14 @@ namespace QuizBotCore
         public async Task ExecuteAsync(Chat chat, TelegramBotClient client, IQuizService quizService)
         {
             var chatId = chat.Id;
-            var messageText = "Вижу с темой ты определился)" +
+            var messageText = "Вижу с темой ты определился. " +
                               "Выбирай уровень:";
 
             var topicGuid = Guid.Parse(topicId);
             
             var keyboard = new InlineKeyboardMarkup(new[]
             {
-                quizService.GetLevels(topicGuid).Select(x => InlineKeyboardButton.WithCallbackData(x.Id.ToString())),
+                quizService.GetLevels(topicGuid).Select(x => InlineKeyboardButton.WithCallbackData(x.Desctiption, x.Id.ToString())),
                 new []
                 {
                     InlineKeyboardButton.WithCallbackData("Назад", "back")

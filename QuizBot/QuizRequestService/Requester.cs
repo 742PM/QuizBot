@@ -42,10 +42,12 @@ namespace QuizRequestService
             return SendGetRequest(client, Method.GET);
         }
 
-        public string GetTaskInfo(Guid userId, Guid topicId, Guid levelId)
+        public TaskDTO GetTaskInfo(Guid userId, Guid topicId, Guid levelId)
         {
             var client = new RestClient(serverUri + $"/api/{userId}/{topicId}/{levelId}/task");
-            return SendGetRequest(client, Method.GET);
+            var content = SendGetRequest(client, Method.GET);
+            var task = JsonConvert.DeserializeObject<TaskDTO>(content);
+            return task;
         }
 
         public string GetNextTaskInfo(Guid userId)
