@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using QuizBotCore.Commands;
 using QuizRequestService;
@@ -9,9 +8,9 @@ namespace QuizBotCore
 {
     internal class FeedBackCommand : ICommand
     {
-        public Task ExecuteAsync(Chat chat, TelegramBotClient client, IQuizService quizService)
+        public async Task ExecuteAsync(Chat chat, TelegramBotClient client, IQuizService quizService)
         {
-            throw new NotImplementedException();
+            await client.SendTextMessageAsync(chat.Id,"Есть вопросик? Пиши нам!");
         }
     }
 }

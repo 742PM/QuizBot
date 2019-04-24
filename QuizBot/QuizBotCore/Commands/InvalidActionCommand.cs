@@ -13,10 +13,7 @@ namespace QuizBotCore.Commands
         {
             this.message = message;
         }
-        /// <inheritdoc />
         public Task ExecuteAsync(Chat chat, TelegramBotClient client, IQuizService quizService) => throw new System.NotImplementedException();
 
-        /// <inheritdoc />
-//        public Task ExecuteAsync(Message message, TelegramBotClient client, IQuizService quizService) => throw new System.NotImplementedException();
     }
 }

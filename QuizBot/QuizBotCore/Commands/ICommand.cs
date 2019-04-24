@@ -8,6 +8,5 @@ namespace QuizBotCore.Commands
     public interface ICommand
     {
         Task ExecuteAsync(Chat chat, TelegramBotClient client, IQuizService quizService);
-//        Task ExecuteAsync(Message message, TelegramBotClient client, IQuizService quizService);
     }
 }

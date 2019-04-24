@@ -22,10 +22,12 @@ namespace QuizRequestService
             return topics;
         }
 
-        public string GetLevels(Guid topicId)
+        public IEnumerable<LevelDTO> GetLevels(Guid topicId)
         {
             var client = new RestClient(serverUri + $"/api/{topicId}/levels");
-            return SendGetRequest(client, Method.GET);
+            var content = SendGetRequest(client, Method.GET);
+            var levels = JsonConvert.DeserializeObject<List<LevelDTO>>(content);
+            return levels;
         }
 
         public string GetAvailableLevels(Guid userId, Guid topicId)

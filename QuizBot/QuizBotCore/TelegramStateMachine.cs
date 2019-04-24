@@ -30,7 +30,7 @@ namespace QuizBotCore
                 case var t when t.state is WelcomeState:
                     return ProcessWelcomeState(t.state, t.transition);
                 case var t when t.state is TopicSelectionState:
-                    return (new LevelSelectionState(), new SelectLevelCommand());
+                    return ProcessTopicSelectionState(t.state, t.transition);
 //                case var t when t.transition is BackTransition && t.state is WelcomeState:
 //                    return (currentState, new InvalidActionCommand("The leatherman club is two blocks below"));
             }
@@ -47,8 +47,18 @@ namespace QuizBotCore
         private static (State, ICommand) ProcessLevelSelectionState(LevelSelectionState state) =>
             throw new NotImplementedException();
 
-        private static (State, ICommand) ProcessTopicSelectionState(TopicSelectionState state) =>
-            throw new NotImplementedException();
+        private static (State, ICommand) ProcessTopicSelectionState(State state, Transition transition)
+        {
+            switch (transition)
+            {
+                case CorrectTransition correctTransition:
+                    if (correctTransition.Content == "back")
+                        return (new WelcomeState(), new WelcomeCommand());
+                    else return (new LevelSelectionState(), new SelectLevelCommand(correctTransition.Content));
+                
+            }
+            return (new WelcomeState(), new EmptyCommand()); 
+        }
 
         private static (State, ICommand) ProcessAdminState(AdminState state) => throw new NotImplementedException();
 
@@ -64,9 +74,9 @@ namespace QuizBotCore
                         case "topics":
                             return (new TopicSelectionState(), new SelectTopicCommand());
                         case "info":
-                            return (new AboutState(), new AboutCommand());
+                            return (new WelcomeState(), new AboutCommand());
                         case "feedback":
-                            return (new FeedBackState(), new FeedBackCommand());
+                            return (new WelcomeState(), new FeedBackCommand());
                     }
 
                     break;

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using RestSharp;
 
 namespace QuizRequestService
 {
@@ -8,7 +7,7 @@ namespace QuizRequestService
     {
         IEnumerable<TopicDTO> GetTopics();
 
-        string GetLevels(Guid topicId);
+        IEnumerable<LevelDTO> GetLevels(Guid topicId);
 
         string GetAvailableLevels(Guid userId, Guid topicId);
 
