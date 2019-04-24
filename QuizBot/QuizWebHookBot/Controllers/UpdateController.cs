@@ -35,7 +35,7 @@ namespace QuizWebHookBot.Controllers
             {
                 logger.LogInformation("CallbackQuery processing");
                 await botService.Client.SendTextMessageAsync(
-                    update.CallbackQuery.Id,
+                    update.CallbackQuery.Message.Chat.Id,
                     $"Received {update.CallbackQuery.Data}");
                 logger.LogInformation("CallbackQuery processed");
                 return Ok();
