@@ -31,6 +31,7 @@ namespace QuizWebHookBot.Controllers
         {
             logger.LogInformation("Entering POST request");
             logger.LogInformation($"Update Type: {update.Type}");
+            
             if (update.Type == UpdateType.CallbackQuery)
             {
                 logger.LogInformation("CallbackQuery processing");
