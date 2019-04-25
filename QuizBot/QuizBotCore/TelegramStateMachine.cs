@@ -51,13 +51,12 @@ namespace QuizBotCore
         {
             switch (transition)
             {
+                case BackTransition backTransition:
+                    return (new WelcomeState(), new WelcomeCommand());
                 case CorrectTransition correctTransition:
-                    if (correctTransition.Content == "back")
-                        return (new WelcomeState(), new WelcomeCommand());
-                    else
-                        return
-                            (new TaskState(((LevelSelectionState) state).TopicId, correctTransition.Content),
-                                new ShowTaskCommand(((LevelSelectionState) state).TopicId, correctTransition.Content));
+                    return
+                        (new TaskState(((LevelSelectionState) state).TopicId, correctTransition.Content),
+                            new ShowTaskCommand(((LevelSelectionState) state).TopicId, correctTransition.Content));
             }
 
             return (new WelcomeState(), new EmptyCommand());
@@ -67,12 +66,11 @@ namespace QuizBotCore
         {
             switch (transition)
             {
+                case BackTransition backTransition:
+                    return (new WelcomeState(), new WelcomeCommand());
                 case CorrectTransition correctTransition:
-                    if (correctTransition.Content == "back")
-                        return (new WelcomeState(), new WelcomeCommand());
-                    else
-                        return (new LevelSelectionState(correctTransition.Content),
-                            new SelectLevelCommand(correctTransition.Content));
+                    return (new LevelSelectionState(correctTransition.Content),
+                        new SelectLevelCommand(correctTransition.Content));
             }
 
             return (new WelcomeState(), new EmptyCommand());
