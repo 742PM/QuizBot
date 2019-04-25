@@ -40,7 +40,8 @@ namespace QuizBotCore
             return default;
         }
 
-        private static (State, ICommand) ProcessGodState(UnknownUserState state) => (new WelcomeState(), new WelcomeCommand());
+        private static (State, ICommand) ProcessGodState(UnknownUserState state) =>
+            (new WelcomeState(), new WelcomeCommand());
 
         private static (State, ICommand) ProcessUnrecognizedState() => throw new NotImplementedException();
 
@@ -51,12 +52,15 @@ namespace QuizBotCore
             switch (transition)
             {
                 case CorrectTransition correctTransition:
-//                    if (correctTransition.Content == "back")
+                    if (correctTransition.Content == "back")
                         return (new WelcomeState(), new WelcomeCommand());
-//                    else return (new LevelSelectionState(), new ShowTaskCommand(correctTransition.Content));
-                
+                    else
+                        return
+                            (new TaskState(((LevelSelectionState) state).TopicId, correctTransition.Content),
+                                new ShowTaskCommand(((LevelSelectionState) state).TopicId, correctTransition.Content));
             }
-            return (new WelcomeState(), new EmptyCommand()); 
+
+            return (new WelcomeState(), new EmptyCommand());
         }
 
         private static (State, ICommand) ProcessTopicSelectionState(State state, Transition transition)
@@ -66,10 +70,12 @@ namespace QuizBotCore
                 case CorrectTransition correctTransition:
                     if (correctTransition.Content == "back")
                         return (new WelcomeState(), new WelcomeCommand());
-                    else return (new LevelSelectionState(), new SelectLevelCommand(correctTransition.Content));
-                
+                    else
+                        return (new LevelSelectionState(correctTransition.Content),
+                            new SelectLevelCommand(correctTransition.Content));
             }
-            return (new WelcomeState(), new EmptyCommand()); 
+
+            return (new WelcomeState(), new EmptyCommand());
         }
 
         private static (State, ICommand) ProcessAdminState(AdminState state) => throw new NotImplementedException();
@@ -90,9 +96,11 @@ namespace QuizBotCore
                         case "feedback":
                             return (new WelcomeState(), new FeedBackCommand());
                     }
+
                     break;
             }
-            return (new WelcomeState(), new EmptyCommand()); 
+
+            return (new WelcomeState(), new EmptyCommand());
         }
     }
 }

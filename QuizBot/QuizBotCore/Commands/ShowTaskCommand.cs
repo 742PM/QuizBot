@@ -11,10 +11,12 @@ namespace QuizBotCore
 {
     internal class ShowTaskCommand : ICommand
     {
+        private readonly string topicId;
         private readonly string levelId;
 
-        public ShowTaskCommand(string levelId)
+        public ShowTaskCommand(string topicId, string levelId)
         {
+            this.topicId = topicId;
             this.levelId = levelId;
         }
 
@@ -22,10 +24,10 @@ namespace QuizBotCore
         {
             var chatId = chat.Id;
             var userId = Guid.Empty;
-            var topicId = Guid.Empty;
+            var topicGuid = Guid.Parse(topicId);
             var levelGuid = Guid.Parse(levelId);
 
-            var task = quizService.GetTaskInfo(userId, topicId, levelGuid);
+            var task = quizService.GetTaskInfo(userId, topicGuid, levelGuid);
             var messageText = task.Question;
             
             var keyboard = new InlineKeyboardMarkup(new[]
