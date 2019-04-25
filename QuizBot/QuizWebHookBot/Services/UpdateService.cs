@@ -47,8 +47,13 @@ namespace QuizWebHookBot.Services
             var state = userEntity.CurrentState;
 
             var transition = parser.Parse(state, update);
-
+            logger.LogInformation($"Parsed transition {transition}");
+            logger.LogInformation($"Parsed state {state}");
+            if (transition is CorrectTransition correct)
+                logger.LogInformation($"State content: {correct.Content}");
             var (currentState, currentCommand) = stateMachine.GetNextState(state, transition);
+            
+            logger.LogInformation($"New state {currentState}");
 
             userRepository.Update(new UserEntity(currentState, userId, userEntity.Id));
 

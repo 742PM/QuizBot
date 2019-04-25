@@ -9,7 +9,7 @@
     {
     }
 
-    class CorrectTransition : Transition
+    public class CorrectTransition : Transition
     {
         public CorrectTransition(string content)
         {
