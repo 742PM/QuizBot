@@ -9,7 +9,7 @@ namespace QuizWebHookBot.Services
 
         public BotService(IOptions<BotConfiguration> config)
         {
-            Client = new TelegramBotClient("840366370:AAEROBZsf6wxPg_5D8eVoF9ibJ4DyFnqiuQ");
+            Client = new TelegramBotClient("854957716:AAHjU_wFLwX5Sz23CV-9qs-kSYAcVqewERU");
         }
         
         public TelegramBotClient Client { get; }
