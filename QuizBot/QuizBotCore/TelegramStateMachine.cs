@@ -1,5 +1,4 @@
-﻿using System;
-using QuizBotCore.Commands;
+﻿using QuizBotCore.Commands;
 using QuizBotCore.Database;
 using QuizBotCore.States;
 using QuizRequestService;
@@ -23,8 +22,6 @@ namespace QuizBotCore
         {
             switch ((state: currentState, transition: transition))
             {
-//                case var t when t.transition is InvalidTransition:
-//                    return (currentState, new InvalidActionCommand("You got the wrong door buddy!"));
                 case var t when t.state is UnknownUserState:
                     return (new WelcomeState(), new WelcomeCommand());
                 case var t when t.state is WelcomeState:
@@ -33,19 +30,26 @@ namespace QuizBotCore
                     return ProcessTopicSelectionState(t.state, t.transition);
                 case var t when t.state is LevelSelectionState:
                     return ProcessLevelSelectionState(t.state, t.transition);
-//                case var t when t.transition is BackTransition && t.state is WelcomeState:
-//                    return (currentState, new InvalidActionCommand("The leatherman club is two blocks below"));
+                case var t when t.state is TaskState:
+                    return ProcessTaskState(t.state, t.transition);
             }
 
             return default;
         }
 
-        private static (State, ICommand) ProcessGodState(UnknownUserState state) =>
-            (new WelcomeState(), new WelcomeCommand());
+        private static (State, ICommand) ProcessTaskState(State state, Transition transition)
+        {
+            switch (transition)
+            {
+                case BackTransition backTransition:
+                    return (new WelcomeState(), new WelcomeCommand());
+                case CorrectTransition correctTransition:
+                    return
+                        (state, new CheckTaskCommand(correctTransition.Content));
+            }
 
-        private static (State, ICommand) ProcessUnrecognizedState() => throw new NotImplementedException();
-
-        private static (State, ICommand) ProcessTaskState(TaskState state) => throw new NotImplementedException();
+            return (new WelcomeState(), new WelcomeCommand());
+        }
 
         private static (State, ICommand) ProcessLevelSelectionState(State state, Transition transition)
         {
@@ -59,7 +63,7 @@ namespace QuizBotCore
                             new ShowTaskCommand(((LevelSelectionState) state).TopicId, correctTransition.Content));
             }
 
-            return (new WelcomeState(), new EmptyCommand());
+            return (new WelcomeState(), new WelcomeCommand());
         }
 
         private static (State, ICommand) ProcessTopicSelectionState(State state, Transition transition)
@@ -73,12 +77,8 @@ namespace QuizBotCore
                         new SelectLevelCommand(correctTransition.Content));
             }
 
-            return (new WelcomeState(), new EmptyCommand());
+            return (new WelcomeState(), new WelcomeCommand());
         }
-
-        private static (State, ICommand) ProcessAdminState(AdminState state) => throw new NotImplementedException();
-
-        private static (State, ICommand) ProcessAboutState(AboutState state) => throw new NotImplementedException();
 
         private static (State, ICommand) ProcessWelcomeState(State state, Transition transition)
         {
@@ -98,7 +98,7 @@ namespace QuizBotCore
                     break;
             }
 
-            return (new WelcomeState(), new EmptyCommand());
+            return (new WelcomeState(), new WelcomeCommand());
         }
     }
 }
