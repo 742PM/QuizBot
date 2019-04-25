@@ -1,4 +1,3 @@
-using System;
 using QuizBotCore.States;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -18,9 +17,37 @@ namespace QuizBotCore
                     return WelcomeStateParser(update);
                 case TopicSelectionState topicSelection:
                     return TopicSelectionStateParser(update);
+                case LevelSelectionState levelSelection:
+                    return LevelSelectionStateParser(update);
+                case TaskState taskState:
+                    return TaskStateParser(update);
             }
 
-            throw new NotImplementedException();
+            return new InvalidTransition();
+        }
+
+        private Transition TaskStateParser(Update update)
+        {
+            if (update.Type == UpdateType.CallbackQuery)
+            {
+                var callbackData = update.CallbackQuery.Data;
+                if (callbackData == "back")
+                    return new BackTransition();
+                return new CorrectTransition(callbackData);
+            }
+            return new InvalidTransition();
+        }
+
+        private Transition LevelSelectionStateParser(Update update)
+        {
+            if (update.Type == UpdateType.CallbackQuery)
+            {
+                var callbackData = update.CallbackQuery.Data;
+                if (callbackData == "back")
+                    return new BackTransition();
+                return new CorrectTransition(callbackData);
+            }
+            return new InvalidTransition();
         }
 
         private Transition TopicSelectionStateParser(Update update)
@@ -28,8 +55,9 @@ namespace QuizBotCore
             if (update.Type == UpdateType.CallbackQuery)
             {
                 var callbackData = update.CallbackQuery.Data;
-                if (callbackData != null) 
-                    return new CorrectTransition(callbackData);
+                if (callbackData == "back")
+                    return new BackTransition();
+                return new CorrectTransition(callbackData);
             }
             return new InvalidTransition();
         }
@@ -44,7 +72,7 @@ namespace QuizBotCore
                     case "topics":
                         return new CorrectTransition("topics");
                     case "info":
-                        return new CorrectTransition("topics");
+                        return new CorrectTransition("info");
                     case "feedback":
                         return new CorrectTransition("feedback");
                 }
