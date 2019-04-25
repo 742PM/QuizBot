@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
@@ -19,6 +20,8 @@ namespace QuizBotCore
             Console.WriteLine(user.Id);
             collection.InsertOne(user);
             Console.WriteLine(user.Id);
+            var usr = collection.Find(u => u.Id == user.Id);
+            Console.WriteLine(usr.First().Id);
 
         }
         public static IMongoDatabase CreateDatabase(string connectionString) =>
