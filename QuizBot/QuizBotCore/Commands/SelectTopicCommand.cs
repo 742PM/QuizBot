@@ -19,7 +19,7 @@ namespace QuizBotCore
             
             var keyboard = new InlineKeyboardMarkup(new[]
             {
-                quizService.GetTopics().Select(x => InlineKeyboardButton.WithCallbackData(x.Id.ToString(), x.Id.ToString())),
+                quizService.GetTopics().Select(x => InlineKeyboardButton.WithCallbackData(x.Name, x.Id.ToString())),
                 new []
                 {
                     InlineKeyboardButton.WithCallbackData("Назад", "back")
