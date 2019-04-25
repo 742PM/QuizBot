@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Attributes;
 using QuizBotCore.States;
+
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Local
 
 namespace QuizBotCore.Database
@@ -11,7 +9,7 @@ namespace QuizBotCore.Database
     public class UserEntity 
     {
         [BsonConstructor]
-        public UserEntity(State currentState, int telegramId, Guid id)
+        public UserEntity(State currentState, long telegramId, Guid id)
         {
             CurrentState = currentState;
             TelegramId = telegramId;
@@ -24,7 +22,7 @@ namespace QuizBotCore.Database
         public State CurrentState { get; private set; }
 
         [BsonElement]
-        public int TelegramId { get; private set; }
+        public long TelegramId { get; private set; }
     }
     
 

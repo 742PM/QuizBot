@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using QuizBotCore.Commands;
+using QuizBotCore.Database;
 using QuizRequestService;
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -20,21 +21,20 @@ namespace QuizBotCore
             this.levelId = levelId;
         }
 
-        public async Task ExecuteAsync(Chat chat, TelegramBotClient client, IQuizService quizService)
+        public async Task ExecuteAsync(Chat chat, TelegramBotClient client, IQuizService quizService,
+            IUserRepository userRepository)
         {
             var chatId = chat.Id;
-            var userId = Guid.Empty;
+            var user = userRepository.FindByTelegramId(chat.Id);
             var topicGuid = Guid.Parse(topicId);
             var levelGuid = Guid.Parse(levelId);
 
-//            var task = quizService.GetTaskInfo(userId, topicGuid, levelGuid);
-//            var messageText = task.Question;
+            var task = quizService.GetTaskInfo(user.Id, topicGuid, levelGuid);
+            var messageText = task.Question;
 
-            var messageText = "Question";
-            var answers = new[] {"O(1)", "O(n)"};
             var keyboard = new InlineKeyboardMarkup(new[]
             {
-                answers.Select(InlineKeyboardButton.WithCallbackData)
+                task.Answers.Select(InlineKeyboardButton.WithCallbackData)
             });
             
             await client.SendTextMessageAsync(chatId, messageText, replyMarkup: keyboard);

@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using QuizBotCore.Database;
 using QuizRequestService;
 using QuizWebHookBot.Services;
 using Telegram.Bot.Types;
@@ -15,14 +16,16 @@ namespace QuizWebHookBot.Controllers
         private readonly IUpdateService updateService;
         private readonly IQuizService quizService;
         private readonly ILogger<UpdateController> logger;
+        private readonly IUserRepository userRepository;
 
-        public UpdateController(IUpdateService updateService, IBotService botService, IQuizService quizService, 
-            ILogger<UpdateController> logger)
+        public UpdateController(IUpdateService updateService, IBotService botService, IQuizService quizService,
+            ILogger<UpdateController> logger, IUserRepository userRepository)
         {
             this.updateService = updateService;
             this.botService = botService;
             this.quizService = quizService;
             this.logger = logger;
+            this.userRepository = userRepository;
         }
 
         // POST api/update
@@ -40,7 +43,7 @@ namespace QuizWebHookBot.Controllers
                     break;
             }
             var userCommand = updateService.ProcessMessage(update);
-            await userCommand.ExecuteAsync(chat, botService.Client, quizService);
+            await userCommand.ExecuteAsync(chat, botService.Client, quizService, userRepository);
 
             return Ok();
         }

@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using QuizBotCore.Commands;
+using QuizBotCore.Database;
 using QuizRequestService;
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -16,7 +17,8 @@ namespace QuizBotCore
         {
             this.topicId = topicId;
         }
-        public async Task ExecuteAsync(Chat chat, TelegramBotClient client, IQuizService quizService)
+        public async Task ExecuteAsync(Chat chat, TelegramBotClient client, IQuizService quizService,
+            IUserRepository userRepository)
         {
             var chatId = chat.Id;
             var messageText = "Вижу с темой ты определился. " +

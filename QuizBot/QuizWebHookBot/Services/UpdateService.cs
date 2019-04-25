@@ -30,14 +30,14 @@ namespace QuizWebHookBot.Services
 
         public ICommand ProcessMessage(Update update)
         {
-            var userId = -1;
+            long userId = -1;
             switch (update.Type)
             {
                 case UpdateType.CallbackQuery:
-                    userId = update.CallbackQuery.Message.From.Id;
+                    userId = update.CallbackQuery.Message.Chat.Id;
                     break;
                 case UpdateType.Message:
-                    userId = update.Message.From.Id;
+                    userId = update.Message.Chat.Id;
                     break;
             }
 

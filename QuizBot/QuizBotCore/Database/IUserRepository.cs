@@ -7,7 +7,7 @@ namespace QuizBotCore.Database
         UserEntity Insert(UserEntity user);
         UserEntity FindById(Guid id);
 
-        UserEntity FindByTelegramId(int telegramId);
+        UserEntity FindByTelegramId(long telegramId);
 
         void Update(UserEntity user);
         UserEntity UpdateOrInsert(UserEntity user);

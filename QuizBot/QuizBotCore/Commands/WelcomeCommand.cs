@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using QuizBotCore.Database;
 using QuizRequestService;
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -9,7 +10,8 @@ namespace QuizBotCore.Commands
     public class WelcomeCommand : ICommand
     {
         /// <inheritdoc />
-        public async Task ExecuteAsync(Chat chat, TelegramBotClient client, IQuizService quizService)
+        public async Task ExecuteAsync(Chat chat, TelegramBotClient client, IQuizService quizService,
+            IUserRepository userRepository)
         {
             var chatId = chat.Id;
             var userName = chat.Username;
