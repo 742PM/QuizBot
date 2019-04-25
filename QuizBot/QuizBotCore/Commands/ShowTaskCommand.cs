@@ -27,12 +27,14 @@ namespace QuizBotCore
             var topicGuid = Guid.Parse(topicId);
             var levelGuid = Guid.Parse(levelId);
 
-            var task = quizService.GetTaskInfo(userId, topicGuid, levelGuid);
-            var messageText = task.Question;
-            
+//            var task = quizService.GetTaskInfo(userId, topicGuid, levelGuid);
+//            var messageText = task.Question;
+
+            var messageText = "Question";
+            var answers = new[] {"O(1)", "O(n)"};
             var keyboard = new InlineKeyboardMarkup(new[]
             {
-                task.Answers.Select(InlineKeyboardButton.WithCallbackData)
+                answers.Select(InlineKeyboardButton.WithCallbackData)
             });
             
             await client.SendTextMessageAsync(chatId, messageText, replyMarkup: keyboard);

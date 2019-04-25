@@ -26,7 +26,7 @@ namespace QuizBotCore
             
             var keyboard = new InlineKeyboardMarkup(new[]
             {
-                quizService.GetLevels(topicGuid).Select(x => InlineKeyboardButton.WithCallbackData(x.Desctiption, x.Id.ToString())),
+                quizService.GetLevels(topicGuid).Select(x => InlineKeyboardButton.WithCallbackData(x.Description, x.Id.ToString())),
                 new []
                 {
                     InlineKeyboardButton.WithCallbackData("Назад", "back")

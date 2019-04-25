@@ -9,5 +9,6 @@ namespace QuizBotCore.States
     {
 
         public abstract Transition[] AvailableTransitions { get; }
+        
     }
 }
