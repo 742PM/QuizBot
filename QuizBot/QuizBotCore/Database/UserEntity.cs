@@ -20,8 +20,10 @@ namespace QuizBotCore.Database
         [BsonId]
         public Guid Id { get; private set; }
 
+        [BsonElement]
         public State CurrentState { get; private set; }
 
+        [BsonElement]
         public int TelegramId { get; private set; }
     }
     

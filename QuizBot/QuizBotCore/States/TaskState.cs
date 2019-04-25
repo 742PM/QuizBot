@@ -1,17 +1,21 @@
+using MongoDB.Bson.Serialization.Attributes;
+
 namespace QuizBotCore.States
 {
     public class TaskState : State
     {
-        public readonly string TopicId;
-        public readonly string LevelId;
-
-        /// <inheritdoc />
-        public override Transition[] AvailableTransitions { get; }
-
+        [BsonConstructor]
         public TaskState(string topicId, string levelId)
         {
             TopicId = topicId;
             LevelId = levelId;
         }
+
+        [BsonElement] public string TopicId { get; }
+
+        [BsonElement] public string LevelId { get; }
+
+        /// <inheritdoc />
+        public override Transition[] AvailableTransitions { get; }
     }
 }
