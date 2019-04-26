@@ -14,11 +14,11 @@ namespace QuizBotCore
         public async Task ExecuteAsync(Chat chat, TelegramBotClient client, IQuizService quizService,
             IUserRepository userRepository, ILogger logger)
         {
-            var message = "**Quibble** происходит от двух фундаментальных слов:" +
-                          "*Quiz* + *Bible* - задаем вопросы, обучаем и даем ответы..." +
-                          "Обучение новому материалу проходит в виде бесконечной викторины." +
-                          "Пройти уровень можно только решив все задачи подряд без ошибок." +
-                          "Желаем удачи!";
+            var message = "    ***Quibble*** происходит от двух фундаментальных слов:\n" +
+                          "  *Quiz* + *Bible* - задаем вопросы, обучаем и даем ответы...\n" +
+                          "Обучение новому материалу проходит в виде бесконечной викторины.\n" +
+                          " Пройти уровень можно только решив все задачи подряд без ошибок.\n" +
+                          "                           *Желаем удачи!* ";
             await client.SendTextMessageAsync(chat.Id, message, ParseMode.Markdown);
         }
     }

@@ -14,7 +14,7 @@ namespace QuizBotCore
         public async Task ExecuteAsync(Chat chat, TelegramBotClient client, IQuizService quizService,
             IUserRepository userRepository, ILogger logger)
         {
-            var message = "Есть вопрос? Пиши нам!";
+            var message = " Есть вопрос? Пиши нам!";
             var keyboard = new InlineKeyboardMarkup(new[]
             {
                 InlineKeyboardButton.WithUrl("Артемий", "telegram.me/aizakov"),
