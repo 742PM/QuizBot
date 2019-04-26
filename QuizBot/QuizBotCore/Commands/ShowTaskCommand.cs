@@ -33,8 +33,8 @@ namespace QuizBotCore
 
             var task = quizService.GetTaskInfo(user.Id, topicGuid, levelGuid);
             var question = task.Question;
-            var questionInMarkdown = "```csharp" +
-                                     $"{question}" +
+            var questionInMarkdown = "```csharp\n" +
+                                     $"{question}\n" +
                                      "```";
 
             var keyboard = new InlineKeyboardMarkup(new[]
