@@ -81,11 +81,18 @@ namespace QuizRequestService
         {
             var client = new RestClient(serverUri + $"/api/{userId}/sendAnswer");
             var parameter = new Parameter("application/json", $"\"{answer}\"", ParameterType.RequestBody);
-            var content = SendGetRequest(client, Method.POST, parameter).Content;
-            var result = bool.TryParse(content, out var isParsed);
-            if (isParsed)
-                return result;
-            return null;
+            var request = SendGetRequest(client, Method.POST, parameter);
+            if (request.StatusCode != HttpStatusCode.OK)
+                return null;
+            switch (request.Content)
+            {
+                case "true":
+                    return true;
+                case "false":
+                    return false;
+                default:
+                    return null;
+            }
         }
 
         private IRestResponse SendGetRequest(IRestClient client, Method method, Parameter parameter = null)
