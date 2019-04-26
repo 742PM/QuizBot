@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using QuizBotCore.Database;
 using QuizRequestService;
 using Telegram.Bot;
@@ -15,7 +16,7 @@ namespace QuizBotCore.Commands
             this.message = message;
         }
         public Task ExecuteAsync(Chat chat, TelegramBotClient client, IQuizService quizService,
-            IUserRepository userRepository) => throw new System.NotImplementedException();
+            IUserRepository userRepository, ILogger logger) => throw new System.NotImplementedException();
 
     }
 }

@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using QuizBotCore.Commands;
 using QuizBotCore.Database;
 using QuizRequestService;
@@ -10,7 +11,7 @@ namespace QuizBotCore
     internal class AboutCommand : ICommand
     {
         public async Task ExecuteAsync(Chat chat, TelegramBotClient client, IQuizService quizService,
-            IUserRepository userRepository)
+            IUserRepository userRepository, ILogger logger)
         {
             await client.SendTextMessageAsync(chat.Id, "Тут будет некая справочка");
         }

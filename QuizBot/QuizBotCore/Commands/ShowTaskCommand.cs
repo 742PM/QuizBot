@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using QuizBotCore.Commands;
 using QuizBotCore.Database;
 using QuizRequestService;
@@ -22,7 +23,7 @@ namespace QuizBotCore
         }
 
         public async Task ExecuteAsync(Chat chat, TelegramBotClient client, IQuizService quizService,
-            IUserRepository userRepository)
+            IUserRepository userRepository, ILogger logger)
         {
             var chatId = chat.Id;
             var user = userRepository.FindByTelegramId(chat.Id);

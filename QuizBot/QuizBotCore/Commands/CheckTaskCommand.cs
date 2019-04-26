@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using QuizBotCore.Commands;
 using QuizBotCore.Database;
 using QuizRequestService;
@@ -17,13 +18,17 @@ namespace QuizBotCore
             this.answer = answer;
         }
 
-        public async Task ExecuteAsync(Chat chat, TelegramBotClient client, IQuizService quizService, IUserRepository userRepository)
+        public async Task ExecuteAsync(Chat chat, TelegramBotClient client, IQuizService quizService,
+            IUserRepository userRepository, ILogger logger)
         {
             var user = userRepository.FindByTelegramId(chat.Id);
-
+            logger.LogInformation("Command: CheckTask");
+            logger.LogInformation($"User: ID: {user.Id}\n TG:{user.TelegramId}");
             var isCorrect = quizService.SendAnswer(user.Id, answer);
+            logger.LogInformation($"The answer is {answer} and not null:{isCorrect.HasValue}");
             if (isCorrect.HasValue)
             {
+                logger.LogInformation($"The answer is {answer} and {isCorrect.Value}");
                 if (isCorrect.Value)
                     await client.SendTextMessageAsync(chat.Id, "<p><span style=\"color: #88CC00\">Похоже на правду</span></p>", ParseMode.Html);
                 await client.SendTextMessageAsync(chat.Id, "<p><span style=\"color:red\">Подумай еще</span></p>", ParseMode.Html);

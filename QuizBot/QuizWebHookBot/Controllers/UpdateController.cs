@@ -43,7 +43,7 @@ namespace QuizWebHookBot.Controllers
                     break;
             }
             var userCommand = updateService.ProcessMessage(update);
-            await userCommand.ExecuteAsync(chat, botService.Client, quizService, userRepository);
+            await userCommand.ExecuteAsync(chat, botService.Client, quizService, userRepository, logger);
 
             return Ok();
         }
