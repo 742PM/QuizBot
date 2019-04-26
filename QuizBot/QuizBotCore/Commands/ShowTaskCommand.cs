@@ -7,6 +7,7 @@ using QuizBotCore.Database;
 using QuizRequestService;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace QuizBotCore
@@ -31,7 +32,10 @@ namespace QuizBotCore
             var levelGuid = Guid.Parse(levelId);
 
             var task = quizService.GetTaskInfo(user.Id, topicGuid, levelGuid);
-            var messageText = task.Question;
+            var question = task.Question;
+            var questionInMarkdown = "```csharp" +
+                                     $"{question}" +
+                                     "```";
 
             var keyboard = new InlineKeyboardMarkup(new[]
             {
@@ -44,7 +48,7 @@ namespace QuizBotCore
                 }
             });
 
-            await client.SendTextMessageAsync(chatId, messageText, replyMarkup: keyboard);
+            await client.SendTextMessageAsync(chatId, questionInMarkdown, replyMarkup: keyboard, parseMode: ParseMode.Markdown);
         }
     }
 }

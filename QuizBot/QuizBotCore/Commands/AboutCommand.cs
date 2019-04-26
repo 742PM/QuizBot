@@ -5,6 +5,7 @@ using QuizBotCore.Database;
 using QuizRequestService;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
 
 namespace QuizBotCore
 {
@@ -13,12 +14,12 @@ namespace QuizBotCore
         public async Task ExecuteAsync(Chat chat, TelegramBotClient client, IQuizService quizService,
             IUserRepository userRepository, ILogger logger)
         {
-            var message = "Quibble происходит от двух фундаментальных слов:\n" +
-                          "Quiz + Bible - Задаем вопросы, обучаем и даем ответы...\n" +
-                          "Обучение новому материалу проходит в виде бесконечной викторины.\n" +
-                          "Пройти уровень можно только решив все задачи подряд без ошибки\n" +
-                          "Желаем удачи";
-            await client.SendTextMessageAsync(chat.Id, message);
+            var message = "**Quibble** происходит от двух фундаментальных слов:" +
+                          "*Quiz* + *Bible* - задаем вопросы, обучаем и даем ответы..." +
+                          "Обучение новому материалу проходит в виде бесконечной викторины." +
+                          "Пройти уровень можно только решив все задачи подряд без ошибок." +
+                          "Желаем удачи!";
+            await client.SendTextMessageAsync(chat.Id, message, ParseMode.Markdown);
         }
     }
 }

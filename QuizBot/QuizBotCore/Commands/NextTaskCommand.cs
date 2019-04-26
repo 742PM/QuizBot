@@ -6,13 +6,15 @@ using QuizBotCore.Database;
 using QuizRequestService;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace QuizBotCore
 {
     internal class NextTaskCommand : ICommand
     {
-        public async Task ExecuteAsync(Chat chat, TelegramBotClient client, IQuizService quizService, IUserRepository userRepository,
+        public async Task ExecuteAsync(Chat chat, TelegramBotClient client, IQuizService quizService,
+            IUserRepository userRepository,
             ILogger logger)
         {
             var user = userRepository.FindByTelegramId(chat.Id);
@@ -23,7 +25,10 @@ namespace QuizBotCore
                 return;
             }
 
-            var messageText = task.Question;
+            var question = task.Question;
+            var questionInMarkdown = "```csharp" +
+                                     $"{question}" +
+                                     "```";
 
             var keyboard = new InlineKeyboardMarkup(new[]
             {
@@ -35,8 +40,9 @@ namespace QuizBotCore
                     InlineKeyboardButton.WithCallbackData("Дальше", "next")
                 }
             });
-            
-            await client.SendTextMessageAsync(chat.Id, messageText, replyMarkup: keyboard);
+
+            await client.SendTextMessageAsync(chat.Id, questionInMarkdown, replyMarkup: keyboard,
+                parseMode: ParseMode.Markdown);
         }
     }
 }
