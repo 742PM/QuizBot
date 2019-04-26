@@ -62,19 +62,12 @@ namespace QuizRequestService
             return SendGetRequest(client, Method.GET);
         }
 
-        public bool? SendAnswer(Guid userId, string answer)
+        public bool SendAnswer(Guid userId, string answer)
         {
             var client = new RestClient(serverUri + $"/api/{userId}/sendAnswer");
             var parameter = new Parameter("application/json", answer, ParameterType.RequestBody);
             var content = SendGetRequest(client, Method.POST, parameter);
-            switch (content)
-            {
-                case "true":
-                    return true;
-                case "false":
-                    return false;
-            }
-            return null;
+            return Boolean.Parse(content);
         }
 
         private string SendGetRequest(IRestClient client, Method method, Parameter parameter = null)
