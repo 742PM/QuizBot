@@ -17,6 +17,11 @@ namespace QuizBotCore
         {
             var user = userRepository.FindByTelegramId(chat.Id);
             var task = quizService.GetNextTaskInfo(user.Id);
+            if (task == null)
+            {
+                await client.SendTextMessageAsync(chat.Id, "Реши эту, а потом подумаем о следующей");
+                return;
+            }
 
             var messageText = task.Question;
 

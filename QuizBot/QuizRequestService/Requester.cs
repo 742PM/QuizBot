@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using Newtonsoft.Json;
 using RestSharp;
 
@@ -18,7 +19,7 @@ namespace QuizRequestService
         {
             var client = new RestClient(serverUri + "/api/topics");
             var content = SendGetRequest(client, Method.GET);
-            var topics = JsonConvert.DeserializeObject<List<TopicDTO>>(content);
+            var topics = JsonConvert.DeserializeObject<List<TopicDTO>>(content.Content);
             return topics;
         }
 
@@ -26,62 +27,64 @@ namespace QuizRequestService
         {
             var client = new RestClient(serverUri + $"/api/{topicId}/levels");
             var content = SendGetRequest(client, Method.GET);
-            var levels = JsonConvert.DeserializeObject<List<LevelDTO>>(content);
+            var levels = JsonConvert.DeserializeObject<List<LevelDTO>>(content.Content);
             return levels;
         }
 
         public string GetAvailableLevels(Guid userId, Guid topicId)
         {
             var client = new RestClient(serverUri + $"/api/{userId}/{topicId}/availableLevels");
-            return SendGetRequest(client, Method.GET);
+            return SendGetRequest(client, Method.GET).Content;
         }
 
         public string GetCurrentProgress(Guid userId, Guid topicId, Guid levelId)
         {
             var client = new RestClient(serverUri + $"/api/{userId}/{topicId}/{levelId}/currentProgress");
-            return SendGetRequest(client, Method.GET);
+            return SendGetRequest(client, Method.GET).Content;
         }
 
         public TaskDTO GetTaskInfo(Guid userId, Guid topicId, Guid levelId)
         {
             var client = new RestClient(serverUri + $"/api/{userId}/{topicId}/{levelId}/task");
             var content = SendGetRequest(client, Method.GET);
-            var task = JsonConvert.DeserializeObject<TaskDTO>(content);
-            return task;
+            if (content.StatusCode == HttpStatusCode.OK)
+                return JsonConvert.DeserializeObject<TaskDTO>(content.Content);
+            return null;
         }
 
         public TaskDTO GetNextTaskInfo(Guid userId)
         {
             var client = new RestClient(serverUri + $"/api/{userId}/nextTask");
             var content = SendGetRequest(client, Method.GET);
-            var task = JsonConvert.DeserializeObject<TaskDTO>(content);
-            return task;
+            if (content.StatusCode == HttpStatusCode.OK)
+                return JsonConvert.DeserializeObject<TaskDTO>(content.Content);
+            return null;
         }
 
         public string GetHint(Guid userId)
         {
             var client = new RestClient(serverUri + $"/api/{userId}/hint");
-            return SendGetRequest(client, Method.GET);
+            return SendGetRequest(client, Method.GET).Content;
         }
 
         public bool? SendAnswer(Guid userId, string answer)
         {
             var client = new RestClient(serverUri + $"/api/{userId}/sendAnswer");
             var parameter = new Parameter("application/json", $"\"{answer}\"", ParameterType.RequestBody);
-            var content = SendGetRequest(client, Method.POST, parameter);
+            var content = SendGetRequest(client, Method.POST, parameter).Content;
             var result = bool.TryParse(content, out var isParsed);
             if (isParsed)
                 return result;
             return null;
         }
 
-        private string SendGetRequest(IRestClient client, Method method, Parameter parameter = null)
+        private IRestResponse SendGetRequest(IRestClient client, Method method, Parameter parameter = null)
         {
             var request = new RestRequest(method);
             if (parameter != null)
                 request.AddParameter(parameter);
             var response = client.Execute(request);
-            return response.Content;
+            return response;
         }
     }
 }

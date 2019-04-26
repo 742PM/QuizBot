@@ -22,7 +22,7 @@ namespace QuizBotCore
         {
             var user = userRepository.FindByTelegramId(chat.Id);
             logger.LogInformation("Command: CheckTask");
-            logger.LogInformation($"User: ID: {user.Id}\n TG:{user.TelegramId}");
+            logger.LogInformation($"User: ID: {user.Id} TG:{user.TelegramId}");
             var isCorrect = quizService.SendAnswer(user.Id, answer);
             if (isCorrect.HasValue)
             {
