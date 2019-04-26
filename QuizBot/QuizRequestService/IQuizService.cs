@@ -19,6 +19,6 @@ namespace QuizRequestService
 
         string GetHint(Guid userId);
 
-        bool SendAnswer(Guid userId, string answer);
+        bool? SendAnswer(Guid userId, string answer);
     }
 }
