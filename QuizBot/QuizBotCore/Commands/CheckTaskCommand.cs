@@ -5,7 +5,6 @@ using QuizBotCore.Database;
 using QuizRequestService;
 using Telegram.Bot;
 using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
 
 namespace QuizBotCore
 {
@@ -29,8 +28,11 @@ namespace QuizBotCore
             {
                 logger.LogInformation($"The answer is {answer} and {isCorrect}");
                 if (isCorrect.Value)
-                    await client.SendTextMessageAsync(chat.Id, "<p><span style=\"color: #88CC00\">Похоже на правду</span></p>", ParseMode.Html);
-                await client.SendTextMessageAsync(chat.Id, "<p><span style=\"color:red\">Подумай еще</span></p>", ParseMode.Html);
+                {
+                    await client.SendTextMessageAsync(chat.Id,
+                        "Похоже на правду");
+                }
+                await client.SendTextMessageAsync(chat.Id, "Подумай еще");
             }
             else
             {
