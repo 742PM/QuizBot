@@ -35,7 +35,11 @@ namespace QuizBotCore
 
             var keyboard = new InlineKeyboardMarkup(new[]
             {
-                task.Answers.Select(InlineKeyboardButton.WithCallbackData)
+                task.Answers.Select(InlineKeyboardButton.WithCallbackData),
+                new []
+                {
+                InlineKeyboardButton.WithCallbackData("Next", "next")
+                }
             });
             
             await client.SendTextMessageAsync(chatId, messageText, replyMarkup: keyboard);

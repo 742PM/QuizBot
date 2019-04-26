@@ -44,8 +44,12 @@ namespace QuizBotCore
                 case BackTransition backTransition:
                     return (new WelcomeState(), new WelcomeCommand());
                 case CorrectTransition correctTransition:
+                {
+                    if (correctTransition.Content == "next")
+                            return (state, new NextTaskCommand());
                     return
                         (state, new CheckTaskCommand(correctTransition.Content));
+                }
             }
 
             return (new WelcomeState(), new WelcomeCommand());

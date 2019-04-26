@@ -15,7 +15,7 @@ namespace QuizRequestService
 
         TaskDTO GetTaskInfo(Guid userId, Guid topicId, Guid levelId);
 
-        string GetNextTaskInfo(Guid userId);
+        TaskDTO GetNextTaskInfo(Guid userId);
 
         string GetHint(Guid userId);
 
