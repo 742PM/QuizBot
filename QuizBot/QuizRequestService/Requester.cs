@@ -64,7 +64,12 @@ namespace QuizRequestService
         public string GetHint(Guid userId)
         {
             var client = new RestClient(serverUri + $"/api/{userId}/hint");
-            return SendGetRequest(client, Method.GET).Content;
+            var request = SendGetRequest(client, Method.GET);
+            if (request.StatusCode == HttpStatusCode.OK)
+            {
+                return request.Content;
+            }
+            return null;
         }
 
         public bool? SendAnswer(Guid userId, string answer)
