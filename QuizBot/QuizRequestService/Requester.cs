@@ -65,7 +65,7 @@ namespace QuizRequestService
         public bool? SendAnswer(Guid userId, string answer)
         {
             var client = new RestClient(serverUri + $"/api/{userId}/sendAnswer");
-            var parameter = new Parameter("application/json", answer, ParameterType.RequestBody);
+            var parameter = new Parameter("application/json", $"\"{answer}\"", ParameterType.RequestBody);
             var content = SendGetRequest(client, Method.POST, parameter);
             var result = bool.TryParse(content, out var isParsed);
             if (isParsed)
