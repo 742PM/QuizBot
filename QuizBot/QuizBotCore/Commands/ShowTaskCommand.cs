@@ -38,7 +38,7 @@ namespace QuizBotCore
                 task.Answers.Select(InlineKeyboardButton.WithCallbackData),
                 new[]
                 {
-                    
+                    InlineKeyboardButton.WithCallbackData("Назад", "next"),
                     InlineKeyboardButton.WithCallbackData("Подсказка", "hint"),
                     InlineKeyboardButton.WithCallbackData("Дальше", "next")
                 }
