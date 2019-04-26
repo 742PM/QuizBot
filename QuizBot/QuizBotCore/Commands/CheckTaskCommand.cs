@@ -28,11 +28,8 @@ namespace QuizBotCore
             {
                 logger.LogInformation($"The answer is {answer} and {isCorrect}");
                 if (isCorrect.Value)
-                {
-                    await client.SendTextMessageAsync(chat.Id,
-                        "Похоже на правду");
-                }
-                await client.SendTextMessageAsync(chat.Id, "Подумай еще");
+                    await client.SendTextMessageAsync(chat.Id, "А ты прав!");
+                else await client.SendTextMessageAsync(chat.Id, "Подумай еще(");
             }
             else
             {
