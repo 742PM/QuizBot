@@ -9,7 +9,7 @@ namespace QuizRequestService
 
         IEnumerable<LevelDTO> GetLevels(Guid topicId);
 
-        string GetAvailableLevels(Guid userId, Guid topicId);
+        IEnumerable<LevelDTO> GetAvailableLevels(Guid userId, Guid topicId);
 
         string GetCurrentProgress(Guid userId, Guid topicId, Guid levelId);
 

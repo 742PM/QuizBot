@@ -25,11 +25,12 @@ namespace QuizBotCore
             var messageText = "Вижу с темой ты определился. " +
                               "Выбирай уровень:";
 
+            var user = userRepository.FindByTelegramId(chatId);
             var topicGuid = Guid.Parse(topicId);
             
             var keyboard = new InlineKeyboardMarkup(new[]
             {
-                quizService.GetLevels(topicGuid).Select(x => InlineKeyboardButton.WithCallbackData(x.Description, x.Id.ToString())),
+                quizService.GetAvailableLevels(user.Id, topicGuid).Select(x => InlineKeyboardButton.WithCallbackData(x.Description, x.Id.ToString())),
                 new []
                 {
                     InlineKeyboardButton.WithCallbackData("Назад", "back")

@@ -31,10 +31,15 @@ namespace QuizRequestService
             return levels;
         }
 
-        public string GetAvailableLevels(Guid userId, Guid topicId)
+        public IEnumerable<LevelDTO> GetAvailableLevels(Guid userId, Guid topicId)
         {
             var client = new RestClient(serverUri + $"/api/{userId}/{topicId}/availableLevels");
-            return SendGetRequest(client, Method.GET).Content;
+            var request = SendGetRequest(client, Method.GET);
+            if (request.StatusCode == HttpStatusCode.OK)
+            {
+                return JsonConvert.DeserializeObject<List<LevelDTO>>(request.Content);
+            }
+            return null;
         }
 
         public string GetCurrentProgress(Guid userId, Guid topicId, Guid levelId)
