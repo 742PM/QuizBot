@@ -40,6 +40,7 @@ namespace QuizWebHookBot.Controllers
                     break;
                 case UpdateType.CallbackQuery:
                     chat = update.CallbackQuery.Message.Chat;
+                    await botService.Client.AnswerCallbackQueryAsync(update.CallbackQuery.Id);
                     break;
             }
             var userCommand = updateService.ProcessMessage(update);
