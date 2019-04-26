@@ -45,12 +45,15 @@ namespace QuizBotCore
                     return (new WelcomeState(), new WelcomeCommand());
                 case CorrectTransition correctTransition:
                 {
-                    if (correctTransition.Content == "next")
-                        return (state, new NextTaskCommand());
-                    if (correctTransition.Content == "hint")
-                        return (state, new ShowHintCommand());
-                    return
-                        (state, new CheckTaskCommand(correctTransition.Content));
+                    switch (correctTransition.Content)
+                    {
+                        case "next":
+                            return (state, new NextTaskCommand());
+                        case "hint":
+                            return (state, new ShowHintCommand());
+                        default:
+                            return (state, new CheckTaskCommand(correctTransition.Content));
+                    }
                 }
             }
 

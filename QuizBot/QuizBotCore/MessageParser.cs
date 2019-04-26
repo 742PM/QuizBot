@@ -20,13 +20,13 @@ namespace QuizBotCore
                 case LevelSelectionState levelSelection:
                     return LevelSelectionStateParser(update);
                 case TaskState taskState:
-                    return TaskStateParser(taskState, update);
+                    return TaskStateParser(update);
             }
 
             return new InvalidTransition();
         }
 
-        private Transition TaskStateParser(TaskState state, Update update)
+        private Transition TaskStateParser(Update update)
         {
             if (update.Type == UpdateType.CallbackQuery)
             {

@@ -10,32 +10,21 @@ namespace QuizBotCore.Commands
 {
     public class WelcomeCommand : ICommand
     {
-        /// <inheritdoc />
         public async Task ExecuteAsync(Chat chat, TelegramBotClient client, IQuizService quizService,
             IUserRepository userRepository, ILogger logger)
         {
             var chatId = chat.Id;
-            var userName = chat.Username;
-            var messageText = $"Привет. Я QuibbleBot, а ты {userName}. " +
-                              "Приятно познакомиться) " +
-                              "Выбирай, чем сегодня будем заниматься)";
+            var messageText = "Главное меню:";
             var inlineKeyboard = new InlineKeyboardMarkup(new[]
             {
-                new [] // first row
+                new[]
                 {
                     InlineKeyboardButton.WithCallbackData("Порешать задачки", "topics"),
                     InlineKeyboardButton.WithCallbackData("Справка", "info"),
                     InlineKeyboardButton.WithCallbackData("Обратная связь", "feedback")
-                },
+                }
             });
-//            var keyboard = new InlineKeyboardMarkup(new[]
-//            {
-//                quizService.GetTopics().Select(x => x.Name).Select(x => InlineKeyboardButton.WithCallbackData(x))
-//            });
             await client.SendTextMessageAsync(chatId, messageText, replyMarkup: inlineKeyboard);
         }
-
-        /// <inheritdoc />
-        public Task ExecuteAsync(Message message, TelegramBotClient client, IQuizService quizService) => throw new System.NotImplementedException();
     }
 }
