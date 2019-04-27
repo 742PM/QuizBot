@@ -33,7 +33,7 @@ namespace QuizBotCore
                 quizService.GetAvailableLevels(user.Id, topicGuid).Select(x => InlineKeyboardButton.WithCallbackData(x.Description, x.Id.ToString())),
                 new []
                 {
-                    InlineKeyboardButton.WithCallbackData("Назад", StringCallbacks.Back)
+                    InlineKeyboardButton.WithCallbackData(ButtonNames.Back, StringCallbacks.Back)
                 }
             });
             

@@ -42,9 +42,9 @@ namespace QuizBotCore
                 task.Answers.Select(InlineKeyboardButton.WithCallbackData),
                 new[]
                 {
-                    InlineKeyboardButton.WithCallbackData("Назад", StringCallbacks.Back),
-                    InlineKeyboardButton.WithCallbackData("Подсказка", StringCallbacks.Hint),
-                    InlineKeyboardButton.WithCallbackData("Дальше", StringCallbacks.NextTask)
+                    InlineKeyboardButton.WithCallbackData(ButtonNames.Back, StringCallbacks.Back),
+                    InlineKeyboardButton.WithCallbackData(ButtonNames.Hint, StringCallbacks.Hint),
+                    InlineKeyboardButton.WithCallbackData(ButtonNames.NextTask, StringCallbacks.NextTask)
                 }
             });
 

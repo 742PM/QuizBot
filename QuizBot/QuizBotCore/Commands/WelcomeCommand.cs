@@ -19,9 +19,9 @@ namespace QuizBotCore.Commands
             {
                 new[]
                 {
-                    InlineKeyboardButton.WithCallbackData("Порешать задачки", StringCallbacks.Topics),
-                    InlineKeyboardButton.WithCallbackData("Справка", StringCallbacks.Info),
-                    InlineKeyboardButton.WithCallbackData("Обратная связь", StringCallbacks.Feedback)
+                    InlineKeyboardButton.WithCallbackData(ButtonNames.Topics, StringCallbacks.Topics),
+                    InlineKeyboardButton.WithCallbackData(ButtonNames.Info, StringCallbacks.Info),
+                    InlineKeyboardButton.WithCallbackData(ButtonNames.Feedback, StringCallbacks.Feedback)
                 }
             });
             await client.SendTextMessageAsync(chatId, messageText, replyMarkup: inlineKeyboard);
