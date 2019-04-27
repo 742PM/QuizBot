@@ -27,10 +27,10 @@ namespace QuizBotCore
 
         private string GenerateProgressBar(double percentage, int minSize, int maxSize)
         {
-            const char filled = '⚫';
-            const char empty = '⚪';
+            const char filled = '⬤';
+            const char empty = '◯';
             var totalFilled = (int)Math.Max(minSize, percentage * maxSize);
-            return new string(filled, totalFilled).PadRight(maxSize - totalFilled, empty);
+            return new string(filled, totalFilled).PadRight(maxSize, empty);
         }
     }
 }
