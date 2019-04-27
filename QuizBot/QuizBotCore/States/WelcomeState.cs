@@ -2,7 +2,5 @@
 {
     internal class WelcomeState : State
     {
-        /// <inheritdoc />
-        public override Transition[] AvailableTransitions { get; }
     }
 }

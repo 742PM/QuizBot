@@ -7,9 +7,6 @@ namespace QuizBotCore.States
         [BsonElement]
         public string TopicId { get; }
 
-        /// <inheritdoc />
-        public override Transition[] AvailableTransitions { get; }
-
         [BsonConstructor]
         public LevelSelectionState(string topicId)
         {

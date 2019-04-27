@@ -22,7 +22,7 @@ namespace QuizBotCore
                 quizService.GetTopics().Select(x => InlineKeyboardButton.WithCallbackData(x.Name, x.Id.ToString())),
                 new []
                 {
-                    InlineKeyboardButton.WithCallbackData("Назад", "back")
+                    InlineKeyboardButton.WithCallbackData("Назад", StringCallbacks.Back)
                 }
             });
             await client.SendTextMessageAsync(chatId, messageText, replyMarkup: keyboard);

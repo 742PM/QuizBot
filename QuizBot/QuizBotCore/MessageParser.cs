@@ -11,18 +11,17 @@ namespace QuizBotCore
         {
             switch (currentState)
             {
-                case UnknownUserState unknownUserState:
+                case UnknownUserState _:
                     return UnknownUserStateParser(update);
-                case WelcomeState welcomeState:
+                case WelcomeState _:
                     return WelcomeStateParser(update);
-                case TopicSelectionState topicSelection:
+                case TopicSelectionState _:
                     return TopicSelectionStateParser(update);
-                case LevelSelectionState levelSelection:
+                case LevelSelectionState _:
                     return LevelSelectionStateParser(update);
-                case TaskState taskState:
+                case TaskState _:
                     return TaskStateParser(update);
             }
-
             return new InvalidTransition();
         }
 
@@ -31,9 +30,17 @@ namespace QuizBotCore
             if (update.Type == UpdateType.CallbackQuery)
             {
                 var callbackData = update.CallbackQuery.Data;
-                if (callbackData == "back")
-                    return new BackTransition();
-                return new CorrectTransition(callbackData);
+                switch (callbackData)
+                {
+                    case StringCallbacks.Back:
+                        return new BackTransition();
+                    case StringCallbacks.NextTask:
+                        return new NextTaskTransition();
+                    case StringCallbacks.Hint:
+                        return new ShowHintTransition();
+                    default:
+                        return new CorrectTransition(callbackData);
+                }
             }
             return new InvalidTransition();
         }
@@ -43,7 +50,7 @@ namespace QuizBotCore
             if (update.Type == UpdateType.CallbackQuery)
             {
                 var callbackData = update.CallbackQuery.Data;
-                if (callbackData == "back")
+                if (callbackData == StringCallbacks.Back)
                     return new BackTransition();
                 return new CorrectTransition(callbackData);
             }
@@ -55,7 +62,7 @@ namespace QuizBotCore
             if (update.Type == UpdateType.CallbackQuery)
             {
                 var callbackData = update.CallbackQuery.Data;
-                if (callbackData == "back")
+                if (callbackData == StringCallbacks.Back)
                     return new BackTransition();
                 return new CorrectTransition(callbackData);
             }
@@ -69,12 +76,12 @@ namespace QuizBotCore
                 var callbackData = update.CallbackQuery.Data;
                 switch (callbackData)
                 {
-                    case "topics":
-                        return new CorrectTransition("topics");
-                    case "info":
-                        return new CorrectTransition("info");
-                    case "feedback":
-                        return new CorrectTransition("feedback");
+                    case StringCallbacks.Topics:
+                        return new CorrectTransition(StringCallbacks.Topics);
+                    case StringCallbacks.Info:
+                        return new CorrectTransition(StringCallbacks.Info);
+                    case StringCallbacks.Feedback:
+                        return new CorrectTransition(StringCallbacks.Feedback);
                 }
             }
             return new InvalidTransition();

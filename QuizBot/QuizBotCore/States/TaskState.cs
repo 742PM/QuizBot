@@ -15,7 +15,5 @@ namespace QuizBotCore.States
 
         [BsonElement] public string LevelId { get; }
 
-        /// <inheritdoc />
-        public override Transition[] AvailableTransitions { get; }
     }
 }

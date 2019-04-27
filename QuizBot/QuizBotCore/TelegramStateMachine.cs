@@ -24,90 +24,78 @@ namespace QuizBotCore
             {
                 case var t when t.state is UnknownUserState:
                     return (new WelcomeState(), new WelcomeCommand());
-                case var t when t.state is WelcomeState:
-                    return ProcessWelcomeState(t.state, t.transition);
-                case var t when t.state is TopicSelectionState:
-                    return ProcessTopicSelectionState(t.state, t.transition);
-                case var t when t.state is LevelSelectionState:
-                    return ProcessLevelSelectionState(t.state, t.transition);
-                case var t when t.state is TaskState:
-                    return ProcessTaskState(t.state, t.transition);
+                case var t when t.state is WelcomeState welcomeState:
+                    return ProcessWelcomeState(welcomeState, t.transition);
+                case var t when t.state is TopicSelectionState topicSelectionState:
+                    return ProcessTopicSelectionState(topicSelectionState, t.transition);
+                case var t when t.state is LevelSelectionState levelSelectionState:
+                    return ProcessLevelSelectionState(levelSelectionState, t.transition);
+                case var t when t.state is TaskState taskState:
+                    return ProcessTaskState(taskState, t.transition);
             }
 
             return default;
         }
 
-        private static (State, ICommand) ProcessTaskState(State state, Transition transition)
+        private static (State, ICommand) ProcessTaskState(TaskState state, Transition transition)
         {
             switch (transition)
             {
-                case BackTransition backTransition:
-                    var taskState = state as TaskState;
-                    return (new LevelSelectionState(taskState.TopicId), new SelectLevelCommand(taskState.TopicId));
+                case BackTransition _:
+                    return (new LevelSelectionState(state.TopicId), new SelectLevelCommand(state.TopicId));
+                case NextTaskTransition _:
+                    return (state, new NextTaskCommand());
+                case ShowHintTransition _:
+                    return (state, new ShowHintCommand());
                 case CorrectTransition correctTransition:
-                {
-                    switch (correctTransition.Content)
-                    {
-                        case "next":
-                            return (state, new NextTaskCommand());
-                        case "hint":
-                            return (state, new ShowHintCommand());
-                        default:
-                            return (state, new CheckTaskCommand(correctTransition.Content));
-                    }
-                }
+                    return (state, new CheckTaskCommand(correctTransition.Content));
             }
 
             return (new WelcomeState(), new WelcomeCommand());
         }
 
-        private static (State, ICommand) ProcessLevelSelectionState(State state, Transition transition)
+        private static (State, ICommand) ProcessLevelSelectionState(LevelSelectionState state, Transition transition)
         {
             switch (transition)
             {
-                case BackTransition backTransition:
+                case BackTransition _:
                     return (new TopicSelectionState(), new SelectTopicCommand());
                 case CorrectTransition correctTransition:
                     return
-                        (new TaskState(((LevelSelectionState) state).TopicId, correctTransition.Content),
-                            new ShowTaskCommand(((LevelSelectionState) state).TopicId, correctTransition.Content));
+                        (new TaskState(state.TopicId, correctTransition.Content),
+                            new ShowTaskCommand(state.TopicId, correctTransition.Content));
             }
 
             return (new WelcomeState(), new WelcomeCommand());
         }
 
-        private static (State, ICommand) ProcessTopicSelectionState(State state, Transition transition)
+        private static (State, ICommand) ProcessTopicSelectionState(TopicSelectionState state, Transition transition)
         {
             switch (transition)
             {
-                case BackTransition backTransition:
+                case BackTransition _:
                     return (new WelcomeState(), new WelcomeCommand());
                 case CorrectTransition correctTransition:
                     return (new LevelSelectionState(correctTransition.Content),
                         new SelectLevelCommand(correctTransition.Content));
             }
-
             return (new WelcomeState(), new WelcomeCommand());
         }
 
-        private static (State, ICommand) ProcessWelcomeState(State state, Transition transition)
+        private static (State, ICommand) ProcessWelcomeState(WelcomeState state, Transition transition)
         {
-            switch (transition)
+            if (transition is CorrectTransition correctTransition)
             {
-                case CorrectTransition correctTransition:
-                    switch (correctTransition.Content)
-                    {
-                        case "topics":
-                            return (new TopicSelectionState(), new SelectTopicCommand());
-                        case "info":
-                            return (new WelcomeState(), new AboutCommand());
-                        case "feedback":
-                            return (new WelcomeState(), new FeedBackCommand());
-                    }
-
-                    break;
+                switch (correctTransition.Content)
+                {
+                    case StringCallbacks.Topics:
+                        return (new TopicSelectionState(), new SelectTopicCommand());
+                    case StringCallbacks.Info:
+                        return (new WelcomeState(), new AboutCommand());
+                    case StringCallbacks.Feedback:
+                        return (new WelcomeState(), new FeedBackCommand());
+                }
             }
-
             return (new WelcomeState(), new WelcomeCommand());
         }
     }
