@@ -17,7 +17,6 @@ namespace QuizBotCore
         {
             var chatId = chat.Id;
             var messageText = "Выбирай тему и погнали!";
-            
             var keyboard = new InlineKeyboardMarkup(new[]
             {
                 quizService.GetTopics().Select(x => InlineKeyboardButton.WithCallbackData(x.Name, x.Id.ToString())),
@@ -26,7 +25,6 @@ namespace QuizBotCore
                     InlineKeyboardButton.WithCallbackData("Назад", "back")
                 }
             });
-            
             await client.SendTextMessageAsync(chatId, messageText, replyMarkup: keyboard);
         }
     }
