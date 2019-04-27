@@ -48,12 +48,8 @@ namespace QuizBotCore
                 }
             });
 
-            var progress = quizService.GetCurrentProgress(user.Id, topicGuid, levelGuid);
-            
-            var replyProgressBar = new ReplyKeyboardMarkup(new KeyboardButton(progress));
-
-            await client.SendTextMessageAsync(chatId, questionInMarkdown, replyMarkup: keyboard, parseMode: ParseMode.Markdown);
-            await client.SendTextMessageAsync(chatId, "", replyMarkup: replyProgressBar);
+            await client.SendTextMessageAsync(chatId, questionInMarkdown, replyMarkup: keyboard,
+                parseMode: ParseMode.Markdown);
         }
     }
 }
