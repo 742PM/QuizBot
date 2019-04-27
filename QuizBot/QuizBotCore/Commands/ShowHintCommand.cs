@@ -16,7 +16,7 @@ namespace QuizBotCore
             var user = userRepository.FindByTelegramId(chat.Id);
             var hint = quizService.GetHint(user.Id);
             if (hint == null)
-                await client.SendTextMessageAsync(chat.Id, "Подсказок нет");
+                await client.SendTextMessageAsync(chat.Id, DialogMessages.NoHintsMessage);
             else await client.SendTextMessageAsync(chat.Id, hint);
         }
     }

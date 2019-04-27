@@ -26,14 +26,10 @@ namespace QuizBotCore
             {
                 if (isCorrect.Value)
                 {
-                    await client.SendTextMessageAsync(chat.Id, "А ты прав!");
+                    await client.SendTextMessageAsync(chat.Id, DialogMessages.CheckTask_Correct);
                     await new SendProgressCommand().ExecuteAsync(chat, client,quizService,userRepository,logger);
                 }
-                else await client.SendTextMessageAsync(chat.Id, "Подумай еще.");
-            }
-            else
-            {
-                await client.SendTextMessageAsync(chat.Id, "Что-то пошло не так.");
+                else await client.SendTextMessageAsync(chat.Id, DialogMessages.CheckTask_Wrong);
             }
         }
     }

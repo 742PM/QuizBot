@@ -14,17 +14,19 @@ namespace QuizBotCore.Commands
             IUserRepository userRepository, ILogger logger)
         {
             var chatId = chat.Id;
-            var messageText = "Главное меню:";
             var inlineKeyboard = new InlineKeyboardMarkup(new[]
             {
                 new[]
                 {
-                    InlineKeyboardButton.WithCallbackData(ButtonNames.Topics, StringCallbacks.Topics),
-                    InlineKeyboardButton.WithCallbackData(ButtonNames.Info, StringCallbacks.Info),
-                    InlineKeyboardButton.WithCallbackData(ButtonNames.Feedback, StringCallbacks.Feedback)
+                    InlineKeyboardButton
+                        .WithCallbackData(ButtonNames.Topics, StringCallbacks.Topics),
+                    InlineKeyboardButton
+                        .WithCallbackData(ButtonNames.Info, StringCallbacks.Info),
+                    InlineKeyboardButton
+                        .WithCallbackData(ButtonNames.Feedback, StringCallbacks.Feedback)
                 }
             });
-            await client.SendTextMessageAsync(chatId, messageText, replyMarkup: inlineKeyboard);
+            await client.SendTextMessageAsync(chatId, DialogMessages.WelcomeMessage, replyMarkup: inlineKeyboard);
         }
     }
 }

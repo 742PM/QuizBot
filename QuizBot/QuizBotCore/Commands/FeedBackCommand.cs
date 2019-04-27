@@ -14,15 +14,12 @@ namespace QuizBotCore
         public async Task ExecuteAsync(Chat chat, TelegramBotClient client, IQuizService quizService,
             IUserRepository userRepository, ILogger logger)
         {
-            var message = " Есть вопрос? Пиши нам!";
-            var keyboard = new InlineKeyboardMarkup(new[]
-            {
-                InlineKeyboardButton.WithUrl("Артемий", "telegram.me/aizakov"),
-                InlineKeyboardButton.WithUrl("Антон", "telegram.me/funfine"),
-                InlineKeyboardButton.WithUrl("Василий", "telegram.me/vaspahomov"),
-                InlineKeyboardButton.WithUrl("Роман", "telegram.me/romutchio")
-            });
-            await client.SendTextMessageAsync(chat.Id,message, replyMarkup:keyboard);
+            var keyboard = new InlineKeyboardMarkup(
+                InlineKeyboardButton.WithUrl(
+                    DialogMessages.FeedbackContact.Item1, 
+                    DialogMessages.FeedbackContact.Item2)
+                );
+            await client.SendTextMessageAsync(chat.Id, DialogMessages.FeedbackMessage, replyMarkup: keyboard);
         }
     }
 }

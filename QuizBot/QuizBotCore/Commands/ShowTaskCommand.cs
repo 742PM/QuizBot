@@ -33,18 +33,24 @@ namespace QuizBotCore
 
             var task = quizService.GetTaskInfo(user.Id, topicGuid, levelGuid);
             var question = task.Question;
+            
             var questionInMarkdown = "```csharp\n" +
                                      $"{question}\n" +
                                      "```";
 
             var keyboard = new InlineKeyboardMarkup(new[]
             {
-                task.Answers.Select(InlineKeyboardButton.WithCallbackData),
+                task
+                    .Answers
+                        .Select(InlineKeyboardButton.WithCallbackData),
                 new[]
                 {
-                    InlineKeyboardButton.WithCallbackData(ButtonNames.Back, StringCallbacks.Back),
-                    InlineKeyboardButton.WithCallbackData(ButtonNames.Hint, StringCallbacks.Hint),
-                    InlineKeyboardButton.WithCallbackData(ButtonNames.NextTask, StringCallbacks.NextTask)
+                    InlineKeyboardButton
+                        .WithCallbackData(ButtonNames.Back, StringCallbacks.Back),
+                    InlineKeyboardButton
+                        .WithCallbackData(ButtonNames.Hint, StringCallbacks.Hint),
+                    InlineKeyboardButton
+                        .WithCallbackData(ButtonNames.NextTask, StringCallbacks.NextTask)
                 }
             });
 

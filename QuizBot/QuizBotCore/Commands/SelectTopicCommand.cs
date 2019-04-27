@@ -16,16 +16,20 @@ namespace QuizBotCore
             IUserRepository userRepository, ILogger logger)
         {
             var chatId = chat.Id;
-            var messageText = "Выбирай тему и погнали!";
             var keyboard = new InlineKeyboardMarkup(new[]
             {
-                quizService.GetTopics().Select(x => InlineKeyboardButton.WithCallbackData(x.Name, x.Id.ToString())),
-                new []
+                quizService
+                    .GetTopics()
+                    .Select(x => 
+                        InlineKeyboardButton
+                            .WithCallbackData(x.Name, x.Id.ToString())),
+                new[]
                 {
-                    InlineKeyboardButton.WithCallbackData(ButtonNames.Back, StringCallbacks.Back)
+                    InlineKeyboardButton
+                        .WithCallbackData(ButtonNames.Back, StringCallbacks.Back)
                 }
             });
-            await client.SendTextMessageAsync(chatId, messageText, replyMarkup: keyboard);
+            await client.SendTextMessageAsync(chatId, DialogMessages.SelectTopicMessage, replyMarkup: keyboard);
         }
     }
 }
