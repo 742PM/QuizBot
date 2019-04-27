@@ -1,26 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using MongoDB.Driver;
+using QuizBotCore;
+using QuizBotCore.Commands;
+using QuizBotCore.Database;
+using QuizRequestService;
 using QuizWebHookBot.Services;
 
 namespace QuizWebHookBot
 {
     public class Startup
     {
+        private const string DatabaseName = "telegramUsers";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
+        public static IMongoDatabase CreateDatabase(string connectionString) =>
+            new MongoClient(connectionString).GetDatabase(DatabaseName);
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -30,6 +32,19 @@ namespace QuizWebHookBot
 
             services.AddScoped<IUpdateService, UpdateService>();
             services.AddSingleton<IBotService, BotService>();
+            services.AddScoped<IQuizService> (_ => new Requester("https://complexitybot.azurewebsites.net"));
+//            services.AddSingleton(_ => new MongoClient("mongodb://localhost:27017").GetDatabase("QuizDatabase"));
+            services.AddSingleton(_ => new MongoClient(
+                "mongodb://romutchio:romaha434" +
+                               "@quizcluster-shard-00-00-kzjb8.azure.mongodb.net:27017," +
+                               "quizcluster-shard-00-01-kzjb8.azure.mongodb.net:27017," +
+                               "quizcluster-shard-00-02-kzjb8.azure.mongodb.net:27017/" +
+                               "ComplexityBot?ssl=true&replicaSet=QuizCluster-shard-0&authSource=admin&retryWrites=true")
+                .GetDatabase("QuizDatabase"));
+
+            services.AddSingleton<IUserRepository, MongoUserRepository>();
+            services.AddScoped<IStateMachine<ICommand>, TelegramStateMachine>();
+            services.AddScoped<IMessageParser, MessageParser>();
 
             services.Configure<BotConfiguration>(Configuration.GetSection("BotConfiguration"));
         }
@@ -38,14 +53,9 @@ namespace QuizWebHookBot
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
-            {
                 app.UseDeveloperExceptionPage();
-            }
             else
-            {
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
-            }
 
             app.UseHttpsRedirection();
             app.UseMvc();

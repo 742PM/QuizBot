@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System;
 using Microsoft.Extensions.Logging;
-using QuizWebHookBot.Commands;
+using QuizBotCore;
+using QuizBotCore.Commands;
+using QuizBotCore.Database;
+using QuizBotCore.States;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
@@ -11,34 +11,53 @@ namespace QuizWebHookBot.Services
 {
     public class UpdateService : IUpdateService
     {
-        private readonly IBotService _botService;
-        private readonly ILogger<UpdateService> _logger;
-        private readonly List<ICommand> commands;
+        private readonly ILogger<UpdateService> logger;
+        private readonly IMessageParser parser;
+        private readonly IStateMachine<ICommand> stateMachine;
+        private readonly IUserRepository userRepository;
 
-        public UpdateService(IBotService botService, ILogger<UpdateService> logger)
+        public UpdateService(
+            ILogger<UpdateService> logger,
+            IUserRepository userRepository,
+            IMessageParser parser,
+            IStateMachine<ICommand> stateMachine)
         {
-            _botService = botService;
-            _logger = logger;
-            commands = new List<ICommand>();
-            commands.Add(new Start());
+            this.logger = logger;
+            this.userRepository = userRepository;
+            this.parser = parser;
+            this.stateMachine = stateMachine;
         }
 
-        public ICommand RecognizeCommand(Message message)
+        public ICommand ProcessMessage(Update update)
         {
-            foreach (var command in commands)
+            long userId = -1;
+            switch (update.Type)
             {
-                if (command.Contains(message))
-                {
-                    return command;
-                }
+                case UpdateType.CallbackQuery:
+                    userId = update.CallbackQuery.Message.Chat.Id;
+                    break;
+                case UpdateType.Message:
+                    userId = update.Message.Chat.Id;
+                    break;
             }
-            return new Echo();
-        }
 
-        public async Task ExecuteCommand(ICommand command, Message message)
-        {
-            await command.Execute(message, _botService.Client);
+            var userEntity = userRepository.FindByTelegramId(userId) ??
+                            userRepository.Insert(new UserEntity(new UnknownUserState(), userId, Guid.NewGuid()));
+
+            var state = userEntity.CurrentState;
+
+            var transition = parser.Parse(state, update);
+            logger.LogInformation($"Parsed transition {transition}");
+            logger.LogInformation($"Parsed state {state}");
+            if (transition is CorrectTransition correct)
+                logger.LogInformation($"State content: {correct.Content}");
+            var (currentState, currentCommand) = stateMachine.GetNextState(state, transition);
+            
+            logger.LogInformation($"New state {currentState}");
+
+            userRepository.Update(new UserEntity(currentState, userId, userEntity.Id));
+
+            return currentCommand;
         }
-       
     }
 }

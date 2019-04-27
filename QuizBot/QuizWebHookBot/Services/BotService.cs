@@ -1,20 +1,17 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.Extensions.Options;
-using QuizWebHookBot.Commands;
 using Telegram.Bot;
 
 namespace QuizWebHookBot.Services
 {
     public class BotService : IBotService
     {
-        const string TelegramTokenVariableName = "TELEGRAM_TOKEN";
+        private const string TelegramTokenVariableName = "TELEGRAM_TOKEN";
 
         public BotService(IOptions<BotConfiguration> config)
         {
-            Client = new TelegramBotClient(Environment.GetEnvironmentVariable(TelegramTokenVariableName));
+            Client = new TelegramBotClient("854957716:AAHjU_wFLwX5Sz23CV-9qs-kSYAcVqewERU");
         }
-
+        
         public TelegramBotClient Client { get; }
     }
 }
