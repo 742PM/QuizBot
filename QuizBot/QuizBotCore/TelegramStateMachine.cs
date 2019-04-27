@@ -42,7 +42,8 @@ namespace QuizBotCore
             switch (transition)
             {
                 case BackTransition backTransition:
-                    return (new WelcomeState(), new WelcomeCommand());
+                    var taskState = state as TaskState;
+                    return (new LevelSelectionState(taskState.TopicId), new SelectLevelCommand(taskState.TopicId));
                 case CorrectTransition correctTransition:
                 {
                     switch (correctTransition.Content)
@@ -65,7 +66,7 @@ namespace QuizBotCore
             switch (transition)
             {
                 case BackTransition backTransition:
-                    return (new WelcomeState(), new WelcomeCommand());
+                    return (new TopicSelectionState(), new SelectTopicCommand());
                 case CorrectTransition correctTransition:
                     return
                         (new TaskState(((LevelSelectionState) state).TopicId, correctTransition.Content),
