@@ -21,7 +21,7 @@ namespace QuizBotCore
             var task = quizService.GetNextTaskInfo(user.Id);
             if (task == null)
             {
-                await client.SendTextMessageAsync(chat.Id, DialogMessages.NextTask_NotAvailable);
+                await client.SendTextMessageAsync(chat.Id, DialogMessages.NextTaskNotAvailable);
                 return;
             }
 

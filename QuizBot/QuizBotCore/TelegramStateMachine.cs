@@ -22,10 +22,12 @@ namespace QuizBotCore
         {
             switch ((state: currentState, transition: transition))
             {
+                case var t when t.transition is HelpTransition:
+                    return (new TopicSelectionState(), new SelectTopicCommand()); 
                 case var t when t.state is UnknownUserState:
-                    return (new WelcomeState(), new WelcomeCommand());
-                case var t when t.state is WelcomeState welcomeState:
-                    return ProcessWelcomeState(welcomeState, t.transition);
+                    return (new TopicSelectionState(), new SelectTopicCommand());
+//                case var t when t.state is WelcomeState welcomeState:
+//                    return ProcessWelcomeState(welcomeState, t.transition);
                 case var t when t.state is TopicSelectionState topicSelectionState:
                     return ProcessTopicSelectionState(topicSelectionState, t.transition);
                 case var t when t.state is LevelSelectionState levelSelectionState:
@@ -51,7 +53,7 @@ namespace QuizBotCore
                     return (state, new CheckTaskCommand(correctTransition.Content));
             }
 
-            return (new WelcomeState(), new WelcomeCommand());
+            return (new TopicSelectionState(), new SelectTopicCommand());
         }
 
         private static (State, ICommand) ProcessLevelSelectionState(LevelSelectionState state, Transition transition)
@@ -66,7 +68,7 @@ namespace QuizBotCore
                             new ShowTaskCommand(state.TopicId, correctTransition.Content));
             }
 
-            return (new WelcomeState(), new WelcomeCommand());
+            return (new TopicSelectionState(), new SelectTopicCommand());
         }
 
         private static (State, ICommand) ProcessTopicSelectionState(TopicSelectionState state, Transition transition)
@@ -74,29 +76,29 @@ namespace QuizBotCore
             switch (transition)
             {
                 case BackTransition _:
-                    return (new WelcomeState(), new WelcomeCommand());
+                    return (new TopicSelectionState(), new SelectTopicCommand());
                 case CorrectTransition correctTransition:
                     return (new LevelSelectionState(correctTransition.Content),
                         new SelectLevelCommand(correctTransition.Content));
             }
-            return (new WelcomeState(), new WelcomeCommand());
+            return (new TopicSelectionState(), new SelectTopicCommand());
         }
 
-        private static (State, ICommand) ProcessWelcomeState(WelcomeState state, Transition transition)
-        {
-            if (transition is CorrectTransition correctTransition)
-            {
-                switch (correctTransition.Content)
-                {
-                    case StringCallbacks.Topics:
-                        return (new TopicSelectionState(), new SelectTopicCommand());
-                    case StringCallbacks.Info:
-                        return (new WelcomeState(), new AboutCommand());
-                    case StringCallbacks.Feedback:
-                        return (new WelcomeState(), new FeedBackCommand());
-                }
-            }
-            return (new WelcomeState(), new WelcomeCommand());
-        }
+//        private static (State, ICommand) ProcessWelcomeState(WelcomeState state, Transition transition)
+//        {
+//            if (transition is CorrectTransition correctTransition)
+//            {
+//                switch (correctTransition.Content)
+//                {
+//                    case StringCallbacks.Topics:
+//                        return (new TopicSelectionState(), new SelectTopicCommand());
+//                    case StringCallbacks.Info:
+//                        return (new WelcomeState(), new AboutCommand());
+//                    case StringCallbacks.Feedback:
+//                        return (new WelcomeState(), new FeedBackCommand());
+//                }
+//            }
+//            return (new WelcomeState(), new WelcomeCommand());
+//        }
     }
 }

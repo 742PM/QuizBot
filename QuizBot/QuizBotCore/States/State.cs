@@ -3,7 +3,7 @@
 namespace QuizBotCore.States
 {
     [BsonDiscriminator(RootClass = true)]
-    [BsonKnownTypes(typeof(AboutState), typeof(UnknownUserState), typeof(WelcomeState),
+    [BsonKnownTypes(typeof(AboutState), typeof(UnknownUserState), /* typeof(WelcomeState), */
         typeof(LevelSelectionState), typeof(TaskState), typeof(FeedBackState), typeof(TopicSelectionState))]
     public abstract class State
     {

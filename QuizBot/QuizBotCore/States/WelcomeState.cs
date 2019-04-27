@@ -1,6 +1,6 @@
-﻿namespace QuizBotCore.States
-{
-    internal class WelcomeState : State
-    {
-    }
-}
+﻿//namespace QuizBotCore.States
+//{
+//    internal class WelcomeState : State
+//    {
+//    }
+//}

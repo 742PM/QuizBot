@@ -9,12 +9,16 @@ namespace QuizBotCore
         /// <inheritdoc />
         public Transition Parse(State currentState, Update update)
         {
+            if (update.Type == UpdateType.Message)
+                if (update.Message.Text == UserCommands.Help)
+                    return new HelpTransition();
+            
             switch (currentState)
             {
                 case UnknownUserState _:
                     return UnknownUserStateParser(update);
-                case WelcomeState _:
-                    return WelcomeStateParser(update);
+//                case WelcomeState _:
+//                    return WelcomeStateParser(update);
                 case TopicSelectionState _:
                     return TopicSelectionStateParser(update);
                 case LevelSelectionState _:
@@ -69,23 +73,23 @@ namespace QuizBotCore
             return new InvalidTransition();
         }
 
-        private Transition WelcomeStateParser(Update update)
-        {
-            if (update.Type == UpdateType.CallbackQuery)
-            {
-                var callbackData = update.CallbackQuery.Data;
-                switch (callbackData)
-                {
-                    case StringCallbacks.Topics:
-                        return new CorrectTransition(StringCallbacks.Topics);
-                    case StringCallbacks.Info:
-                        return new CorrectTransition(StringCallbacks.Info);
-                    case StringCallbacks.Feedback:
-                        return new CorrectTransition(StringCallbacks.Feedback);
-                }
-            }
-            return new InvalidTransition();
-        }
+//        private Transition WelcomeStateParser(Update update)
+//        {
+//            if (update.Type == UpdateType.CallbackQuery)
+//            {
+//                var callbackData = update.CallbackQuery.Data;
+//                switch (callbackData)
+//                {
+//                    case StringCallbacks.Topics:
+//                        return new CorrectTransition(StringCallbacks.Topics);
+//                    case StringCallbacks.Info:
+//                        return new CorrectTransition(StringCallbacks.Info);
+//                    case StringCallbacks.Feedback:
+//                        return new CorrectTransition(StringCallbacks.Feedback);
+//                }
+//            }
+//            return new InvalidTransition();
+//        }
 
         private Transition UnknownUserStateParser(Update update)
         {

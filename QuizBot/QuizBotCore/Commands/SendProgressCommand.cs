@@ -23,16 +23,22 @@ namespace QuizBotCore
             var state = user.CurrentState as TaskState;
             var percentage = quizService.GetCurrentProgress(user.Id,
                 Guid.Parse(state.TopicId), Guid.Parse(state.LevelId));
+            if (percentage != null)
+            {
+                var progressInPercencts = double.Parse(percentage);
+                var progress = GenerateProgressBar(progressInPercencts, 1, 10);
+                await client.SendTextMessageAsync(chat.Id, DialogMessages.ProgressMessage + progress);
+                if (progressInPercencts == 1.0)
+                    await client.SendTextMessageAsync(chat.Id, DialogMessages.LevelCompleted);
+            }
 
-            var progress = GenerateProgressBar(double.Parse(percentage), 1, 10);
-            await client.SendTextMessageAsync(chat.Id, DialogMessages.ProgressMessage + progress);
         }
 
         private string GenerateProgressBar(double percentage, int minSize, int maxSize)
         {
             var totalFilled = (int) Math.Max(minSize, percentage * maxSize);
-            return new string(DialogMessages.Progress_Filled, totalFilled)
-                .PadRight(maxSize, DialogMessages.Progress_Empty);
+            return new string(DialogMessages.ProgressFilled, totalFilled)
+                .PadRight(maxSize, DialogMessages.ProgressEmpty);
         }
     }
 }

@@ -29,7 +29,7 @@ namespace QuizBotCore
                         .WithCallbackData(ButtonNames.Back, StringCallbacks.Back)
                 }
             });
-            await client.SendTextMessageAsync(chatId, DialogMessages.SelectTopicMessage, replyMarkup: keyboard);
+            await client.SendTextMessageAsync(chatId, DialogMessages.WelcomeMessage, replyMarkup: keyboard);
         }
     }
 }
