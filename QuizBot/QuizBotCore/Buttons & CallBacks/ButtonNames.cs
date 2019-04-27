@@ -2,11 +2,11 @@ namespace QuizBotCore
 {
     public static class ButtonNames
     {
-        public static string Back = "Назад";
-        public static string Hint = "Подсказка";
-        public static string NextTask = "Далее";
-        public static string Topics = "Порешать";
-        public static string Info = "Справка";
-        public static string Feedback = "Обратная связь";
+        public const string Back = "Назад";
+        public const string Hint = "Подсказка";
+        public const string NextTask = "Далее";
+        public const string Topics = "Порешать";
+        public const string Info = "Справка";
+        public const string Feedback = "Обратная связь";
     }
 }
