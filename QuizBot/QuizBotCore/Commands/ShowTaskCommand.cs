@@ -38,19 +38,16 @@ namespace QuizBotCore
                                      $"{question}\n" +
                                      "```";
 
-            var keyboard = new InlineKeyboardMarkup(new[]
+            var keyboard = new ReplyKeyboardMarkup(new[]
             {
                 task
                     .Answers
-                        .Select(InlineKeyboardButton.WithCallbackData),
+                        .Select(x => new KeyboardButton(x)),
                 new[]
                 {
-                    InlineKeyboardButton
-                        .WithCallbackData(ButtonNames.Back, StringCallbacks.Back),
-                    InlineKeyboardButton
-                        .WithCallbackData(ButtonNames.Hint, StringCallbacks.Hint),
-                    InlineKeyboardButton
-                        .WithCallbackData(ButtonNames.NextTask, StringCallbacks.NextTask)
+                    new KeyboardButton(ButtonNames.Back),
+                    new KeyboardButton(ButtonNames.Hint),
+                    new KeyboardButton(ButtonNames.NextTask)
                 }
             });
 
