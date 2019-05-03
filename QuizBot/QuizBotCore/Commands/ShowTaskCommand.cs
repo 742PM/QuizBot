@@ -39,17 +39,20 @@ namespace QuizBotCore
                                      "```";
 
             var keyboard = new ReplyKeyboardMarkup(new[]
-            {
-                task
-                    .Answers
-                        .Select(x => new KeyboardButton(x)),
-                new[]
                 {
-                    new KeyboardButton(ButtonNames.Back),
-                    new KeyboardButton(ButtonNames.Hint),
-                    new KeyboardButton(ButtonNames.NextTask)
-                }
-            });
+                    task
+                        .Answers
+                        .Select(x => new KeyboardButton(x)),
+                    new[]
+                    {
+                        new KeyboardButton(ButtonNames.Back),
+                        new KeyboardButton(ButtonNames.Hint),
+                        new KeyboardButton(ButtonNames.NextTask)
+                    }
+                },
+                resizeKeyboard: true,
+                oneTimeKeyboard: true
+            );
 
             await client.SendTextMessageAsync(chatId, questionInMarkdown, replyMarkup: keyboard,
                 parseMode: ParseMode.Markdown);
