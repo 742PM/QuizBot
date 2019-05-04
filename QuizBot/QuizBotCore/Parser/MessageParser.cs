@@ -10,8 +10,13 @@ namespace QuizBotCore
         public Transition Parse(State currentState, Update update)
         {
             if (update.Type == UpdateType.Message)
-                if (update.Message.Text == UserCommands.Help)
-                    return new HelpTransition();
+                switch (update.Message.Text)
+                {
+                    case UserCommands.Help:
+                        return new HelpTransition();
+                    case UserCommands.Feedback:
+                        return new FeedbackTransition();
+                }
             
             switch (currentState)
             {

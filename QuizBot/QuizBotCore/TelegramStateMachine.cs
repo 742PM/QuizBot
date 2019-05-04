@@ -24,10 +24,10 @@ namespace QuizBotCore
             {
                 case var t when t.transition is HelpTransition:
                     return (new TopicSelectionState(), new SelectTopicCommand()); 
+                case var t when t.transition is FeedbackTransition:
+                    return (new TopicSelectionState(), new FeedBackCommand()); 
                 case var t when t.state is UnknownUserState:
                     return (new TopicSelectionState(), new SelectTopicCommand());
-//                case var t when t.state is WelcomeState welcomeState:
-//                    return ProcessWelcomeState(welcomeState, t.transition);
                 case var t when t.state is TopicSelectionState topicSelectionState:
                     return ProcessTopicSelectionState(topicSelectionState, t.transition);
                 case var t when t.state is LevelSelectionState levelSelectionState:
