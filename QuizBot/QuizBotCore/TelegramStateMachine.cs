@@ -45,8 +45,8 @@ namespace QuizBotCore
             {
                 case BackTransition _:
                     return (new LevelSelectionState(state.TopicId), new SelectLevelCommand(state.TopicId));
-                case NextTaskTransition _:
-                    return (state, new NextTaskCommand());
+//                case NextTaskTransition _:
+//                    return (state, new NextTaskCommand());
                 case ShowHintTransition _:
                     return (state, new ShowHintCommand());
                 case CorrectTransition correctTransition:

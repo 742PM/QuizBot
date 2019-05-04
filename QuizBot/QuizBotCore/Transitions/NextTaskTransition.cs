@@ -1,6 +1,6 @@
-namespace QuizBotCore
-{
-    class NextTaskTransition : Transition
-    {
-    }
-}
+//namespace QuizBotCore
+//{
+//    class NextTaskTransition : Transition
+//    {
+//    }
+//}

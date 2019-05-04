@@ -43,8 +43,8 @@ namespace QuizBotCore
                 {
                     case StringCallbacks.Back:
                         return new BackTransition();
-                    case StringCallbacks.NextTask:
-                        return new NextTaskTransition();
+//                    case StringCallbacks.NextTask:
+//                        return new NextTaskTransition();
                     case StringCallbacks.Hint:
                         return new ShowHintTransition();
                     default:

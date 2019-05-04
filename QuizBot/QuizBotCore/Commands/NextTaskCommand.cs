@@ -37,7 +37,7 @@ namespace QuizBotCore
                 {
                     InlineKeyboardButton.WithCallbackData(ButtonNames.Back, StringCallbacks.Back),
                     InlineKeyboardButton.WithCallbackData(ButtonNames.Hint, StringCallbacks.Hint),
-                    InlineKeyboardButton.WithCallbackData(ButtonNames.NextTask, StringCallbacks.NextTask)
+//                    InlineKeyboardButton.WithCallbackData(ButtonNames.NextTask, StringCallbacks.NextTask)
                 }
             });
 

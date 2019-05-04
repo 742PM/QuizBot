@@ -17,7 +17,6 @@ namespace QuizBotCore
         public const string SelectLevelMessage = "Вижу с темой ты определился. " +
                                                  "Выбирай уровень:";
 
-        public const string SelectTopicMessage = "Выбирай тему и погнали!";
         public const string ProgressMessage = "Прогресс:\n";
         public const char ProgressFilled = '⬤';
         public const char ProgressEmpty = '◯';
@@ -28,6 +27,6 @@ namespace QuizBotCore
         
         public static readonly string LevelCompleted = "Ты решил все задачки из этого уровня👌🏿\n" +
                                                        $"Чтобы продолжить, - нажми \"{ButtonNames.Back}\" и выбери новый уровень.\n" +
-                                                       $"Чтобы взять еще задачку из этого уровня - жми \"{ButtonNames.NextTask}.\"";
+                                                       "Или же можешь продолжить решать этот уровень.";
     }
 }
