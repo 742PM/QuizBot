@@ -1,4 +1,5 @@
-﻿using QuizBotCore.Commands;
+﻿using Newtonsoft.Json;
+using QuizBotCore.Commands;
 using QuizBotCore.Database;
 using QuizBotCore.States;
 using QuizRequestService;
@@ -44,13 +45,11 @@ namespace QuizBotCore
             switch (transition)
             {
                 case BackTransition _:
-                    return (new LevelSelectionState(state.TopicId), new SelectLevelCommand(state.TopicId));
-//                case NextTaskTransition _:
-//                    return (state, new NextTaskCommand());
+                    return (new LevelSelectionState(state.TopicDTO), new SelectLevelCommand(state.TopicDTO));
                 case ShowHintTransition _:
                     return (state, new ShowHintCommand());
                 case CorrectTransition correctTransition:
-                    return (state, new CheckTaskCommand(correctTransition.Content));
+                    return (state, new CheckTaskCommand(state.TopicDTO, state.LevelDTO, correctTransition.Content));
             }
 
             return (new TopicSelectionState(), new SelectTopicCommand());
@@ -63,9 +62,10 @@ namespace QuizBotCore
                 case BackTransition _:
                     return (new TopicSelectionState(), new SelectTopicCommand());
                 case CorrectTransition correctTransition:
+                    var levelDto = JsonConvert.DeserializeObject<LevelDTO>(correctTransition.Content);
                     return
-                        (new TaskState(state.TopicId, correctTransition.Content),
-                            new ShowTaskCommand(state.TopicId, correctTransition.Content));
+                        (new TaskState(state.TopicDto, levelDto),
+                            new ShowTaskCommand(state.TopicDto, levelDto));
             }
 
             return (new TopicSelectionState(), new SelectTopicCommand());
@@ -78,27 +78,12 @@ namespace QuizBotCore
                 case BackTransition _:
                     return (new TopicSelectionState(), new SelectTopicCommand());
                 case CorrectTransition correctTransition:
-                    return (new LevelSelectionState(correctTransition.Content),
-                        new SelectLevelCommand(correctTransition.Content));
+                    var topicDto = JsonConvert.DeserializeObject<TopicDTO>(correctTransition.Content);
+                    return (new LevelSelectionState(topicDto),
+                        new SelectLevelCommand(topicDto));
             }
             return (new TopicSelectionState(), new SelectTopicCommand());
         }
 
-//        private static (State, ICommand) ProcessWelcomeState(WelcomeState state, Transition transition)
-//        {
-//            if (transition is CorrectTransition correctTransition)
-//            {
-//                switch (correctTransition.Content)
-//                {
-//                    case StringCallbacks.Topics:
-//                        return (new TopicSelectionState(), new SelectTopicCommand());
-//                    case StringCallbacks.Info:
-//                        return (new WelcomeState(), new AboutCommand());
-//                    case StringCallbacks.Feedback:
-//                        return (new WelcomeState(), new FeedBackCommand());
-//                }
-//            }
-//            return (new WelcomeState(), new WelcomeCommand());
-//        }
     }
 }

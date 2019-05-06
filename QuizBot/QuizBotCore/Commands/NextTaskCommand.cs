@@ -13,6 +13,14 @@ namespace QuizBotCore
 {
     internal class NextTaskCommand : ICommand
     {
+        private readonly TopicDTO topicDto;
+        private readonly LevelDTO levelDto;
+
+        public NextTaskCommand(TopicDTO topicDto, LevelDTO levelDto)
+        {
+            this.topicDto = topicDto;
+            this.levelDto = levelDto;
+        }
         public async Task ExecuteAsync(Chat chat, TelegramBotClient client, IQuizService quizService,
             IUserRepository userRepository,
             ILogger logger)
@@ -26,9 +34,15 @@ namespace QuizBotCore
             }
 
             var question = task.Question;
-            var questionInMarkdown = "```csharp\n" +
-                                     $"{question}\n" +
-                                     "```";
+            
+            var topicName = $"Тема: \"{topicDto.Name}\".\n";
+            var levelName = $"Уровень: \"{levelDto.Description}\".\n";
+            
+            var questionFormatted = "```csharp\n" +
+                                    $"{question}\n" +
+                                    "```";
+            
+            var questionInMarkdown = $"{topicName}{levelName}{questionFormatted}";
 
             var keyboard = new InlineKeyboardMarkup(new[]
             {
@@ -37,7 +51,6 @@ namespace QuizBotCore
                 {
                     InlineKeyboardButton.WithCallbackData(ButtonNames.Back, StringCallbacks.Back),
                     InlineKeyboardButton.WithCallbackData(ButtonNames.Hint, StringCallbacks.Hint),
-//                    InlineKeyboardButton.WithCallbackData(ButtonNames.NextTask, StringCallbacks.NextTask)
                 }
             });
 
