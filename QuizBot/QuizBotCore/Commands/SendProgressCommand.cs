@@ -22,7 +22,7 @@ namespace QuizBotCore
             var user = userRepository.FindByTelegramId(chat.Id);
             var state = user.CurrentState as TaskState;
             var percentage = quizService.GetCurrentProgress(user.Id,
-                state.TopicDto.Id, state.LevelDto.Id);
+                Guid.Parse(state.TopicId), Guid.Parse(state.LevelId));
             if (percentage != null)
             {
                 var progressInPercencts = double.Parse(percentage);

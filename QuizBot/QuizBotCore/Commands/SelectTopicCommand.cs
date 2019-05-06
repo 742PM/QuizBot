@@ -1,8 +1,6 @@
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using QuizBotCore.Commands;
 using QuizBotCore.Database;
 using QuizRequestService;
@@ -18,15 +16,13 @@ namespace QuizBotCore
             IUserRepository userRepository, ILogger logger)
         {
             var chatId = chat.Id;
-            var jsons = quizService.GetTopics().Select(x => JsonConvert.SerializeObject(x));
-            logger.LogInformation(String.Join("", jsons));
             var keyboard = new InlineKeyboardMarkup(new[]
             {
                 quizService
                     .GetTopics()
                     .Select(x => 
                         InlineKeyboardButton
-                            .WithCallbackData(x.Name, JsonConvert.SerializeObject(x))),
+                            .WithCallbackData(x.Name, x.Id.ToString())),
                 new[]
                 {
                     InlineKeyboardButton

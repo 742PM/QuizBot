@@ -1,7 +1,7 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using QuizBotCore.Commands;
 using QuizBotCore.Database;
 using QuizRequestService;
@@ -13,11 +13,11 @@ namespace QuizBotCore
 {
     public class SelectLevelCommand : ICommand
     {
-        private TopicDTO topicDto;
+        private string topicId;
 
-        public SelectLevelCommand(TopicDTO topicDto)
+        public SelectLevelCommand(string topicId)
         {
-            this.topicDto = topicDto;
+            this.topicId = topicId;
         }
 
         public async Task ExecuteAsync(Chat chat, TelegramBotClient client, IQuizService quizService,
@@ -26,14 +26,15 @@ namespace QuizBotCore
             var chatId = chat.Id;
 
             var user = userRepository.FindByTelegramId(chatId);
+            var topicGuid = Guid.Parse(topicId);
 
             var keyboard = new InlineKeyboardMarkup(new[]
             {
                 quizService
-                    .GetAvailableLevels(user.Id, topicDto.Id)
+                    .GetAvailableLevels(user.Id, topicGuid)
                     .Select(x => 
                         InlineKeyboardButton
-                            .WithCallbackData(x.Description, JsonConvert.SerializeObject(x))),
+                            .WithCallbackData(x.Description, x.Id.ToString())),
                 new[]
                 {
                     InlineKeyboardButton
