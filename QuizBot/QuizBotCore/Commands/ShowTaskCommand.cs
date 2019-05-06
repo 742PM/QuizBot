@@ -43,17 +43,18 @@ namespace QuizBotCore
                 task = quizService.GetTaskInfo(user.Id, topicDto.Id, levelDto.Id);
             }
 
-            await SendTask(task, chat, user, client, quizService);
+            await SendTask(task, chat, user, client, quizService, logger);
         }
 
         private async Task SendTask(TaskDTO task, Chat chat, UserEntity user, TelegramBotClient client,
-            IQuizService quizService)
+            IQuizService quizService, ILogger logger)
         {
             var userProgress = quizService.GetCurrentProgress(user.Id, topicDto.Id, levelDto.Id);
             var progressBar = new CircleProgressBar();
             var progress = progressBar.GenerateProgressBar(userProgress.TasksSolved, userProgress.TasksCount);
             var question = task.Question;
-
+            
+            logger.LogInformation($"Прогресс: {userProgress.TasksSolved.ToString()}: {userProgress.TasksCount.ToString()}");
             var message = FormatMessage(question, progress);
             var controlButtons = new[]
             {
