@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -54,23 +55,20 @@ namespace QuizBotCore
             var progress = progressBar.GenerateProgressBar(userProgress.TasksSolved, userProgress.TasksCount);
             var question = task.Question;
             
-            logger.LogInformation($"Прогресс: {userProgress.TasksSolved.ToString()}: {userProgress.TasksCount.ToString()}");
             var message = FormatMessage(question, progress);
-            var controlButtons = new[]
+            var controlButtons = new List<InlineKeyboardButton>
             {
                 InlineKeyboardButton
                     .WithCallbackData(ButtonNames.Back, StringCallbacks.Back)
             };
-            
+            logger.LogInformation($"{task.Question}:{task.HasHints}");
             if (task.HasHints)
                 controlButtons.Append(InlineKeyboardButton
                     .WithCallbackData(ButtonNames.Hint, StringCallbacks.Hint));
             
             var keyboard = new InlineKeyboardMarkup(new[]
             {
-                task
-                    .Answers
-                    .Select(InlineKeyboardButton.WithCallbackData),
+                task.Answers.Select(InlineKeyboardButton.WithCallbackData),
                 controlButtons
             });
 
