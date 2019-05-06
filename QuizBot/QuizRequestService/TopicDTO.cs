@@ -6,7 +6,6 @@ namespace QuizRequestService
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-
         public TopicDTO(Guid id, string name)
         {
             Id = id;

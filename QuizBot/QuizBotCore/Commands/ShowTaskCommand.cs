@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -14,13 +13,13 @@ namespace QuizBotCore
 {
     internal class ShowTaskCommand : ICommand
     {
-        private readonly string topicId;
-        private readonly string levelId;
+        private readonly TopicDTO topicDto;
+        private readonly LevelDTO levelDto;
 
-        public ShowTaskCommand(string topicId, string levelId)
+        public ShowTaskCommand(TopicDTO topicDto, LevelDTO levelDto)
         {
-            this.topicId = topicId;
-            this.levelId = levelId;
+            this.topicDto = topicDto;
+            this.levelDto = levelDto;
         }
 
         public async Task ExecuteAsync(Chat chat, TelegramBotClient client, IQuizService quizService,
@@ -28,15 +27,17 @@ namespace QuizBotCore
         {
             var chatId = chat.Id;
             var user = userRepository.FindByTelegramId(chat.Id);
-            var topicGuid = Guid.Parse(topicId);
-            var levelGuid = Guid.Parse(levelId);
 
-            var task = quizService.GetTaskInfo(user.Id, topicGuid, levelGuid);
+            var task = quizService.GetTaskInfo(user.Id, topicDto.Id, levelDto.Id);
             var question = task.Question;
+            var topicName = $"Тема: {topicDto.Name}\n";
+            var levelName = $"Уровень: {levelDto.Description}\n";
             
-            var questionInMarkdown = "```csharp\n" +
+            var questionFormatted = "```csharp\n" +
                                      $"{question}\n" +
                                      "```";
+
+            var questionInMarkdown = $"{topicName}{levelName}{questionFormatted}";
 
             var keyboard = new InlineKeyboardMarkup(new[]
             {
@@ -49,8 +50,6 @@ namespace QuizBotCore
                         .WithCallbackData(ButtonNames.Back, StringCallbacks.Back),
                     InlineKeyboardButton
                         .WithCallbackData(ButtonNames.Hint, StringCallbacks.Hint),
-//                    InlineKeyboardButton
-//                        .WithCallbackData(ButtonNames.NextTask, StringCallbacks.NextTask)
                 }
             });
 

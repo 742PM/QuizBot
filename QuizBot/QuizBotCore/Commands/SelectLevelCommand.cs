@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -13,11 +12,11 @@ namespace QuizBotCore
 {
     public class SelectLevelCommand : ICommand
     {
-        private string topicId;
+        private TopicDTO topicDto;
 
-        public SelectLevelCommand(string topicId)
+        public SelectLevelCommand(TopicDTO topicDto)
         {
-            this.topicId = topicId;
+            this.topicDto = topicDto;
         }
 
         public async Task ExecuteAsync(Chat chat, TelegramBotClient client, IQuizService quizService,
@@ -26,12 +25,11 @@ namespace QuizBotCore
             var chatId = chat.Id;
 
             var user = userRepository.FindByTelegramId(chatId);
-            var topicGuid = Guid.Parse(topicId);
 
             var keyboard = new InlineKeyboardMarkup(new[]
             {
                 quizService
-                    .GetAvailableLevels(user.Id, topicGuid)
+                    .GetAvailableLevels(user.Id, topicDto.Id)
                     .Select(x => 
                         InlineKeyboardButton
                             .WithCallbackData(x.Description, x.Id.ToString())),

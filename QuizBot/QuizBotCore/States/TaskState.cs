@@ -1,19 +1,20 @@
 using MongoDB.Bson.Serialization.Attributes;
+using QuizRequestService;
 
 namespace QuizBotCore.States
 {
     public class TaskState : State
     {
         [BsonConstructor]
-        public TaskState(string topicId, string levelId)
+        public TaskState(TopicDTO topicDto, LevelDTO levelDto)
         {
-            TopicId = topicId;
-            LevelId = levelId;
+            TopicDto = topicDto;
+            LevelDto = levelDto;
         }
 
-        [BsonElement] public string TopicId { get; }
+        [BsonElement] public TopicDTO TopicDto { get; }
 
-        [BsonElement] public string LevelId { get; }
+        [BsonElement] public LevelDTO LevelDto { get; }
 
     }
 }

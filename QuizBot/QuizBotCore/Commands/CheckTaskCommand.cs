@@ -10,10 +10,14 @@ namespace QuizBotCore
 {
     internal class CheckTaskCommand : ICommand
     {
+        private readonly TopicDTO topicDto;
+        private readonly LevelDTO levelDto;
         private readonly string answer;
 
-        public CheckTaskCommand(string answer)
+        public CheckTaskCommand(TopicDTO topicDto, LevelDTO levelDto, string answer)
         {
+            this.topicDto = topicDto;
+            this.levelDto = levelDto;
             this.answer = answer;
         }
 
@@ -28,7 +32,7 @@ namespace QuizBotCore
                 {
                     await client.SendTextMessageAsync(chat.Id, DialogMessages.CheckTaskCorrect);
                     await new SendProgressCommand().ExecuteAsync(chat, client,quizService,userRepository,logger);
-                    await new NextTaskCommand().ExecuteAsync(chat, client, quizService, userRepository, logger);
+                    await new NextTaskCommand(topicDto,levelDto).ExecuteAsync(chat, client, quizService, userRepository, logger);
                 }
                 else await client.SendTextMessageAsync(chat.Id, DialogMessages.CheckTaskWrong);
             }
