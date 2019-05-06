@@ -31,8 +31,7 @@ namespace QuizBotCore
                 if (isCorrect.Value)
                 {
                     await client.SendTextMessageAsync(chat.Id, DialogMessages.CheckTaskCorrect);
-                    await new SendProgressCommand().ExecuteAsync(chat, client,quizService,userRepository,logger);
-                    await new NextTaskCommand(topicDto,levelDto).ExecuteAsync(chat, client, quizService, userRepository, logger);
+                    await new ShowTaskCommand(topicDto,levelDto, true).ExecuteAsync(chat, client, quizService, userRepository, logger);
                 }
                 else await client.SendTextMessageAsync(chat.Id, DialogMessages.CheckTaskWrong);
             }

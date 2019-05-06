@@ -17,7 +17,9 @@ namespace QuizBotCore
         public const string SelectLevelMessage = "Вижу с темой ты определился. " +
                                                  "Выбирай уровень:";
 
-        public const string ProgressMessage = "Прогресс:\n";
+        public const string ProgressMessage = "Прогресс:";
+        public const string TopicName = "";
+        public const string LevelName = "";
         public const char ProgressFilled = '⬤';
         public const char ProgressEmpty = '◯';
         public const string NoHintsMessage = "Подсказок нет";
