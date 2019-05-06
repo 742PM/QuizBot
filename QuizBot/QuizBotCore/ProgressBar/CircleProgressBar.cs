@@ -1,14 +1,11 @@
-using System;
-
 namespace QuizBotCore
 {
     internal class CircleProgressBar : IProgressBar
     {
-        public string GenerateProgressBar(double percentage, int minSize, int maxSize)
+        public string GenerateProgressBar(int solved, int total)
         {
-            var totalFilled = (int) Math.Max(minSize, percentage * maxSize);
-            return new string(DialogMessages.ProgressFilled, totalFilled)
-                .PadRight(maxSize, DialogMessages.ProgressEmpty);
+            return new string(DialogMessages.ProgressFilled, solved)
+                .PadRight(total, DialogMessages.ProgressEmpty);
         }
     }
 }

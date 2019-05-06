@@ -46,27 +46,31 @@ namespace QuizBotCore
             await SendTask(task, chat, user, client, quizService);
         }
 
-        private async Task SendTask(TaskDTO task, Chat chat, UserEntity user, TelegramBotClient client, IQuizService quizService)
+        private async Task SendTask(TaskDTO task, Chat chat, UserEntity user, TelegramBotClient client,
+            IQuizService quizService)
         {
-            var percentage = quizService.GetCurrentProgress(user.Id, topicDto.Id, levelDto.Id);
+            var userProgress = quizService.GetCurrentProgress(user.Id, topicDto.Id, levelDto.Id);
             var progressBar = new CircleProgressBar();
-            var progress = progressBar.GenerateProgressBar(double.Parse(percentage), 1, 10);
+            var progress = progressBar.GenerateProgressBar(userProgress.TasksSolved, userProgress.TasksCount);
             var question = task.Question;
-            
-            var message = FormatMessage(question, progress);
 
+            var message = FormatMessage(question, progress);
+            var controlButtons = new[]
+            {
+                InlineKeyboardButton
+                    .WithCallbackData(ButtonNames.Back, StringCallbacks.Back)
+            };
+            
+            if (task.HasHints)
+                controlButtons.Append(InlineKeyboardButton
+                    .WithCallbackData(ButtonNames.Hint, StringCallbacks.Hint));
+            
             var keyboard = new InlineKeyboardMarkup(new[]
             {
                 task
                     .Answers
                     .Select(InlineKeyboardButton.WithCallbackData),
-                new[]
-                {
-                    InlineKeyboardButton
-                        .WithCallbackData(ButtonNames.Back, StringCallbacks.Back),
-                    InlineKeyboardButton
-                        .WithCallbackData(ButtonNames.Hint, StringCallbacks.Hint),
-                }
+                controlButtons
             });
 
             await client.SendTextMessageAsync(chat.Id, message, replyMarkup: keyboard,

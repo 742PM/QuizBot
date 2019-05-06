@@ -42,10 +42,13 @@ namespace QuizRequestService
             return null;
         }
 
-        public string GetCurrentProgress(Guid userId, Guid topicId, Guid levelId)
+        public ProgressDTO GetCurrentProgress(Guid userId, Guid topicId, Guid levelId)
         {
             var client = new RestClient(serverUri + $"/api/{userId}/{topicId}/{levelId}/currentProgress");
-            return SendGetRequest(client, Method.GET).Content;
+            var request = SendGetRequest(client, Method.GET);
+            if (request.StatusCode == HttpStatusCode.OK)
+                return JsonConvert.DeserializeObject<ProgressDTO>(request.Content);
+            return null;
         }
 
         public TaskDTO GetTaskInfo(Guid userId, Guid topicId, Guid levelId)
@@ -66,14 +69,12 @@ namespace QuizRequestService
             return null;
         }
 
-        public string GetHint(Guid userId)
+        public HintDTO GetHint(Guid userId)
         {
             var client = new RestClient(serverUri + $"/api/{userId}/hint");
             var request = SendGetRequest(client, Method.GET);
             if (request.StatusCode == HttpStatusCode.OK)
-            {
-                return request.Content;
-            }
+                return JsonConvert.DeserializeObject<HintDTO>(request.Content);
             return null;
         }
 

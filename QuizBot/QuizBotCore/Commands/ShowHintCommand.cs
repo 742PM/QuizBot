@@ -17,7 +17,7 @@ namespace QuizBotCore
             var hint = quizService.GetHint(user.Id);
             if (hint == null)
                 await client.SendTextMessageAsync(chat.Id, DialogMessages.NoHintsMessage);
-            else await client.SendTextMessageAsync(chat.Id, hint);
+            else await client.SendTextMessageAsync(chat.Id, hint.HintText);
         }
     }
 }

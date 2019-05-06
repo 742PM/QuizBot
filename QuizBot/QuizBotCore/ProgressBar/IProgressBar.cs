@@ -2,6 +2,6 @@ namespace QuizBotCore
 {
     interface IProgressBar
     {
-        string GenerateProgressBar(double percentage, int minSize, int maxSize);
+        string GenerateProgressBar(int solved, int total);
     }
 }
