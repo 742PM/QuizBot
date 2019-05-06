@@ -45,11 +45,11 @@ namespace QuizBotCore
             switch (transition)
             {
                 case BackTransition _:
-                    return (new LevelSelectionState(state.TopicDTO), new SelectLevelCommand(state.TopicDTO));
+                    return (new LevelSelectionState(state.TopicDto), new SelectLevelCommand(state.TopicDto));
                 case ShowHintTransition _:
                     return (state, new ShowHintCommand());
                 case CorrectTransition correctTransition:
-                    return (state, new CheckTaskCommand(state.TopicDTO, state.LevelDTO, correctTransition.Content));
+                    return (state, new CheckTaskCommand(state.TopicDto, state.LevelDto, correctTransition.Content));
             }
 
             return (new TopicSelectionState(), new SelectTopicCommand());

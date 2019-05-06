@@ -8,13 +8,15 @@ namespace QuizBotCore.States
         [BsonConstructor]
         public TaskState(TopicDTO topicDto, LevelDTO levelDto)
         {
-            TopicDTO = topicDto;
-            LevelDTO = levelDto;
+            TopicDto = topicDto;
+            LevelDto = levelDto;
         }
 
-        [BsonElement] public TopicDTO TopicDTO { get; }
+        [BsonElement] 
+        public TopicDTO TopicDto { get; }
 
-        [BsonElement] public LevelDTO LevelDTO { get; }
+        [BsonElement] 
+        public LevelDTO LevelDto { get; }
 
     }
 }
