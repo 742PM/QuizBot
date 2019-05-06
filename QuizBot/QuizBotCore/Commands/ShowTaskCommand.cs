@@ -83,7 +83,10 @@ namespace QuizBotCore
                                     $"{question}\n" +
                                     "```";
 
-            return $"{topicName}{levelName}{progress}{questionFormatted}";
+            return $"{topicName}" +
+                   $"{levelName}" +
+                   $"{progress}\n" +
+                   $"{questionFormatted}";
         }
     }
 }
