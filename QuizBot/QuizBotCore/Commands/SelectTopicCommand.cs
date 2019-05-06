@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using MongoDB.Bson;
+using Newtonsoft.Json;
 using QuizBotCore.Commands;
 using QuizBotCore.Database;
 using QuizRequestService;
@@ -23,7 +23,7 @@ namespace QuizBotCore
                     .GetTopics()
                     .Select(x => 
                         InlineKeyboardButton
-                            .WithCallbackData(x.Name, x.ToJson())),
+                            .WithCallbackData(x.Name, JsonConvert.SerializeObject(x))),
                 new[]
                 {
                     InlineKeyboardButton

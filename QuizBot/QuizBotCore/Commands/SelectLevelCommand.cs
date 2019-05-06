@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using MongoDB.Bson;
+using Newtonsoft.Json;
 using QuizBotCore.Commands;
 using QuizBotCore.Database;
 using QuizRequestService;
@@ -33,7 +33,7 @@ namespace QuizBotCore
                     .GetAvailableLevels(user.Id, topicDto.Id)
                     .Select(x => 
                         InlineKeyboardButton
-                            .WithCallbackData(x.Description, x.ToJson())),
+                            .WithCallbackData(x.Description, JsonConvert.SerializeObject(x))),
                 new[]
                 {
                     InlineKeyboardButton
