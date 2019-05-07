@@ -25,9 +25,14 @@ namespace QuizBotCore
             var chatId = chat.Id;
 
             var user = userRepository.FindByTelegramId(chatId);
-            var levels = quizService.GetAvailableLevels(user.Id, topicDto.Id)
-                .Select((e,index)=> $"/level{index} {e.Description}");
-            var levelsMessage = string.Join("\n", levels);
+            var allLevels = quizService.GetLevels(topicDto.Id);
+            var availableLevels = quizService.GetAvailableLevels(user.Id, topicDto.Id).ToList();
+            var closedLevels = allLevels.Except(availableLevels);
+            
+            var activeLevels = availableLevels.Select((e,index)=> $"/level{index} {e.Description}");
+            var nonActiveLevels = closedLevels.Select(x => $"{DialogMessages.ClosedLevel} {x.Description}");
+            
+            var levelsMessage = string.Join("\n", activeLevels, nonActiveLevels);
             var message = $"{DialogMessages.SelectLevelMessage}\n{levelsMessage}";
             
 

@@ -19,6 +19,7 @@ namespace QuizBotCore
 
         public static readonly char[] Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
         public const string ProgressMessage = "Прогресс:";
+        public const string ClosedLevel = "[Заблокирован]";
         public const string TopicName = "Тема:";
         public const string LevelName = "Уровень:";
         public const char ProgressFilled = '⬤';
