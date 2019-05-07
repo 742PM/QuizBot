@@ -68,7 +68,7 @@ namespace QuizBotCore
 
             var answers = task.Answers.Select((e, index) => (DialogMessages.Alphabet[index], $"{e}"));
 
-            var answerBlock = string.Join("/n", answers.Select(x => $"/{x.Item1}. {x.Item2}"));
+            var answerBlock = string.Join('\n', answers.Select(x => $"{x.Item1}. {x.Item2}"));
 
             var message = FormatMessage(question, progress, answerBlock);
 
