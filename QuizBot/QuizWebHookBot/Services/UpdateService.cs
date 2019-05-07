@@ -52,7 +52,7 @@ namespace QuizWebHookBot.Services
 
             var state = userEntity.CurrentState;
 
-            var transition = parser.Parse(state, update, quizService);
+            var transition = parser.Parse(state, update, quizService, logger);
             logger.LogInformation($"Parsed transition {transition}");
             logger.LogInformation($"Parsed state {state}");
             if (transition is CorrectTransition correct)

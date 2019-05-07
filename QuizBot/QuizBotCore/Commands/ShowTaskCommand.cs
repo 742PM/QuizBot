@@ -51,18 +51,18 @@ namespace QuizBotCore.Commands
             IQuizService quizService, ILogger logger)
         {
             var userProgress = quizService.GetCurrentProgress(user.Id, topicDto.Id, levelDto.Id);
-            
+            logger.LogInformation($"Progress: {userProgress.TasksSolved}:{userProgress.TasksCount}");
             var progressBar = new CircleProgressBar();
             var progress = progressBar.GenerateProgressBar(userProgress.TasksSolved, userProgress.TasksCount);
             
             var question = task.Question;
-
+            logger.LogInformation($"Question: {question}");
             var controlButtons = new List<InlineKeyboardButton>
             {
                 InlineKeyboardButton
                     .WithCallbackData(ButtonNames.Back, StringCallbacks.Back)
             };
-            
+            logger.LogInformation($"HasHints: {task.HasHints}");
             if (task.HasHints)
                 controlButtons.Append(InlineKeyboardButton
                     .WithCallbackData(ButtonNames.Hint, StringCallbacks.Hint));
@@ -70,8 +70,9 @@ namespace QuizBotCore.Commands
             var answers = task.Answers.Select((e, index) => (letter: DialogMessages.Alphabet[index], answer: $"{e}")).ToList();
 
             var answerBlock = string.Join('\n', answers.Select(x => $"**{x.letter}.** {x.answer}"));
-
+            logger.LogInformation($"Answers: {answerBlock}");
             var message = FormatMessage(question, progress, answerBlock);
+            logger.LogInformation($"messageToSend : {message}");
 
             var keyboard = new InlineKeyboardMarkup(new[]
             {

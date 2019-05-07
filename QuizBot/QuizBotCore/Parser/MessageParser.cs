@@ -1,4 +1,5 @@
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using QuizBotCore.States;
 using QuizBotCore.Transitions;
 using QuizRequestService;
@@ -9,7 +10,7 @@ namespace QuizBotCore.Parser
 {
     public class MessageParser : IMessageParser
     {
-        public Transition Parse(State currentState, Update update, IQuizService quizService)
+        public Transition Parse(State currentState, Update update, IQuizService quizService, ILogger logger)
         {
             if (update.Type == UpdateType.Message)
                 switch (update.Message.Text)
