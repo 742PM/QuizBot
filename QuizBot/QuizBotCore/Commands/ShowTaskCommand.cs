@@ -96,7 +96,7 @@ namespace QuizBotCore
             return $"{topicName}" +
                    $"{levelName}" +
                    $"{progress}\n" +
-                   $"{questionFormatted}\n" +
+                   $"{questionFormatted}" +
                    $"{answers}\n" +
                    $"{UserCommands.ReportError}";
         }
