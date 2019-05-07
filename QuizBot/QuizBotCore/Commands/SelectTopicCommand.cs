@@ -22,12 +22,7 @@ namespace QuizBotCore
                     .GetTopics()
                     .Select(x => 
                         InlineKeyboardButton
-                            .WithCallbackData(x.Name, x.Id.ToString())),
-                new[]
-                {
-                    InlineKeyboardButton
-                        .WithCallbackData(ButtonNames.Back, StringCallbacks.Back)
-                }
+                            .WithCallbackData(x.Name, x.Id.ToString()))
             });
             await client.SendTextMessageAsync(chatId, DialogMessages.WelcomeMessage, replyMarkup: keyboard);
         }
