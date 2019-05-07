@@ -17,6 +17,7 @@ namespace QuizBotCore
         public const string SelectLevelMessage = "Вижу с темой ты определился. " +
                                                  "Выбирай уровень:";
 
+        public static readonly char[] Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
         public const string ProgressMessage = "Прогресс:";
         public const string TopicName = "Тема:";
         public const string LevelName = "Уровень:";

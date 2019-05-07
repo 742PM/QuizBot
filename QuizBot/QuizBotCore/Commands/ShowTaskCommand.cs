@@ -54,8 +54,8 @@ namespace QuizBotCore
             var progressBar = new CircleProgressBar();
             var progress = progressBar.GenerateProgressBar(userProgress.TasksSolved, userProgress.TasksCount);
             var question = task.Question;
-            
-            var message = FormatMessage(question, progress);
+
+
             var controlButtons = new List<InlineKeyboardButton>
             {
                 InlineKeyboardButton
@@ -65,10 +65,17 @@ namespace QuizBotCore
             if (task.HasHints)
                 controlButtons.Append(InlineKeyboardButton
                     .WithCallbackData(ButtonNames.Hint, StringCallbacks.Hint));
-            
+
+            var answers = task.Answers.Select((e, index) => (DialogMessages.Alphabet[index], $"{e}"));
+
+            var answerBlock = string.Join("/n", answers.Select(x => $"/{x.Item1}. {x.Item2}"));
+
+            var message = FormatMessage(question, progress, answerBlock);
+
             var keyboard = new InlineKeyboardMarkup(new[]
             {
-                task.Answers.Select(InlineKeyboardButton.WithCallbackData),
+                answers.Select(x => InlineKeyboardButton
+                    .WithCallbackData(x.Item1.ToString(), x.Item2)),
                 controlButtons
             });
 
@@ -76,20 +83,21 @@ namespace QuizBotCore
                 parseMode: ParseMode.Markdown);
         }
 
-        private string FormatMessage(string question, string progressBar)
+        private string FormatMessage(string question, string progressBar, string answers)
         {
-            var topicName = $"{DialogMessages.TopicName} \"**{topicDto.Name}**\"\n";
-            var levelName = $"{DialogMessages.LevelName} \"**{levelDto.Description}**\"\n";
+            var topicName = $"{DialogMessages.TopicName} **\"{topicDto.Name}\"** \n";
+            var levelName = $"{DialogMessages.LevelName} **\"{levelDto.Description}\"** \n";
             var progress = $"{DialogMessages.ProgressMessage} {progressBar}\n";
 
             var questionFormatted = "```csharp\n" +
                                     $"{question}\n" +
-                                    "```\n";
+                                    "```";
 
             return $"{topicName}" +
                    $"{levelName}" +
                    $"{progress}\n" +
                    $"{questionFormatted}\n" +
+                   $"{answers}" +
                    $"{UserCommands.ReportError}";
         }
     }
