@@ -68,7 +68,7 @@ namespace QuizBotCore
 
             var answers = task.Answers.Select((e, index) => (DialogMessages.Alphabet[index], $"{e}"));
 
-            var answerBlock = string.Join('\n', answers.Select(x => $"__{x.Item1}.__ {x.Item2}"));
+            var answerBlock = string.Join('\n', answers.Select(x => $"**{x.Item1}.** {x.Item2}"));
 
             var message = FormatMessage(question, progress, answerBlock);
 
@@ -85,8 +85,8 @@ namespace QuizBotCore
 
         private string FormatMessage(string question, string progressBar, string answers)
         {
-            var topicName = $"{DialogMessages.TopicName} __\"{topicDto.Name}\"__ \n";
-            var levelName = $"{DialogMessages.LevelName} __\"{levelDto.Description}\"__ \n";
+            var topicName = $"{DialogMessages.TopicName} **{topicDto.Name}** \n";
+            var levelName = $"{DialogMessages.LevelName} **{levelDto.Description}** \n";
             var progress = $"{DialogMessages.ProgressMessage} {progressBar}\n";
 
             var questionFormatted = "```csharp\n" +
@@ -97,8 +97,8 @@ namespace QuizBotCore
                    $"{levelName}" +
                    $"{progress}\n" +
                    $"{questionFormatted}" +
-                   $"{answers}\n" +
-                   $"{UserCommands.ReportError}";
+                   $"{answers}";
+//                   $"{UserCommands.ReportError}";
         }
     }
 }
