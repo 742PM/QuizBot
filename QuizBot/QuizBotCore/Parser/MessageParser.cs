@@ -1,10 +1,11 @@
 using System.Linq;
 using QuizBotCore.States;
+using QuizBotCore.Transitions;
 using QuizRequestService;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
-namespace QuizBotCore
+namespace QuizBotCore.Parser
 {
     public class MessageParser : IMessageParser
     {

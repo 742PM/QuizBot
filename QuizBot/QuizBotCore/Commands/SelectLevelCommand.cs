@@ -1,14 +1,13 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using QuizBotCore.Commands;
 using QuizBotCore.Database;
 using QuizRequestService;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace QuizBotCore
+namespace QuizBotCore.Commands
 {
     public class SelectLevelCommand : ICommand
     {
@@ -23,8 +22,8 @@ namespace QuizBotCore
             IUserRepository userRepository, ILogger logger)
         {
             var chatId = chat.Id;
-
             var user = userRepository.FindByTelegramId(chatId);
+            
             var allLevels = quizService.GetLevels(topicDto.Id);
             var availableLevels = quizService.GetAvailableLevels(user.Id, topicDto.Id).ToList();
             var closedLevels = allLevels.Select(x => x.Description).Except(availableLevels.Select(x => x.Description));
@@ -37,7 +36,6 @@ namespace QuizBotCore
             
             var message = $"{DialogMessages.SelectLevelMessage}\n{activeLevelsMessage}\n{nonActiveLevelsMessage}";
             
-
             var keyboard = new InlineKeyboardMarkup(new[]
             {
                 new[]

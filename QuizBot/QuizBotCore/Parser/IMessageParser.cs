@@ -1,8 +1,9 @@
 ﻿using QuizBotCore.States;
+using QuizBotCore.Transitions;
 using QuizRequestService;
 using Telegram.Bot.Types;
 
-namespace QuizBotCore
+namespace QuizBotCore.Parser
 {
     public interface IMessageParser
     {

@@ -7,6 +7,7 @@ using MongoDB.Driver;
 using QuizBotCore;
 using QuizBotCore.Commands;
 using QuizBotCore.Database;
+using QuizBotCore.Parser;
 using QuizRequestService;
 using QuizWebHookBot.Services;
 

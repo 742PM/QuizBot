@@ -2,15 +2,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using QuizBotCore.Commands;
 using QuizBotCore.Database;
+using QuizBotCore.ProgressBar;
 using QuizRequestService;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace QuizBotCore
+namespace QuizBotCore.Commands
 {
     internal class ShowTaskCommand : ICommand
     {
@@ -51,31 +51,32 @@ namespace QuizBotCore
             IQuizService quizService, ILogger logger)
         {
             var userProgress = quizService.GetCurrentProgress(user.Id, topicDto.Id, levelDto.Id);
+            
             var progressBar = new CircleProgressBar();
             var progress = progressBar.GenerateProgressBar(userProgress.TasksSolved, userProgress.TasksCount);
+            
             var question = task.Question;
-
 
             var controlButtons = new List<InlineKeyboardButton>
             {
                 InlineKeyboardButton
                     .WithCallbackData(ButtonNames.Back, StringCallbacks.Back)
             };
-            logger.LogInformation($"{task.Question}:{task.HasHints}");
+            
             if (task.HasHints)
                 controlButtons.Append(InlineKeyboardButton
                     .WithCallbackData(ButtonNames.Hint, StringCallbacks.Hint));
 
-            var answers = task.Answers.Select((e, index) => (DialogMessages.Alphabet[index], $"{e}"));
+            var answers = task.Answers.Select((e, index) => (letter: DialogMessages.Alphabet[index], answer: $"{e}")).ToList();
 
-            var answerBlock = string.Join('\n', answers.Select(x => $"**{x.Item1}.** {x.Item2}"));
+            var answerBlock = string.Join('\n', answers.Select(x => $"**{x.letter}.** {x.answer}"));
 
             var message = FormatMessage(question, progress, answerBlock);
 
             var keyboard = new InlineKeyboardMarkup(new[]
             {
                 answers.Select(x => InlineKeyboardButton
-                    .WithCallbackData(x.Item1.ToString(), x.Item2)),
+                    .WithCallbackData(x.letter.ToString(), x.answer)),
                 controlButtons
             });
 
@@ -98,7 +99,6 @@ namespace QuizBotCore
                    $"{progress}\n" +
                    $"{questionFormatted}" +
                    $"{answers}";
-//                   $"{UserCommands.ReportError}";
         }
     }
 }

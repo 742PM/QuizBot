@@ -2,12 +2,6 @@ namespace QuizBotCore
 {
     public static class DialogMessages
     {
-        public const string AboutMessage = " ***Quibble*** происходит от двух фундаментальных слов:\n" +
-                                           "*Quiz* + *Bible* - задаем вопросы, обучаем и даем ответы...\n" +
-                                           "Обучение новому материалу проходит в виде бесконечной викторины.\n" +
-                                           "Пройти уровень можно только решив определенное количество задач подряд.\n" +
-                                           "*Желаем удачи!* ";
-
         public const string CheckTaskCorrect = "А ты прав!";
         public const string CheckTaskWrong = "Подумай еще.";
         public const string FeedbackMessage = "Есть вопрос? Пиши нам!";

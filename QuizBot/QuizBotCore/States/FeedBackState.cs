@@ -1,6 +1,4 @@
-using QuizBotCore.States;
-
-namespace QuizBotCore
+namespace QuizBotCore.States
 {
     internal class FeedBackState : State
     {

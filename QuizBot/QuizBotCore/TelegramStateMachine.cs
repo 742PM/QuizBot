@@ -3,6 +3,7 @@ using System.Linq;
 using QuizBotCore.Commands;
 using QuizBotCore.Database;
 using QuizBotCore.States;
+using QuizBotCore.Transitions;
 using QuizRequestService;
 
 namespace QuizBotCore

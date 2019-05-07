@@ -1,4 +1,4 @@
-namespace QuizBotCore
+namespace QuizBotCore.ProgressBar
 {
     interface IProgressBar
     {
