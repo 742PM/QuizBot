@@ -28,7 +28,7 @@ namespace QuizBotCore.Parser
                 case TopicSelectionState _:
                     return TopicSelectionStateParser(update);
                 case LevelSelectionState state:
-                    return LevelSelectionStateParser(state, update, quizService);
+                    return LevelSelectionStateParser(state, update, quizService, logger);
                 case TaskState _:
                     return TaskStateParser(update);
             }
@@ -53,17 +53,20 @@ namespace QuizBotCore.Parser
             return new InvalidTransition();
         }
 
-        private Transition LevelSelectionStateParser(LevelSelectionState state, Update update, IQuizService quizService)
+        private Transition LevelSelectionStateParser(LevelSelectionState state, Update update, 
+            IQuizService quizService, ILogger logger)
         {
             switch (update.Type)
             {
                 case UpdateType.Message:
                 {
-                    return ParseLevel(state, update, quizService);
+                    logger.LogInformation($"Parsed message: {update.Message.Text}");
+                    return ParseLevel(state, update, quizService, logger);
                 }
                 case UpdateType.CallbackQuery:
                 {
                     var callbackData = update.CallbackQuery.Data;
+                    logger.LogInformation($"Parsed callback: {update.Message.Text}");
                     if (callbackData == StringCallbacks.Back)
                         return new BackTransition();
                     return new CorrectTransition(callbackData);
@@ -72,14 +75,17 @@ namespace QuizBotCore.Parser
             return new InvalidTransition();
         }
 
-        private Transition ParseLevel(LevelSelectionState state, Update update, IQuizService quizService)
+        private Transition ParseLevel(LevelSelectionState state, Update update, 
+            IQuizService quizService, ILogger logger)
         {
             var message = update.Message.Text;
             if (message.Contains(UserCommands.Level))
             {
                 var levelId = message.Replace(UserCommands.Level, "");
                 var index = int.Parse(levelId);
+                logger.LogInformation($"levelId: {index}");
                 var level = quizService.GetLevels(state.TopicDto.Id).ElementAt(index);
+                logger.LogInformation($"level: {level.Id}");
                 return new CorrectTransition(level.Id.ToString());
             }
             return new InvalidTransition();
