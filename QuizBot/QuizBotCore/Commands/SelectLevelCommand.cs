@@ -25,14 +25,14 @@ namespace QuizBotCore
             var chatId = chat.Id;
 
             var user = userRepository.FindByTelegramId(chatId);
+            var levels = quizService.GetAvailableLevels(user.Id, topicDto.Id)
+                .Select((e,index)=> $"/level{index} {e.Description}");
+            var levelsMessage = string.Join("\n", levels);
+            var message = $"{DialogMessages.SelectLevelMessage}\n{levelsMessage}";
+            
 
             var keyboard = new InlineKeyboardMarkup(new[]
             {
-                quizService
-                    .GetAvailableLevels(user.Id, topicDto.Id)
-                    .Select(x => 
-                        InlineKeyboardButton
-                            .WithCallbackData(x.Description, x.Id.ToString())),
                 new[]
                 {
                     InlineKeyboardButton
@@ -40,7 +40,7 @@ namespace QuizBotCore
                 }
             });
 
-            await client.SendTextMessageAsync(chatId, DialogMessages.SelectLevelMessage, replyMarkup: keyboard);
+            await client.SendTextMessageAsync(chatId, message, replyMarkup: keyboard);
         }
     }
 }

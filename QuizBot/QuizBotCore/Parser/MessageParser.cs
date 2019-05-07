@@ -1,4 +1,6 @@
+using System.Linq;
 using QuizBotCore.States;
+using QuizRequestService;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
@@ -6,8 +8,7 @@ namespace QuizBotCore
 {
     public class MessageParser : IMessageParser
     {
-        /// <inheritdoc />
-        public Transition Parse(State currentState, Update update)
+        public Transition Parse(State currentState, Update update, IQuizService quizService)
         {
             if (update.Type == UpdateType.Message)
                 switch (update.Message.Text)
@@ -22,12 +23,10 @@ namespace QuizBotCore
             {
                 case UnknownUserState _:
                     return UnknownUserStateParser(update);
-//                case WelcomeState _:
-//                    return WelcomeStateParser(update);
                 case TopicSelectionState _:
                     return TopicSelectionStateParser(update);
-                case LevelSelectionState _:
-                    return LevelSelectionStateParser(update);
+                case LevelSelectionState state:
+                    return LevelSelectionStateParser(state, update, quizService);
                 case TaskState _:
                     return TaskStateParser(update);
             }
@@ -43,8 +42,6 @@ namespace QuizBotCore
                 {
                     case StringCallbacks.Back:
                         return new BackTransition();
-//                    case StringCallbacks.NextTask:
-//                        return new NextTaskTransition();
                     case StringCallbacks.Hint:
                         return new ShowHintTransition();
                     default:
@@ -54,14 +51,31 @@ namespace QuizBotCore
             return new InvalidTransition();
         }
 
-        private Transition LevelSelectionStateParser(Update update)
+        private Transition LevelSelectionStateParser(LevelSelectionState state, Update update, IQuizService quizService)
         {
-            if (update.Type == UpdateType.CallbackQuery)
+            switch (update.Type)
             {
-                var callbackData = update.CallbackQuery.Data;
-                if (callbackData == StringCallbacks.Back)
-                    return new BackTransition();
-                return new CorrectTransition(callbackData);
+                case UpdateType.CallbackQuery:
+                {
+                    var callbackData = update.CallbackQuery.Data;
+                    if (callbackData == StringCallbacks.Back)
+                        return new BackTransition();
+                    return new CorrectTransition(callbackData);
+                }
+
+                case UpdateType.Message:
+                {
+                    var message = update.Message.Text;
+                    if (message.Contains(UserCommands.Level))
+                    {
+                        var levelId = message.Replace(UserCommands.Level, "");
+                        var index = int.Parse(levelId);
+                        var level = quizService.GetLevels(state.TopicDto.Id).ElementAt(index);
+                        return new CorrectTransition(level.Id.ToString());
+                    }
+
+                    break;
+                }
             }
             return new InvalidTransition();
         }
@@ -75,26 +89,9 @@ namespace QuizBotCore
                     return new BackTransition();
                 return new CorrectTransition(callbackData);
             }
+            
             return new InvalidTransition();
         }
-
-//        private Transition WelcomeStateParser(Update update)
-//        {
-//            if (update.Type == UpdateType.CallbackQuery)
-//            {
-//                var callbackData = update.CallbackQuery.Data;
-//                switch (callbackData)
-//                {
-//                    case StringCallbacks.Topics:
-//                        return new CorrectTransition(StringCallbacks.Topics);
-//                    case StringCallbacks.Info:
-//                        return new CorrectTransition(StringCallbacks.Info);
-//                    case StringCallbacks.Feedback:
-//                        return new CorrectTransition(StringCallbacks.Feedback);
-//                }
-//            }
-//            return new InvalidTransition();
-//        }
 
         private Transition UnknownUserStateParser(Update update)
         {

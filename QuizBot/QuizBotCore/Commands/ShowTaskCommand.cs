@@ -84,12 +84,13 @@ namespace QuizBotCore
 
             var questionFormatted = "```csharp\n" +
                                     $"{question}\n" +
-                                    "```";
+                                    "```\n";
 
             return $"{topicName}" +
                    $"{levelName}" +
                    $"{progress}\n" +
-                   $"{questionFormatted}";
+                   $"{questionFormatted}\n" +
+                   $"{UserCommands.ReportError}";
         }
     }
 }
