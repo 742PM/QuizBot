@@ -32,8 +32,10 @@ namespace QuizBotCore
             var activeLevels = availableLevels.Select((e,index)=> $"/level{index} {e.Description}");
             var nonActiveLevels = closedLevels.Select(x => $"{DialogMessages.ClosedLevel} {x.Description}");
             
-            var levelsMessage = string.Join("\n", activeLevels, nonActiveLevels);
-            var message = $"{DialogMessages.SelectLevelMessage}\n{levelsMessage}";
+            var activeLevelsMessage = string.Join("\n", activeLevels);
+            var nonActiveLevelsMessage = string.Join('\n', nonActiveLevels);
+            
+            var message = $"{DialogMessages.SelectLevelMessage}\n{activeLevelsMessage}\n{nonActiveLevelsMessage}";
             
 
             var keyboard = new InlineKeyboardMarkup(new[]
