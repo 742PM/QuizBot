@@ -56,6 +56,10 @@ namespace QuizBotCore.Parser
         {
             switch (update.Type)
             {
+                case UpdateType.Message:
+                {
+                    return ParseLevel(state, update, quizService);
+                }
                 case UpdateType.CallbackQuery:
                 {
                     var callbackData = update.CallbackQuery.Data;
@@ -63,20 +67,19 @@ namespace QuizBotCore.Parser
                         return new BackTransition();
                     return new CorrectTransition(callbackData);
                 }
+            }
+            return new InvalidTransition();
+        }
 
-                case UpdateType.Message:
-                {
-                    var message = update.Message.Text;
-                    if (message.Contains(UserCommands.Level))
-                    {
-                        var levelId = message.Replace(UserCommands.Level, "");
-                        var index = int.Parse(levelId);
-                        var level = quizService.GetLevels(state.TopicDto.Id).ElementAt(index);
-                        return new CorrectTransition(level.Id.ToString());
-                    }
-
-                    break;
-                }
+        private Transition ParseLevel(LevelSelectionState state, Update update, IQuizService quizService)
+        {
+            var message = update.Message.Text;
+            if (message.Contains(UserCommands.Level))
+            {
+                var levelId = message.Replace(UserCommands.Level, "");
+                var index = int.Parse(levelId);
+                var level = quizService.GetLevels(state.TopicDto.Id).ElementAt(index);
+                return new CorrectTransition(level.Id.ToString());
             }
             return new InvalidTransition();
         }
