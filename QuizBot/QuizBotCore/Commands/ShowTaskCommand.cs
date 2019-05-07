@@ -97,7 +97,7 @@ namespace QuizBotCore
                    $"{levelName}" +
                    $"{progress}\n" +
                    $"{questionFormatted}\n" +
-                   $"{answers}" +
+                   $"{answers}\n" +
                    $"{UserCommands.ReportError}";
         }
     }
