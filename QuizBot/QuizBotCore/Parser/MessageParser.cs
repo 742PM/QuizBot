@@ -67,7 +67,7 @@ namespace QuizBotCore.Parser
                 case UpdateType.CallbackQuery:
                 {
                     var callbackData = update.CallbackQuery.Data;
-                    logger.LogInformation($"Parsed callback: {update.Message.Text}");
+                    logger.LogInformation($"Parsed callback: {callbackData}");
                     if (callbackData == StringCallbacks.Back)
                         return new BackTransition();
                     return new InvalidTransition();
