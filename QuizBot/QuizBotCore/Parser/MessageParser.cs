@@ -56,6 +56,7 @@ namespace QuizBotCore.Parser
         private Transition LevelSelectionStateParser(LevelSelectionState state, Update update, 
             IQuizService quizService, ILogger logger)
         {
+            logger.LogInformation($"Update Type: {update.Type}");
             switch (update.Type)
             {
                 case UpdateType.Message:
@@ -69,7 +70,7 @@ namespace QuizBotCore.Parser
                     logger.LogInformation($"Parsed callback: {update.Message.Text}");
                     if (callbackData == StringCallbacks.Back)
                         return new BackTransition();
-                    return new CorrectTransition(callbackData);
+                    return new InvalidTransition();
                 }
             }
             return new InvalidTransition();
