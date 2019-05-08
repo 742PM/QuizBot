@@ -1,7 +1,4 @@
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using QuizBotCore.Database;
-using QuizRequestService;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
@@ -9,13 +6,12 @@ namespace QuizBotCore.Commands
 {
     internal class ShowHintCommand : ICommand
     {
-        public async Task ExecuteAsync(Chat chat, TelegramBotClient client, IQuizService quizService, IUserRepository userRepository,
-            ILogger logger)
+        public async Task ExecuteAsync(Chat chat, TelegramBotClient client, ServiceManager serviceManager)
         {
-            var user = userRepository.FindByTelegramId(chat.Id);
-            var hint = quizService.GetHint(user.Id);
+            var user = serviceManager.userRepository.FindByTelegramId(chat.Id);
+            var hint = serviceManager.quizService.GetHint(user.Id);
             if (hint == null)
-                await client.SendTextMessageAsync(chat.Id, DialogMessages.NoHintsMessage);
+                await client.SendTextMessageAsync(chat.Id, DialogMessages.NoHints);
             else await client.SendTextMessageAsync(chat.Id, hint.HintText);
         }
     }

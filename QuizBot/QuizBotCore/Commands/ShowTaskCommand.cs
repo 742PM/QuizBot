@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using QuizBotCore.Database;
 using QuizBotCore.ProgressBar;
 using QuizRequestService;
+using QuizRequestService.DTO;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -25,38 +26,70 @@ namespace QuizBotCore.Commands
             this.isNext = isNext;
         }
 
-        public async Task ExecuteAsync(Chat chat, TelegramBotClient client, IQuizService quizService,
-            IUserRepository userRepository, ILogger logger)
+        public async Task ExecuteAsync(Chat chat, TelegramBotClient client, ServiceManager serviceManager)
         {
-            var user = userRepository.FindByTelegramId(chat.Id);
+            var user = serviceManager.userRepository.FindByTelegramId(chat.Id);
+
+            var task = await GetTask(user, chat, client, serviceManager);
+            if (task != null)
+                await SendTask(task, chat, user, client, serviceManager.quizService, serviceManager.logger);
+        }
+
+        private async Task<TaskDTO> GetTask(UserEntity user, Chat chat, TelegramBotClient client, 
+            ServiceManager serviceManager)
+        {
             TaskDTO task = null;
             if (isNext)
             {
-                task = quizService.GetNextTaskInfo(user.Id);
+                task = serviceManager.quizService.GetNextTaskInfo(user.Id);
                 if (task == null)
-                {
                     await client.SendTextMessageAsync(chat.Id, DialogMessages.NextTaskNotAvailable);
-                    return;
-                }
             }
             else
-            {
-                task = quizService.GetTaskInfo(user.Id, topicDto.Id, levelDto.Id);
-            }
+                task = serviceManager.quizService.GetTaskInfo(user.Id, topicDto.Id, levelDto.Id);
 
-            await SendTask(task, chat, user, client, quizService, logger);
+            return task;
         }
 
         private async Task SendTask(TaskDTO task, Chat chat, UserEntity user, TelegramBotClient client,
             IQuizService quizService, ILogger logger)
         {
             var userProgress = quizService.GetCurrentProgress(user.Id, topicDto.Id, levelDto.Id);
+            var progress = PrepareProgress(logger, userProgress);
+
+            var question = task.Question;
+            logger.LogInformation($"Question: {question}");
+
+            var answers = task.Answers.Select((e, index) => (letter: DialogMessages.Alphabet[index], answer: $"{e}")).ToList();
+            var answerBlock = PrepareAnswers(answers, logger);
+            
+            var message = FormatMessage(question, progress, answerBlock);
+            logger.LogInformation($"messageToSend : {message}");
+            
+            var keyboard = PrepareButtons(task, logger, answers);
+
+            await client.SendTextMessageAsync(chat.Id, message, replyMarkup: keyboard,
+                parseMode: ParseMode.Markdown);
+        }
+
+        private static string PrepareProgress(ILogger logger, ProgressDTO userProgress)
+        {
             logger.LogInformation($"Progress: {userProgress.TasksSolved}:{userProgress.TasksCount}");
             var progressBar = new CircleProgressBar();
             var progress = progressBar.GenerateProgressBar(userProgress.TasksSolved, userProgress.TasksCount);
-            
-            var question = task.Question;
-            logger.LogInformation($"Question: {question}");
+            return progress;
+        }
+
+        private static string PrepareAnswers(IEnumerable<(char letter, string answer)> answers, ILogger logger)
+        {
+            var answerBlock = string.Join('\n', answers.Select(x => $"**{x.letter}.** {x.answer}"));
+            logger.LogInformation($"Answers: {answerBlock}");
+            return answerBlock;
+        }
+
+        private static InlineKeyboardMarkup PrepareButtons(TaskDTO task, ILogger logger, 
+            IEnumerable<(char letter, string answer)> answers)
+        {
             var controlButtons = new List<InlineKeyboardButton>
             {
                 InlineKeyboardButton
@@ -66,30 +99,20 @@ namespace QuizBotCore.Commands
             if (task.HasHints)
                 controlButtons.Append(InlineKeyboardButton
                     .WithCallbackData(ButtonNames.Hint, StringCallbacks.Hint));
-
-            var answers = task.Answers.Select((e, index) => (letter: DialogMessages.Alphabet[index], answer: $"{e}")).ToList();
-
-            var answerBlock = string.Join('\n', answers.Select(x => $"**{x.letter}.** {x.answer}"));
-            logger.LogInformation($"Answers: {answerBlock}");
-            var message = FormatMessage(question, progress, answerBlock);
-            logger.LogInformation($"messageToSend : {message}");
-
             var keyboard = new InlineKeyboardMarkup(new[]
             {
                 answers.Select(x => InlineKeyboardButton
                     .WithCallbackData(x.letter.ToString(), x.answer)),
                 controlButtons
             });
-
-            await client.SendTextMessageAsync(chat.Id, message, replyMarkup: keyboard,
-                parseMode: ParseMode.Markdown);
+            return keyboard;
         }
 
         private string FormatMessage(string question, string progressBar, string answers)
         {
             var topicName = $"{DialogMessages.TopicName} **{topicDto.Name}** \n";
             var levelName = $"{DialogMessages.LevelName} **{levelDto.Description}** \n";
-            var progress = $"{DialogMessages.ProgressMessage} {progressBar}\n";
+            var progress = $"{DialogMessages.Progress} {progressBar}\n";
 
             var questionFormatted = "```csharp\n" +
                                     $"{question}\n" +

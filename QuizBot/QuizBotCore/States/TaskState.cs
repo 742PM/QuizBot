@@ -1,5 +1,5 @@
 using MongoDB.Bson.Serialization.Attributes;
-using QuizRequestService;
+using QuizRequestService.DTO;
 
 namespace QuizBotCore.States
 {

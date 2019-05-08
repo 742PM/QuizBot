@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 
-namespace QuizRequestService
+namespace QuizRequestService.DTO
 {
     public class TaskDTO
     {
-        public string Question;
-        public IEnumerable<string> Answers;
-        public bool HasHints;
+        public string Question { get; set; }
+        public IEnumerable<string> Answers { get; set; }
+        public bool HasHints { get; set; }
 
         public TaskDTO(string question, IEnumerable<string> answers, bool hasHints)
         {

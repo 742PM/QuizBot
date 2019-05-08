@@ -83,11 +83,14 @@ namespace QuizBotCore.Parser
             if (message.Contains(UserCommands.Level))
             {
                 var levelId = message.Replace(UserCommands.Level, "");
-                var index = int.Parse(levelId);
-                logger.LogInformation($"levelId: {index}");
-                var level = quizService.GetLevels(state.TopicDto.Id).ElementAt(index);
-                logger.LogInformation($"level: {level.Id}");
-                return new CorrectTransition(level.Id.ToString());
+                if (int.TryParse(levelId, out var index))
+                {
+                    logger.LogInformation($"levelId: {index}");
+                    var level = quizService.GetLevels(state.TopicDto.Id).ElementAt(index);
+                    logger.LogInformation($"level: {level.Id}");
+                    return new CorrectTransition(level.Id.ToString());
+                }
+                return new InvalidTransition();
             }
             return new InvalidTransition();
         }

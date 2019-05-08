@@ -1,7 +1,5 @@
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using QuizBotCore.Database;
-using QuizRequestService;
+using QuizRequestService.DTO;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
@@ -20,19 +18,18 @@ namespace QuizBotCore.Commands
             this.answer = answer;
         }
 
-        public async Task ExecuteAsync(Chat chat, TelegramBotClient client, IQuizService quizService,
-            IUserRepository userRepository, ILogger logger)
+        public async Task ExecuteAsync(Chat chat, TelegramBotClient client, ServiceManager serviceManager)
         {
-            var user = userRepository.FindByTelegramId(chat.Id);
-            var isCorrect = quizService.SendAnswer(user.Id, answer);
+            var user = serviceManager.userRepository.FindByTelegramId(chat.Id);
+            var isCorrect = serviceManager.quizService.SendAnswer(user.Id, answer);
             if (isCorrect.HasValue)
             {
                 if (isCorrect.Value)
                 {
-                    await client.SendTextMessageAsync(chat.Id, DialogMessages.CheckTaskCorrect);
-                    await new ShowTaskCommand(topicDto,levelDto, true).ExecuteAsync(chat, client, quizService, userRepository, logger);
+                    await client.SendTextMessageAsync(chat.Id, DialogMessages.CorrectAnswer);
+                    await new ShowTaskCommand(topicDto,levelDto, true).ExecuteAsync(chat, client, serviceManager);
                 }
-                else await client.SendTextMessageAsync(chat.Id, DialogMessages.CheckTaskWrong);
+                else await client.SendTextMessageAsync(chat.Id, DialogMessages.WrongAnswer);
             }
         }
     }

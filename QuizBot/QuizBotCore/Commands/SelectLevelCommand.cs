@@ -1,8 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using QuizBotCore.Database;
-using QuizRequestService;
+using QuizRequestService.DTO;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
@@ -18,15 +16,14 @@ namespace QuizBotCore.Commands
             this.topicDto = topicDto;
         }
 
-        public async Task ExecuteAsync(Chat chat, TelegramBotClient client, IQuizService quizService,
-            IUserRepository userRepository, ILogger logger)
+        public async Task ExecuteAsync(Chat chat, TelegramBotClient client, ServiceManager serviceManager)
         {
             var chatId = chat.Id;
-            var user = userRepository.FindByTelegramId(chatId);
+            var user = serviceManager.userRepository.FindByTelegramId(chatId);
             
-            var allLevels = quizService.GetLevels(topicDto.Id);
-            var availableLevels = quizService.GetAvailableLevels(user.Id, topicDto.Id).ToList();
-            var closedLevels = allLevels.Select(x => x.Description).Except(availableLevels.Select(x => x.Description));
+            var allLevels = serviceManager.quizService.GetLevels(topicDto.Id);
+            var availableLevels = serviceManager.quizService.GetAvailableLevels(user.Id, topicDto.Id).ToList();
+            var closedLevels = allLevels.Select(x => x.Id).Except(availableLevels.Select(x => x.Id));
             
             var activeLevels = availableLevels.Select((e,index)=> $"/level{index} {e.Description}");
             var nonActiveLevels = closedLevels.Select(x => $"{DialogMessages.ClosedLevel} {x}");
@@ -34,7 +31,7 @@ namespace QuizBotCore.Commands
             var activeLevelsMessage = string.Join("\n", activeLevels);
             var nonActiveLevelsMessage = string.Join('\n', nonActiveLevels);
             
-            var message = $"{DialogMessages.SelectLevelMessage}\n{activeLevelsMessage}\n{nonActiveLevelsMessage}";
+            var message = $"{DialogMessages.LevelSelection}\n{activeLevelsMessage}\n{nonActiveLevelsMessage}";
             
             var keyboard = new InlineKeyboardMarkup(new[]
             {
