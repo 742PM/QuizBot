@@ -10,6 +10,7 @@ namespace QuizRequestService
     public class Requester : IQuizService
     {
         private readonly string serverUri;
+        private const int MaxRetries = 5;
 
         public Requester(string serverUri)
         {
@@ -102,8 +103,13 @@ namespace QuizRequestService
             var request = new RestRequest(method);
             if (parameter != null)
                 request.AddParameter(parameter);
-            var response = client.Execute(request);
-            return response;
+            for (var i = 0; i < MaxRetries; i++)
+            {
+                var response = client.Execute(request);
+                if (response.IsSuccessful) 
+                    return response;
+            }
+            return null;
         }
     }
 }

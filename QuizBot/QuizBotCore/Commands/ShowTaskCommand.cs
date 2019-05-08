@@ -35,7 +35,7 @@ namespace QuizBotCore.Commands
                 await SendTask(task, chat, user, client, serviceManager.quizService, serviceManager.logger);
         }
 
-        private async Task<TaskDTO> GetTask(UserEntity user, Chat chat, TelegramBotClient client, 
+        private async Task<TaskDTO> GetTask(UserEntity user, Chat chat, TelegramBotClient client,
             ServiceManager serviceManager)
         {
             TaskDTO task = null;
@@ -60,12 +60,13 @@ namespace QuizBotCore.Commands
             var question = task.Question;
             logger.LogInformation($"Question: {question}");
 
-            var answers = task.Answers.Select((e, index) => (letter: DialogMessages.Alphabet[index], answer: $"{e}")).ToList();
+            var answers = task.Answers.Select((e, index) => (letter: DialogMessages.Alphabet[index], answer: $"{e}"))
+                .ToList();
             var answerBlock = PrepareAnswers(answers, logger);
-            
+
             var message = FormatMessage(question, progress, answerBlock);
             logger.LogInformation($"messageToSend : {message}");
-            
+
             var keyboard = PrepareButtons(task, logger, answers);
 
             await client.SendTextMessageAsync(chat.Id, message, replyMarkup: keyboard,
@@ -87,18 +88,24 @@ namespace QuizBotCore.Commands
             return answerBlock;
         }
 
-        private static InlineKeyboardMarkup PrepareButtons(TaskDTO task, ILogger logger, 
+        private static InlineKeyboardMarkup PrepareButtons(TaskDTO task, ILogger logger,
             IEnumerable<(char letter, string answer)> answers)
         {
-            var controlButtons = new List<InlineKeyboardButton>
+            var controlButtons = new[]
             {
                 InlineKeyboardButton
                     .WithCallbackData(ButtonNames.Back, StringCallbacks.Back)
             };
             logger.LogInformation($"HasHints: {task.HasHints}");
             if (task.HasHints)
-                controlButtons.Append(InlineKeyboardButton
-                    .WithCallbackData(ButtonNames.Hint, StringCallbacks.Hint));
+                controlButtons =
+                    new[]
+                    {
+                        InlineKeyboardButton
+                            .WithCallbackData(ButtonNames.Back, StringCallbacks.Back),
+                        InlineKeyboardButton
+                            .WithCallbackData(ButtonNames.Hint, StringCallbacks.Hint)
+                    };
             var keyboard = new InlineKeyboardMarkup(new[]
             {
                 answers.Select(x => InlineKeyboardButton
