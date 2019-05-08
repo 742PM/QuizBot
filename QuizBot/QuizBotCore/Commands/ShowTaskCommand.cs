@@ -56,8 +56,7 @@ namespace QuizBotCore.Commands
         {
             var userProgress = quizService.GetCurrentProgress(user.Id, topicDto.Id, levelDto.Id);
             var progress = PrepareProgress(logger, userProgress);
-            if (userProgress.TasksSolved == userProgress.TasksCount)
-                progress = $"{progress}{DialogMessages.LevelSolved}";
+            var isSolvedLevel = userProgress.TasksSolved == userProgress.TasksCount;
 
             var question = task.Question;
             logger.LogInformation($"Question: {question}");
@@ -66,7 +65,7 @@ namespace QuizBotCore.Commands
                 .ToList();
             var answerBlock = PrepareAnswers(answers, logger);
 
-            var message = FormatMessage(question, progress, answerBlock);
+            var message = FormatMessage(question, progress, answerBlock, isSolvedLevel);
             logger.LogInformation($"messageToSend : {message}");
 
             var keyboard = PrepareButtons(task, logger, answers);
@@ -77,10 +76,10 @@ namespace QuizBotCore.Commands
 
         private static string PrepareProgress(ILogger logger, ProgressDTO userProgress)
         {
-            logger.LogInformation($"Progress: {userProgress.TasksSolved}:{userProgress.TasksCount}\n");
+            logger.LogInformation($"Progress: {userProgress.TasksSolved}:{userProgress.TasksCount}");
             var progressBar = new CircleProgressBar();
             var progress = progressBar.GenerateProgressBar(userProgress.TasksSolved, userProgress.TasksCount);
-            return progress;
+            return progress + '\n';
         }
 
         private static string PrepareAnswers(IEnumerable<(char letter, string answer)> answers, ILogger logger)
@@ -117,11 +116,14 @@ namespace QuizBotCore.Commands
             return keyboard;
         }
 
-        private string FormatMessage(string question, string progressBar, string answers)
+        private string FormatMessage(string question, string progressBar, string answers, bool isSolved)
         {
             var topicName = $"{DialogMessages.TopicName} {topicDto.Name} \n";
             var levelName = $"{DialogMessages.LevelName} {levelDto.Description} \n";
             var progress = $"{DialogMessages.Progress} {progressBar} \n";
+            
+            if (isSolved)
+                progress += DialogMessages.LevelSolved;
 
             var questionFormatted = "```csharp\n" +
                                     $"{question}\n" +
