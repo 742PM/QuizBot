@@ -83,7 +83,7 @@ namespace QuizBotCore.Commands
 
         private static string PrepareAnswers(IEnumerable<(char letter, string answer)> answers, ILogger logger)
         {
-            var answerBlock = string.Join('\n', answers.Select(x => $"{x.letter}. ```{x.answer}```"));
+            var answerBlock = string.Join('\n', answers.Select(x => $"```{x.letter}: {x.answer}```"));
             logger.LogInformation($"Answers: {answerBlock}");
             return answerBlock;
         }
