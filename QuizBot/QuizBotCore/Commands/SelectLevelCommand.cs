@@ -23,7 +23,7 @@ namespace QuizBotCore.Commands
             
             var allLevels = serviceManager.quizService.GetLevels(topicDto.Id);
             var availableLevels = serviceManager.quizService.GetAvailableLevels(user.Id, topicDto.Id).ToList();
-            var closedLevels = allLevels.Select(x => x.Id).Except(availableLevels.Select(x => x.Id));
+            var closedLevels = allLevels.Select(x => x.Description).Except(availableLevels.Select(x => x.Description));
             
             var activeLevels = availableLevels.Select((e,index)=> $"/level{index} {e.Description}");
             var nonActiveLevels = closedLevels.Select(x => $"{DialogMessages.ClosedLevel} {x}");
