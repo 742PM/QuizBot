@@ -57,7 +57,7 @@ namespace QuizBotCore.Commands
             var userProgress = quizService.GetCurrentProgress(user.Id, topicDto.Id, levelDto.Id);
             var progress = PrepareProgress(logger, userProgress);
             if (userProgress.TasksSolved == userProgress.TasksCount)
-                progress = $"{progress}\n{DialogMessages.LevelSolved}";
+                progress = $"{progress}{DialogMessages.LevelSolved}";
 
             var question = task.Question;
             logger.LogInformation($"Question: {question}");
@@ -77,7 +77,7 @@ namespace QuizBotCore.Commands
 
         private static string PrepareProgress(ILogger logger, ProgressDTO userProgress)
         {
-            logger.LogInformation($"Progress: {userProgress.TasksSolved}:{userProgress.TasksCount}");
+            logger.LogInformation($"Progress: {userProgress.TasksSolved}:{userProgress.TasksCount}\n");
             var progressBar = new CircleProgressBar();
             var progress = progressBar.GenerateProgressBar(userProgress.TasksSolved, userProgress.TasksCount);
             return progress;
@@ -133,7 +133,7 @@ namespace QuizBotCore.Commands
 
             return $"{topicName}" +
                    $"{levelName}" +
-                   $"{progress}\n" +
+                   $"{progress}" +
                    $"{questionFormatted}" +
                    $"{answersFormatted}";
         }
