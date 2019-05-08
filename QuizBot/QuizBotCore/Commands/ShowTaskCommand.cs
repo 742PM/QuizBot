@@ -56,6 +56,8 @@ namespace QuizBotCore.Commands
         {
             var userProgress = quizService.GetCurrentProgress(user.Id, topicDto.Id, levelDto.Id);
             var progress = PrepareProgress(logger, userProgress);
+            if (userProgress.TasksSolved == userProgress.TasksCount)
+                progress = $"{progress}\n{DialogMessages.LevelSolved}";
 
             var question = task.Question;
             logger.LogInformation($"Question: {question}");
@@ -83,7 +85,7 @@ namespace QuizBotCore.Commands
 
         private static string PrepareAnswers(IEnumerable<(char letter, string answer)> answers, ILogger logger)
         {
-            var answerBlock = string.Join('\n', answers.Select(x => $"```{x.letter}: {x.answer}```"));
+            var answerBlock = string.Join('\n', answers.Select(x => $"{x.letter}. {x.answer}"));
             logger.LogInformation($"Answers: {answerBlock}");
             return answerBlock;
         }
@@ -124,12 +126,16 @@ namespace QuizBotCore.Commands
             var questionFormatted = "```csharp\n" +
                                     $"{question}\n" +
                                     "```";
+            
+            var answersFormatted = "```\n" +
+                                    $"{answers}\n" +
+                                    "```";
 
             return $"{topicName}" +
                    $"{levelName}" +
                    $"{progress}\n" +
                    $"{questionFormatted}" +
-                   $"{answers}";
+                   $"{answersFormatted}";
         }
     }
 }
