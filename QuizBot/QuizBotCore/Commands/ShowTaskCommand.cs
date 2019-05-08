@@ -124,12 +124,16 @@ namespace QuizBotCore.Commands
             var questionFormatted = "```csharp\n" +
                                     $"{question}\n" +
                                     "```\n";
+            
+            var answersFormatted = "```csharp\n" +
+                                    $"{answers}\n" +
+                                    "```\n";
 
             return $"{topicName}" +
                    $"{levelName}" +
                    $"{progress}\n" +
                    $"{questionFormatted}" +
-                   $"{answers}";
+                   $"{answersFormatted}";
         }
     }
 }
