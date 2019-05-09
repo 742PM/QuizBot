@@ -5,7 +5,7 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace QuizBotCore.Commands
 {
-    internal class FeedBackCommand : ICommand
+    public class FeedBackCommand : ICommand
     {
         public async Task ExecuteAsync(Chat chat, TelegramBotClient client, ServiceManager serviceManager)
         {

@@ -6,7 +6,7 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace QuizBotCore.Commands
 {
-    internal class SelectTopicCommand : ICommand
+    public class SelectTopicCommand : ICommand
     {
         public async Task ExecuteAsync(Chat chat, TelegramBotClient client, ServiceManager serviceManager)
         {

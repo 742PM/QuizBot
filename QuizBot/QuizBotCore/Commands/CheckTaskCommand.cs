@@ -5,7 +5,7 @@ using Telegram.Bot.Types;
 
 namespace QuizBotCore.Commands
 {
-    internal class CheckTaskCommand : ICommand
+    public class CheckTaskCommand : ICommand
     {
         private readonly TopicDTO topicDto;
         private readonly LevelDTO levelDto;

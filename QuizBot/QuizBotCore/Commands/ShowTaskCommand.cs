@@ -13,7 +13,7 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace QuizBotCore.Commands
 {
-    internal class ShowTaskCommand : ICommand
+    public class ShowTaskCommand : ICommand
     {
         private readonly TopicDTO topicDto;
         private readonly LevelDTO levelDto;
@@ -121,9 +121,9 @@ namespace QuizBotCore.Commands
             var topicName = $"{DialogMessages.TopicName} {topicDto.Name} \n";
             var levelName = $"{DialogMessages.LevelName} {levelDto.Description} \n";
             var progress = $"{DialogMessages.Progress} {progressBar} \n";
-            
+
             if (isSolved)
-                progress += DialogMessages.LevelSolved;
+                progress = $"{progress}{DialogMessages.LevelSolved}";
 
             var questionFormatted = "```csharp\n" +
                                     $"{question}\n" +

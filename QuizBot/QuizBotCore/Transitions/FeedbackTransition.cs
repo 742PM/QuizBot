@@ -1,6 +1,6 @@
 namespace QuizBotCore.Transitions
 {
-    class FeedbackTransition : Transition
+    public class FeedbackTransition : Transition
     {
     }
 }

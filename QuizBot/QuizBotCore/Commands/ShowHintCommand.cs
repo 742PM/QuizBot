@@ -4,7 +4,7 @@ using Telegram.Bot.Types;
 
 namespace QuizBotCore.Commands
 {
-    internal class ShowHintCommand : ICommand
+    public class ShowHintCommand : ICommand
     {
         public async Task ExecuteAsync(Chat chat, TelegramBotClient client, ServiceManager serviceManager)
         {

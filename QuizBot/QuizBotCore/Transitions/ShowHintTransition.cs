@@ -1,6 +1,6 @@
 namespace QuizBotCore.Transitions
 {
-    internal class ShowHintTransition : Transition
+    public class ShowHintTransition : Transition
     {
     }
 }

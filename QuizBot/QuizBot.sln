@@ -12,6 +12,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizBotCore", "QuizBotCore\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizRequestService", "QuizRequestService\QuizRequestService.csproj", "{520AFC9C-3336-46B1-993B-9D75189E32F4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizBotCoreTests", "QuizBotCoreTests\QuizBotCoreTests.csproj", "{D0DAC231-8DDC-4825-B203-41D5747D8FA0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +32,10 @@ Global
 		{520AFC9C-3336-46B1-993B-9D75189E32F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{520AFC9C-3336-46B1-993B-9D75189E32F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{520AFC9C-3336-46B1-993B-9D75189E32F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0DAC231-8DDC-4825-B203-41D5747D8FA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0DAC231-8DDC-4825-B203-41D5747D8FA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0DAC231-8DDC-4825-B203-41D5747D8FA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0DAC231-8DDC-4825-B203-41D5747D8FA0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
