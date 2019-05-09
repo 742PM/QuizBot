@@ -1,18 +1,13 @@
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using QuizBotCore.Commands;
-using QuizBotCore.Database;
-using QuizRequestService;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace QuizBotCore
+namespace QuizBotCore.Commands
 {
-    internal class FeedBackCommand : ICommand
+    public class FeedBackCommand : ICommand
     {
-        public async Task ExecuteAsync(Chat chat, TelegramBotClient client, IQuizService quizService,
-            IUserRepository userRepository, ILogger logger)
+        public async Task ExecuteAsync(Chat chat, TelegramBotClient client, ServiceManager serviceManager)
         {
             var keyboard = new InlineKeyboardMarkup(
                 InlineKeyboardButton.WithUrl(

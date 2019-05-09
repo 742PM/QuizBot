@@ -1,4 +1,4 @@
-namespace QuizBotCore
+namespace QuizBotCore.Transitions
 {
     public class CorrectTransition : Transition
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace QuizRequestService
+namespace QuizRequestService.DTO
 {
     public class LevelDTO
     {

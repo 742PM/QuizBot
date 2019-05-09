@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using QuizRequestService.DTO;
 
 namespace QuizRequestService
 {
@@ -11,13 +12,13 @@ namespace QuizRequestService
 
         IEnumerable<LevelDTO> GetAvailableLevels(Guid userId, Guid topicId);
 
-        string GetCurrentProgress(Guid userId, Guid topicId, Guid levelId);
+        ProgressDTO GetCurrentProgress(Guid userId, Guid topicId, Guid levelId);
 
         TaskDTO GetTaskInfo(Guid userId, Guid topicId, Guid levelId);
 
         TaskDTO GetNextTaskInfo(Guid userId);
 
-        string GetHint(Guid userId);
+        HintDTO GetHint(Guid userId);
 
         bool? SendAnswer(Guid userId, string answer);
     }

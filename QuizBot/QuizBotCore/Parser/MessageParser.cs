@@ -1,24 +1,34 @@
+using System.Linq;
+using Microsoft.Extensions.Logging;
 using QuizBotCore.States;
+using QuizBotCore.Transitions;
+using QuizRequestService;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
-namespace QuizBotCore
+namespace QuizBotCore.Parser
 {
     public class MessageParser : IMessageParser
     {
-        /// <inheritdoc />
-        public Transition Parse(State currentState, Update update)
+        public Transition Parse(State currentState, Update update, IQuizService quizService, ILogger logger)
         {
+            if (update.Type == UpdateType.Message)
+                switch (update.Message.Text)
+                {
+                    case UserCommands.Help:
+                        return new HelpTransition();
+                    case UserCommands.Feedback:
+                        return new FeedbackTransition();
+                }
+            
             switch (currentState)
             {
                 case UnknownUserState _:
                     return UnknownUserStateParser(update);
-                case WelcomeState _:
-                    return WelcomeStateParser(update);
                 case TopicSelectionState _:
                     return TopicSelectionStateParser(update);
-                case LevelSelectionState _:
-                    return LevelSelectionStateParser(update);
+                case LevelSelectionState state:
+                    return LevelSelectionStateParser(state, update, quizService, logger);
                 case TaskState _:
                     return TaskStateParser(update);
             }
@@ -34,8 +44,6 @@ namespace QuizBotCore
                 {
                     case StringCallbacks.Back:
                         return new BackTransition();
-                    case StringCallbacks.NextTask:
-                        return new NextTaskTransition();
                     case StringCallbacks.Hint:
                         return new ShowHintTransition();
                     default:
@@ -45,14 +53,44 @@ namespace QuizBotCore
             return new InvalidTransition();
         }
 
-        private Transition LevelSelectionStateParser(Update update)
+        private Transition LevelSelectionStateParser(LevelSelectionState state, Update update, 
+            IQuizService quizService, ILogger logger)
         {
-            if (update.Type == UpdateType.CallbackQuery)
+            logger.LogInformation($"Update Type: {update.Type}");
+            switch (update.Type)
             {
-                var callbackData = update.CallbackQuery.Data;
-                if (callbackData == StringCallbacks.Back)
-                    return new BackTransition();
-                return new CorrectTransition(callbackData);
+                case UpdateType.Message:
+                {
+                    logger.LogInformation($"Parsed message: {update.Message.Text}");
+                    return ParseLevel(state, update, quizService, logger);
+                }
+                case UpdateType.CallbackQuery:
+                {
+                    var callbackData = update.CallbackQuery.Data;
+                    logger.LogInformation($"Parsed callback: {callbackData}");
+                    if (callbackData == StringCallbacks.Back)
+                        return new BackTransition();
+                    return new InvalidTransition();
+                }
+            }
+            return new InvalidTransition();
+        }
+
+        private Transition ParseLevel(LevelSelectionState state, Update update, 
+            IQuizService quizService, ILogger logger)
+        {
+            var message = update.Message.Text;
+            if (message.Contains(UserCommands.Level))
+            {
+                var levelId = message.Replace(UserCommands.Level, "");
+                if (int.TryParse(levelId, out var index))
+                {
+                    logger.LogInformation($"levelId: {index}");
+                    var level = quizService.GetLevels(state.TopicDto.Id).ElementAt(index);
+                    logger.LogInformation($"level: {level.Id}");
+                    return new CorrectTransition(level.Id.ToString());
+                }
+                return new InvalidTransition();
             }
             return new InvalidTransition();
         }
@@ -66,24 +104,7 @@ namespace QuizBotCore
                     return new BackTransition();
                 return new CorrectTransition(callbackData);
             }
-            return new InvalidTransition();
-        }
-
-        private Transition WelcomeStateParser(Update update)
-        {
-            if (update.Type == UpdateType.CallbackQuery)
-            {
-                var callbackData = update.CallbackQuery.Data;
-                switch (callbackData)
-                {
-                    case StringCallbacks.Topics:
-                        return new CorrectTransition(StringCallbacks.Topics);
-                    case StringCallbacks.Info:
-                        return new CorrectTransition(StringCallbacks.Info);
-                    case StringCallbacks.Feedback:
-                        return new CorrectTransition(StringCallbacks.Feedback);
-                }
-            }
+            
             return new InvalidTransition();
         }
 

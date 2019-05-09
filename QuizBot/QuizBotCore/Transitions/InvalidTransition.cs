@@ -1,6 +1,6 @@
-namespace QuizBotCore
+namespace QuizBotCore.Transitions
 {
-    class InvalidTransition : Transition
+    public class InvalidTransition : Transition
     {
     }
 }

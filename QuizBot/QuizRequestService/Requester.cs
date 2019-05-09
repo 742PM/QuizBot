@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using Newtonsoft.Json;
+using QuizRequestService.DTO;
 using RestSharp;
 
 namespace QuizRequestService
@@ -9,6 +10,7 @@ namespace QuizRequestService
     public class Requester : IQuizService
     {
         private readonly string serverUri;
+        private const int MaxRetries = 5;
 
         public Requester(string serverUri)
         {
@@ -42,10 +44,13 @@ namespace QuizRequestService
             return null;
         }
 
-        public string GetCurrentProgress(Guid userId, Guid topicId, Guid levelId)
+        public ProgressDTO GetCurrentProgress(Guid userId, Guid topicId, Guid levelId)
         {
             var client = new RestClient(serverUri + $"/api/{userId}/{topicId}/{levelId}/currentProgress");
-            return SendGetRequest(client, Method.GET).Content;
+            var request = SendGetRequest(client, Method.GET);
+            if (request.StatusCode == HttpStatusCode.OK)
+                return JsonConvert.DeserializeObject<ProgressDTO>(request.Content);
+            return null;
         }
 
         public TaskDTO GetTaskInfo(Guid userId, Guid topicId, Guid levelId)
@@ -66,14 +71,12 @@ namespace QuizRequestService
             return null;
         }
 
-        public string GetHint(Guid userId)
+        public HintDTO GetHint(Guid userId)
         {
             var client = new RestClient(serverUri + $"/api/{userId}/hint");
             var request = SendGetRequest(client, Method.GET);
             if (request.StatusCode == HttpStatusCode.OK)
-            {
-                return request.Content;
-            }
+                return JsonConvert.DeserializeObject<HintDTO>(request.Content);
             return null;
         }
 
@@ -100,8 +103,13 @@ namespace QuizRequestService
             var request = new RestRequest(method);
             if (parameter != null)
                 request.AddParameter(parameter);
-            var response = client.Execute(request);
-            return response;
+            for (var i = 0; i < MaxRetries; i++)
+            {
+                var response = client.Execute(request);
+                if (response.IsSuccessful) 
+                    return response;
+            }
+            return null;
         }
     }
 }

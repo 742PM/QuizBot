@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using QuizBotCore.Commands;
 using QuizBotCore.Database;
 using QuizRequestService;
 using QuizWebHookBot.Services;
@@ -44,7 +45,8 @@ namespace QuizWebHookBot.Controllers
                     break;
             }
             var userCommand = updateService.ProcessMessage(update);
-            await userCommand.ExecuteAsync(chat, botService.Client, quizService, userRepository, logger);
+            var serviceManager = new ServiceManager(quizService, userRepository, logger);
+            await userCommand.ExecuteAsync(chat, botService.Client, serviceManager);
 
             return Ok();
         }

@@ -1,6 +1,6 @@
-namespace QuizBotCore
+namespace QuizBotCore.Transitions
 {
-    class BackTransition : Transition
+    public class BackTransition : Transition
     {
     }
 }

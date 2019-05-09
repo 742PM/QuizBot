@@ -1,35 +1,27 @@
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using QuizBotCore.Commands;
-using QuizBotCore.Database;
-using QuizRequestService;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace QuizBotCore
+namespace QuizBotCore.Commands
 {
-    internal class SelectTopicCommand : ICommand
+    public class SelectTopicCommand : ICommand
     {
-        public async Task ExecuteAsync(Chat chat, TelegramBotClient client, IQuizService quizService,
-            IUserRepository userRepository, ILogger logger)
+        public async Task ExecuteAsync(Chat chat, TelegramBotClient client, ServiceManager serviceManager)
         {
             var chatId = chat.Id;
+            
             var keyboard = new InlineKeyboardMarkup(new[]
             {
-                quizService
+                serviceManager.quizService
                     .GetTopics()
                     .Select(x => 
                         InlineKeyboardButton
-                            .WithCallbackData(x.Name, x.Id.ToString())),
-                new[]
-                {
-                    InlineKeyboardButton
-                        .WithCallbackData(ButtonNames.Back, StringCallbacks.Back)
-                }
+                            .WithCallbackData(x.Name, x.Id.ToString()))
             });
-            await client.SendTextMessageAsync(chatId, DialogMessages.SelectTopicMessage, replyMarkup: keyboard);
+            
+            await client.SendTextMessageAsync(chatId, DialogMessages.Welcome, replyMarkup: keyboard);
         }
     }
 }
