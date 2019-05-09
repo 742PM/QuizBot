@@ -79,7 +79,7 @@ namespace QuizBotCore.Commands
             logger.LogInformation($"Progress: {userProgress.TasksSolved}:{userProgress.TasksCount}");
             var progressBar = new CircleProgressBar();
             var progress = progressBar.GenerateProgressBar(userProgress.TasksSolved, userProgress.TasksCount);
-            return progress + '\n';
+            return progress;
         }
 
         private static string PrepareAnswers(IEnumerable<(char letter, string answer)> answers, ILogger logger)
@@ -120,7 +120,7 @@ namespace QuizBotCore.Commands
         {
             var topicName = $"{DialogMessages.TopicName} {topicDto.Name} \n";
             var levelName = $"{DialogMessages.LevelName} {levelDto.Description} \n";
-            var progress = $"{DialogMessages.Progress} {progressBar} \n";
+            var progress = $"{DialogMessages.Progress} {progressBar}\n";
 
             if (isSolved)
                 progress = $"{progress}{DialogMessages.LevelSolved}";
@@ -135,7 +135,7 @@ namespace QuizBotCore.Commands
 
             return $"{topicName}" +
                    $"{levelName}" +
-                   $"{progress}" +
+                   $"{progress}\n" +
                    $"{questionFormatted}" +
                    $"{answersFormatted}";
         }
