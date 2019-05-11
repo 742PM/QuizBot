@@ -9,7 +9,7 @@ namespace QuizRequestService.DTO
         public IEnumerable<string> Answers { get; set; }
         public bool HasHints { get; set; }
 
-        public TaskDTO(string question, string text, IEnumerable<string> answers, bool hasHints)
+        public TaskDTO(string question, IEnumerable<string> answers, bool hasHints, string text)
         {
             Question = question;
             Text = text;
