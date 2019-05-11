@@ -1,8 +1,8 @@
-
 using System.Threading.Tasks;
 using QuizBotCore.Commands;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace QuizBotCore
 {
@@ -16,8 +16,8 @@ namespace QuizBotCore
         }
         public async Task ExecuteAsync(Chat chat, TelegramBotClient client, ServiceManager serviceManager)
         {
-            long reportAccount = 349845203;
-            await client.ForwardMessageAsync("@quibblereport", chat.Id, messageId);
+            await client.SendTextMessageAsync(chat.Id, "test", replyMarkup: new ForceReplyMarkup());
+//            await client.ForwardMessageAsync("@quibblereport", chat.Id, messageId);
         }
-    }
+    }    
 }

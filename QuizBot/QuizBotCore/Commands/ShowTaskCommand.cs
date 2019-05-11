@@ -29,7 +29,6 @@ namespace QuizBotCore.Commands
         public async Task ExecuteAsync(Chat chat, TelegramBotClient client, ServiceManager serviceManager)
         {
             var user = serviceManager.userRepository.FindByTelegramId(chat.Id);
-
             var task = await GetTask(user, chat, client, serviceManager);
             if (task != null)
                 await SendTask(task, chat, user, client, serviceManager.quizService, serviceManager.logger);
@@ -119,7 +118,7 @@ namespace QuizBotCore.Commands
             var levelName = $"{DialogMessages.LevelName} {levelDto.Description} \n";
             var progress = $"{DialogMessages.Progress} {progressBar}\n";
             var question = $"{task.Question}\n";
-
+            
             if (isSolved)
                 progress = $"{progress}{DialogMessages.LevelSolved}";
 
