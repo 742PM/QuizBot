@@ -132,7 +132,7 @@ namespace QuizBotCore.Commands
 
             return $"{topicName}" +
                    $"{levelName}" +
-                   $"{progress}\n" +
+                   $"{progress}" +
                    $"{task.Question}\n" +
                    $"{questionFormatted}" +
                    $"{answersFormatted}";
