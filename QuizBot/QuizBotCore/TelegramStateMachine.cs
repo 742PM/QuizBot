@@ -50,6 +50,8 @@ namespace QuizBotCore
                     return (new LevelSelectionState(state.TopicDto), new SelectLevelCommand(state.TopicDto));
                 case ShowHintTransition _:
                     return (state, new ShowHintCommand());
+                case ReportTransition reportTransition:
+                    return (state, new ReportTaskCommand(reportTransition.MessageId));
                 case CorrectTransition correctTransition:
                     return (state, new CheckTaskCommand(state.TopicDto, state.LevelDto, correctTransition.Content));
             }
