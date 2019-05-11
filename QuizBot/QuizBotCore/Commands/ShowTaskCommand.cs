@@ -58,14 +58,11 @@ namespace QuizBotCore.Commands
             var progress = PrepareProgress(logger, userProgress);
             var isSolvedLevel = userProgress.TasksSolved == userProgress.TasksCount;
 
-            var question = task.Question;
-            logger.LogInformation($"Question: {question}");
-
             var answers = task.Answers.Select((e, index) => (letter: DialogMessages.Alphabet[index], answer: $"{e}"))
                 .ToList();
             var answerBlock = PrepareAnswers(answers, logger);
 
-            var message = FormatMessage(question, progress, answerBlock, isSolvedLevel);
+            var message = FormatMessage(task, progress, answerBlock, isSolvedLevel);
             logger.LogInformation($"messageToSend : {message}");
 
             var keyboard = PrepareButtons(task, logger, answers);
@@ -116,7 +113,7 @@ namespace QuizBotCore.Commands
             return keyboard;
         }
 
-        private string FormatMessage(string question, string progressBar, string answers, bool isSolved)
+        private string FormatMessage(TaskDTO task, string progressBar, string answers, bool isSolved)
         {
             var topicName = $"{DialogMessages.TopicName} {topicDto.Name} \n";
             var levelName = $"{DialogMessages.LevelName} {levelDto.Description} \n";
@@ -126,7 +123,7 @@ namespace QuizBotCore.Commands
                 progress = $"{progress}{DialogMessages.LevelSolved}";
 
             var questionFormatted = "```csharp\n" +
-                                    $"{question}\n" +
+                                    $"{task.Text}\n" +
                                     "```";
             
             var answersFormatted = "```\n" +
@@ -136,6 +133,7 @@ namespace QuizBotCore.Commands
             return $"{topicName}" +
                    $"{levelName}" +
                    $"{progress}\n" +
+                   $"{task.Question}\n" +
                    $"{questionFormatted}" +
                    $"{answersFormatted}";
         }
