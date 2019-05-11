@@ -127,16 +127,12 @@ namespace QuizBotCore.Commands
                                     $"{task.Text}\n" +
                                     "```";
             
-            var answersFormatted = "```\n" +
-                                    $"{answers}\n" +
-                                    "```";
-
             return $"{topicName}" +
                    $"{levelName}" +
                    $"{progress}" +
                    $"{question}\n" +
                    $"{questionFormatted}" +
-                   $"{answersFormatted}";
+                   $"{answers}";
         }
     }
 }
