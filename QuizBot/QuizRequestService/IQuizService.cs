@@ -12,7 +12,7 @@ namespace QuizRequestService
 
         IEnumerable<LevelDTO> GetAvailableLevels(Guid userId, Guid topicId);
 
-        ProgressDTO GetCurrentProgress(Guid userId, Guid topicId, Guid levelId);
+        ProgressDTO GetProgress(Guid userId, Guid topicId, Guid levelId);
 
         TaskDTO GetTaskInfo(Guid userId, Guid topicId, Guid levelId);
 

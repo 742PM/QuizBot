@@ -44,7 +44,7 @@ namespace QuizRequestService
             return null;
         }
 
-        public ProgressDTO GetCurrentProgress(Guid userId, Guid topicId, Guid levelId)
+        public ProgressDTO GetProgress(Guid userId, Guid topicId, Guid levelId)
         {
             var client = new RestClient(serverUri + $"/api/{userId}/{topicId}/{levelId}/progress");
             var request = SendGetRequest(client, Method.GET);

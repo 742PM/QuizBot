@@ -54,7 +54,7 @@ namespace QuizBotCore.Commands
         private async Task SendTask(TaskDTO task, Chat chat, UserEntity user, TelegramBotClient client,
             IQuizService quizService, ILogger logger)
         {
-            var userProgress = quizService.GetCurrentProgress(user.Id, topicDto.Id, levelDto.Id);
+            var userProgress = quizService.GetProgress(user.Id, topicDto.Id, levelDto.Id);
             var progress = PrepareProgress(logger, userProgress);
             var isSolvedLevel = userProgress.TasksSolved == userProgress.TasksCount;
 
