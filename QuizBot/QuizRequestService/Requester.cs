@@ -46,7 +46,7 @@ namespace QuizRequestService
 
         public ProgressDTO GetCurrentProgress(Guid userId, Guid topicId, Guid levelId)
         {
-            var client = new RestClient(serverUri + $"/api/{userId}/{topicId}/{levelId}/currentProgress");
+            var client = new RestClient(serverUri + $"/api/{userId}/{topicId}/{levelId}/progress");
             var request = SendGetRequest(client, Method.GET);
             if (request.StatusCode == HttpStatusCode.OK)
                 return JsonConvert.DeserializeObject<ProgressDTO>(request.Content);
