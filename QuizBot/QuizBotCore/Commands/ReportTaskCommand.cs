@@ -17,7 +17,7 @@ namespace QuizBotCore
         public async Task ExecuteAsync(Chat chat, TelegramBotClient client, ServiceManager serviceManager)
         {
             long reportAccount = 349845203;
-            await client.ForwardMessageAsync(reportAccount, chat.Id, messageId);
+            await client.ForwardMessageAsync(chat.Id, reportAccount, messageId);
         }
     }
 }
