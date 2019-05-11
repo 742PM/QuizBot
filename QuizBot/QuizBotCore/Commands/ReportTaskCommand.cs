@@ -16,7 +16,7 @@ namespace QuizBotCore
         }
         public async Task ExecuteAsync(Chat chat, TelegramBotClient client, ServiceManager serviceManager)
         {
-            await client.SendTextMessageAsync(chat.Id, "test", replyMarkup: new ForceReplyMarkup());
+            await client.SendTextMessageAsync(chat.Id, "test", replyMarkup: new ForceReplyMarkup(), replyToMessageId: messageId);
 //            await client.ForwardMessageAsync("@quibblereport", chat.Id, messageId);
         }
     }    
