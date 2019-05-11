@@ -46,9 +46,9 @@ namespace QuizWebHookBot.Services
                     userId = update.Message.Chat.Id;
                     break;
             }
-
+            
             var userEntity = userRepository.FindByTelegramId(userId) ??
-                            userRepository.Insert(new UserEntity(new UnknownUserState(), userId, Guid.NewGuid()));
+                            userRepository.Insert(new UserEntity(new UnknownUserState(), userId, Guid.NewGuid(), 0));
 
             var state = userEntity.CurrentState;
 
@@ -61,7 +61,7 @@ namespace QuizWebHookBot.Services
             
             logger.LogInformation($"New state {currentState}");
 
-            userRepository.Update(new UserEntity(currentState, userId, userEntity.Id));
+            userRepository.Update(new UserEntity(currentState, userId, userEntity.Id, userEntity.MessageId));
 
             return currentCommand;
         }

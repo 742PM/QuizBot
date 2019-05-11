@@ -58,7 +58,7 @@ namespace QuizBotCore.Parser
                     var message = update.Message.Text;
                     if (message == UserCommands.ReportTask)
                     {
-                        return new ReportTransition(update.Message.MessageId);
+                        return new ReportTransition();
                     }
 
                     break;

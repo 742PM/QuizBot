@@ -2,23 +2,20 @@ using System.Threading.Tasks;
 using QuizBotCore.Commands;
 using Telegram.Bot;
 using Telegram.Bot.Types;
-using Telegram.Bot.Types.ReplyMarkups;
 
 namespace QuizBotCore
 {
     internal class ReportTaskCommand : ICommand
     {
-        private readonly int messageId;
-
-        public ReportTaskCommand(int messageId)
+        public ReportTaskCommand()
         {
-            this.messageId = messageId;
         }
         public async Task ExecuteAsync(Chat chat, TelegramBotClient client, ServiceManager serviceManager)
         {
-            var messageReport = await client.SendTextMessageAsync(chat.Id, "Опишите вашу проблему:", 
-                replyMarkup: new ForceReplyMarkup(), replyToMessageId: messageId);
-            await client.ForwardMessageAsync("@quibblereport", chat.Id, messageReport.MessageId);
+            var user = serviceManager.userRepository.FindByTelegramId(chat.Id);
+//            var messageReport = await client.SendTextMessageAsync(chat.Id, "Опишите вашу проблему:", 
+//                replyMarkup: new ForceReplyMarkup(), replyToMessageId: user.MessageId);
+            await client.ForwardMessageAsync("@quibblereport", chat.Id, user.MessageId);
         }
     }    
 }

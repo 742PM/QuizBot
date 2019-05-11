@@ -31,7 +31,12 @@ namespace QuizBotCore.Commands
             var user = serviceManager.userRepository.FindByTelegramId(chat.Id);
             var task = await GetTask(user, chat, client, serviceManager);
             if (task != null)
-                await SendTask(task, chat, user, client, serviceManager.quizService, serviceManager.logger);
+            {
+                var message = await SendTask(task, chat, user, client, serviceManager.quizService, serviceManager.logger);
+                var newUser = new UserEntity(user.CurrentState, user.TelegramId, user.Id, message.MessageId);
+                serviceManager.userRepository.Update(newUser);
+            }
+            
         }
 
         private async Task<TaskDTO> GetTask(UserEntity user, Chat chat, TelegramBotClient client,
@@ -50,7 +55,7 @@ namespace QuizBotCore.Commands
             return task;
         }
 
-        private async Task SendTask(TaskDTO task, Chat chat, UserEntity user, TelegramBotClient client,
+        private async Task<Message> SendTask(TaskDTO task, Chat chat, UserEntity user, TelegramBotClient client,
             IQuizService quizService, ILogger logger)
         {
             var userProgress = quizService.GetProgress(user.Id, topicDto.Id, levelDto.Id);
@@ -66,7 +71,7 @@ namespace QuizBotCore.Commands
 
             var keyboard = PrepareButtons(task, logger, answers);
 
-            await client.SendTextMessageAsync(chat.Id, message, replyMarkup: keyboard,
+            return await client.SendTextMessageAsync(chat.Id, message, replyMarkup: keyboard,
                 parseMode: ParseMode.Markdown);
         }
 

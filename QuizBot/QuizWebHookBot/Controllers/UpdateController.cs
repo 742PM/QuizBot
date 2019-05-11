@@ -47,7 +47,7 @@ namespace QuizWebHookBot.Controllers
             var userCommand = updateService.ProcessMessage(update);
             var serviceManager = new ServiceManager(quizService, userRepository, logger);
             await userCommand.ExecuteAsync(chat, botService.Client, serviceManager);
-
+            
             return Ok();
         }
     }
