@@ -29,10 +29,14 @@ namespace QuizBotCore.Commands
         public async Task ExecuteAsync(Chat chat, TelegramBotClient client, ServiceManager serviceManager)
         {
             var user = serviceManager.userRepository.FindByTelegramId(chat.Id);
-
             var task = await GetTask(user, chat, client, serviceManager);
             if (task != null)
-                await SendTask(task, chat, user, client, serviceManager.quizService, serviceManager.logger);
+            {
+                var message = await SendTask(task, chat, user, client, serviceManager.quizService, serviceManager.logger);
+                var newUser = new UserEntity(user.CurrentState, user.TelegramId, user.Id, message.MessageId);
+                serviceManager.userRepository.Update(newUser);
+            }
+            
         }
 
         private async Task<TaskDTO> GetTask(UserEntity user, Chat chat, TelegramBotClient client,
@@ -51,26 +55,23 @@ namespace QuizBotCore.Commands
             return task;
         }
 
-        private async Task SendTask(TaskDTO task, Chat chat, UserEntity user, TelegramBotClient client,
+        private async Task<Message> SendTask(TaskDTO task, Chat chat, UserEntity user, TelegramBotClient client,
             IQuizService quizService, ILogger logger)
         {
-            var userProgress = quizService.GetCurrentProgress(user.Id, topicDto.Id, levelDto.Id);
+            var userProgress = quizService.GetProgress(user.Id, topicDto.Id, levelDto.Id);
             var progress = PrepareProgress(logger, userProgress);
             var isSolvedLevel = userProgress.TasksSolved == userProgress.TasksCount;
-
-            var question = task.Question;
-            logger.LogInformation($"Question: {question}");
 
             var answers = task.Answers.Select((e, index) => (letter: DialogMessages.Alphabet[index], answer: $"{e}"))
                 .ToList();
             var answerBlock = PrepareAnswers(answers, logger);
 
-            var message = FormatMessage(question, progress, answerBlock, isSolvedLevel);
+            var message = FormatMessage(task, progress, answerBlock, isSolvedLevel);
             logger.LogInformation($"messageToSend : {message}");
 
             var keyboard = PrepareButtons(task, logger, answers);
 
-            await client.SendTextMessageAsync(chat.Id, message, replyMarkup: keyboard,
+            return await client.SendTextMessageAsync(chat.Id, message, replyMarkup: keyboard,
                 parseMode: ParseMode.Markdown);
         }
 
@@ -84,7 +85,7 @@ namespace QuizBotCore.Commands
 
         private static string PrepareAnswers(IEnumerable<(char letter, string answer)> answers, ILogger logger)
         {
-            var answerBlock = string.Join('\n', answers.Select(x => $"{x.letter}. {x.answer}"));
+            var answerBlock = string.Join('\n', answers.Select(x => $"*{x.letter}.* `{x.answer}`"));
             logger.LogInformation($"Answers: {answerBlock}");
             return answerBlock;
         }
@@ -116,28 +117,27 @@ namespace QuizBotCore.Commands
             return keyboard;
         }
 
-        private string FormatMessage(string question, string progressBar, string answers, bool isSolved)
+        private string FormatMessage(TaskDTO task, string progressBar, string answers, bool isSolved)
         {
             var topicName = $"{DialogMessages.TopicName} {topicDto.Name} \n";
             var levelName = $"{DialogMessages.LevelName} {levelDto.Description} \n";
             var progress = $"{DialogMessages.Progress} {progressBar}\n";
-
+            var question = $"{task.Question}\n";
+            
             if (isSolved)
                 progress = $"{progress}{DialogMessages.LevelSolved}";
 
             var questionFormatted = "```csharp\n" +
-                                    $"{question}\n" +
+                                    $"{task.Text}\n" +
                                     "```";
             
-            var answersFormatted = "```\n" +
-                                    $"{answers}\n" +
-                                    "```";
-
             return $"{topicName}" +
                    $"{levelName}" +
-                   $"{progress}\n" +
+                   $"{progress}" +
+                   $"{question}\n" +
                    $"{questionFormatted}" +
-                   $"{answersFormatted}";
+                   $"{answers}\n\n" +
+                   $"{UserCommands.ReportTask}";
         }
     }
 }

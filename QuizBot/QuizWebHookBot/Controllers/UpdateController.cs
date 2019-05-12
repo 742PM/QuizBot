@@ -44,10 +44,11 @@ namespace QuizWebHookBot.Controllers
                     await botService.Client.AnswerCallbackQueryAsync(update.CallbackQuery.Id);
                     break;
             }
+
             var userCommand = updateService.ProcessMessage(update);
             var serviceManager = new ServiceManager(quizService, userRepository, logger);
             await userCommand.ExecuteAsync(chat, botService.Client, serviceManager);
-
+            
             return Ok();
         }
     }

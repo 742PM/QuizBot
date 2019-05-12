@@ -31,25 +31,46 @@ namespace QuizBotCore.Parser
                     return LevelSelectionStateParser(state, update, quizService, logger);
                 case TaskState _:
                     return TaskStateParser(update);
+                case ReportState _:
+                    return ReportStateParser(update);
             }
+            return new InvalidTransition();
+        }
+
+        private Transition ReportStateParser(Update update)
+        {
+            if (update.Type == UpdateType.Message)
+                return new ReplyReportTransition(update.Message.MessageId);
             return new InvalidTransition();
         }
 
         private Transition TaskStateParser(Update update)
         {
-            if (update.Type == UpdateType.CallbackQuery)
+            switch (update.Type)
             {
-                var callbackData = update.CallbackQuery.Data;
-                switch (callbackData)
+                case UpdateType.CallbackQuery:
                 {
-                    case StringCallbacks.Back:
-                        return new BackTransition();
-                    case StringCallbacks.Hint:
-                        return new ShowHintTransition();
-                    default:
-                        return new CorrectTransition(callbackData);
+                    var callbackData = update.CallbackQuery.Data;
+                    switch (callbackData)
+                    {
+                        case StringCallbacks.Back:
+                            return new BackTransition();
+                        case StringCallbacks.Hint:
+                            return new ShowHintTransition();
+                        default:
+                            return new CorrectTransition(callbackData);
+                    }
+                }
+
+                case UpdateType.Message:
+                {
+                    var message = update.Message.Text;
+                    if (message == UserCommands.ReportTask)
+                        return new ReportTransition();
+                    break;
                 }
             }
+
             return new InvalidTransition();
         }
 
