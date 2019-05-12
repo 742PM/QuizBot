@@ -40,10 +40,7 @@ namespace QuizBotCore.Parser
         private Transition ReportStateParser(Update update)
         {
             if (update.Type == UpdateType.Message)
-            {
-                return new ReportMessageTransition(update.Message.MessageId);
-            }
-
+                return new ReplyReportTransition(update.Message.MessageId);
             return new InvalidTransition();
         }
 

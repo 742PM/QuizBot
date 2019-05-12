@@ -2,11 +2,11 @@ using QuizBotCore.Transitions;
 
 namespace QuizBotCore.Parser
 {
-    public class ReportMessageTransition : Transition
+    public class ReplyReportTransition : Transition
     {
         public readonly int MessageId;
 
-        public ReportMessageTransition(int messageId)
+        public ReplyReportTransition(int messageId)
         {
             MessageId = messageId;
         }
