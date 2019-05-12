@@ -136,7 +136,7 @@ namespace QuizBotCore.Commands
                    $"{progress}" +
                    $"{question}\n" +
                    $"{questionFormatted}" +
-                   $"{answers}\n" +
+                   $"{answers}\n\n" +
                    $"{UserCommands.ReportTask}";
         }
     }
