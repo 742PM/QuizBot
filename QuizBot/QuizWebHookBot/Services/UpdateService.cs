@@ -37,6 +37,7 @@ namespace QuizWebHookBot.Services
         public ICommand ProcessMessage(Update update)
         {
             long userId = -1;
+            logger.LogInformation(update.Type.ToString());
             switch (update.Type)
             {
                 case UpdateType.CallbackQuery:
