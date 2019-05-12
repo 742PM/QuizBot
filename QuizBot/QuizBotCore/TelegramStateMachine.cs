@@ -2,6 +2,7 @@
 using System.Linq;
 using QuizBotCore.Commands;
 using QuizBotCore.Database;
+using QuizBotCore.Parser;
 using QuizBotCore.States;
 using QuizBotCore.Transitions;
 using QuizRequestService;
@@ -52,6 +53,8 @@ namespace QuizBotCore
                     return (state, new ShowHintCommand());
                 case ReportTransition reportTransition:
                     return (state, new ReportTaskCommand());
+                case ReportMessageTransition reportMessageTransition:
+                    return (new TopicSelectionState(), new SendReportTaskCommand(reportMessageTransition.MessageId));
                 case CorrectTransition correctTransition:
                     return (state, new CheckTaskCommand(state.TopicDto, state.LevelDto, correctTransition.Content));
             }

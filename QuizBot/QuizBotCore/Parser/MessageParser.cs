@@ -61,6 +61,8 @@ namespace QuizBotCore.Parser
                         return new ReportTransition();
                     }
 
+                    return new ReportMessageTransition(update.Message.MessageId);
+
                     break;
                 }
             }
