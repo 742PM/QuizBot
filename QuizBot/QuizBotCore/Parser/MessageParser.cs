@@ -31,7 +31,19 @@ namespace QuizBotCore.Parser
                     return LevelSelectionStateParser(state, update, quizService, logger);
                 case TaskState _:
                     return TaskStateParser(update);
+                case ReportState _:
+                    return ReportStateParser(update);
             }
+            return new InvalidTransition();
+        }
+
+        private Transition ReportStateParser(Update update)
+        {
+            if (update.Type == UpdateType.Message)
+            {
+                return new ReportMessageTransition(update.Message.MessageId);
+            }
+
             return new InvalidTransition();
         }
 
@@ -57,12 +69,7 @@ namespace QuizBotCore.Parser
                 {
                     var message = update.Message.Text;
                     if (message == UserCommands.ReportTask)
-                    {
                         return new ReportTransition();
-                    }
-
-                    return new ReportMessageTransition(update.Message.MessageId);
-
                     break;
                 }
             }
