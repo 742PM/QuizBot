@@ -17,8 +17,8 @@ namespace QuizBotCore.Commands
         public async Task ExecuteAsync(Chat chat, TelegramBotClient client, ServiceManager serviceManager)
         {
             var user = serviceManager.userRepository.FindByTelegramId(chat.Id);
-            var reportUserInfo = $"Report message from: {chat.Id};" +
-                                 $"UserId: {user.Id}, State: {user.CurrentState}";
+            var reportUserInfo = $"Report message from: {chat.Id};\n" +
+                                 $"UserId: {user.Id};\n ";
             await client.SendTextMessageAsync(ReportContact, reportUserInfo);
             await client.ForwardMessageAsync(ReportContact, chat.Id, messageId);
             await client.ForwardMessageAsync(ReportContact, chat.Id, user.MessageId);
