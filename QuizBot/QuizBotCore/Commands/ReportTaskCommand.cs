@@ -10,8 +10,7 @@ namespace QuizBotCore.Commands
         public async Task ExecuteAsync(Chat chat, TelegramBotClient client, ServiceManager serviceManager)
         {
             var user = serviceManager.userRepository.FindByTelegramId(chat.Id);
-            await client.SendTextMessageAsync(chat.Id, DialogMessages.ReportRequesting,
-                replyMarkup: new ForceReplyMarkup(), replyToMessageId: user.MessageId);
+            await client.SendTextMessageAsync(chat.Id, DialogMessages.ReportRequesting);
         }
     }
 }
