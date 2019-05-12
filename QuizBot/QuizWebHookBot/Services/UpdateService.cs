@@ -37,7 +37,6 @@ namespace QuizWebHookBot.Services
         public ICommand ProcessMessage(Update update)
         {
             long userId = -1;
-            logger.LogInformation(update.Type.ToString());
             switch (update.Type)
             {
                 case UpdateType.CallbackQuery:
@@ -45,12 +44,6 @@ namespace QuizWebHookBot.Services
                     break;
                 case UpdateType.Message:
                     userId = update.Message.Chat.Id;
-                    break;
-                case UpdateType.EditedMessage:
-                    userId = update.EditedMessage.Chat.Id;
-                    break;
-                case UpdateType.ChannelPost:
-                    userId = update.ChannelPost.Chat.Id;
                     break;
             }
             
