@@ -12,14 +12,13 @@ namespace QuizBotCore.Commands
         {
             var chatId = chat.Id;
             
-            var keyboard = new InlineKeyboardMarkup(new[]
-            {
-                serviceManager.quizService
+            var keyboard = new InlineKeyboardMarkup(
+            serviceManager.quizService
                     .GetTopics()
                     .Select(x => 
                         InlineKeyboardButton
                             .WithCallbackData(x.Name, x.Id.ToString()))
-            });
+            );
             
             await client.SendTextMessageAsync(chatId, DialogMessages.Welcome, replyMarkup: keyboard);
         }

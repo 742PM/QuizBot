@@ -43,6 +43,8 @@ namespace QuizWebHookBot.Controllers
                     chat = update.CallbackQuery.Message.Chat;
                     await botService.Client.AnswerCallbackQueryAsync(update.CallbackQuery.Id);
                     break;
+                default:
+                    return Ok();
 //                case UpdateType.ChannelPost:
 //                    chat = update.ChannelPost.Chat;
 //                    break;
