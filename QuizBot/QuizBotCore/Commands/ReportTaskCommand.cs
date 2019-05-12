@@ -31,6 +31,7 @@ namespace QuizBotCore
         {
             var user = serviceManager.userRepository.FindByTelegramId(chat.Id);
             await client.ForwardMessageAsync("@quibblereport", chat.Id, id);
+            await client.ForwardMessageAsync("@quibblereport", chat.Id, user.MessageId);
         }
     }   
 }
