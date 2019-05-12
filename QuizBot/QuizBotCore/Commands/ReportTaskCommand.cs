@@ -8,32 +8,31 @@ namespace QuizBotCore
 {
     internal class ReportTaskCommand : ICommand
     {
-        public ReportTaskCommand()
-        {
-        }
         public async Task ExecuteAsync(Chat chat, TelegramBotClient client, ServiceManager serviceManager)
         {
             var user = serviceManager.userRepository.FindByTelegramId(chat.Id);
-            var messageReport = await client.SendTextMessageAsync(chat.Id, "Опишите вашу проблему:", 
+            await client.SendTextMessageAsync(chat.Id, DialogMessages.ReportRequesting,
                 replyMarkup: new ForceReplyMarkup(), replyToMessageId: user.MessageId);
         }
     }
-    
+
     internal class SendReportTaskCommand : ICommand
     {
-        private readonly int id;
+        private readonly int messageId;
+        private const string ReportContact = "@quibblereport";
 
-        public SendReportTaskCommand(int id)
+        public SendReportTaskCommand(int messageId)
         {
-            this.id = id;
+            this.messageId = messageId;
         }
+
         public async Task ExecuteAsync(Chat chat, TelegramBotClient client, ServiceManager serviceManager)
         {
             var user = serviceManager.userRepository.FindByTelegramId(chat.Id);
-            await client.ForwardMessageAsync("@quibblereport", chat.Id, id);
-            await client.ForwardMessageAsync("@quibblereport", chat.Id, user.MessageId);
-            await client.SendTextMessageAsync(chat.Id, DialogMessages.Thanks);
+            await client.ForwardMessageAsync(ReportContact, chat.Id, messageId);
+            await client.ForwardMessageAsync(ReportContact, chat.Id, user.MessageId);
+            await client.SendTextMessageAsync(chat.Id, DialogMessages.ReportThanks);
             await new SelectTopicCommand().ExecuteAsync(chat, client, serviceManager);
         }
-    }   
+    }
 }
