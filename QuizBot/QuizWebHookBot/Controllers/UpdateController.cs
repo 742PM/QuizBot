@@ -43,15 +43,15 @@ namespace QuizWebHookBot.Controllers
                     chat = update.CallbackQuery.Message.Chat;
                     await botService.Client.AnswerCallbackQueryAsync(update.CallbackQuery.Id);
                     break;
-                case UpdateType.ChannelPost:
-                    chat = update.ChannelPost.Chat;
-                    break;
-                case UpdateType.EditedMessage:
-                    chat = update.EditedMessage.Chat;
-                    break;
+//                case UpdateType.ChannelPost:
+//                    chat = update.ChannelPost.Chat;
+//                    break;
+//                case UpdateType.EditedMessage:
+//                    chat = update.EditedMessage.Chat;
+//                    break;
             }
 
-            await botService.Client.SendTextMessageAsync(chat.Id, update.Type.ToString());
+//            await botService.Client.SendTextMessageAsync(chat.Id, update.Type.ToString());
 
             var userCommand = updateService.ProcessMessage(update);
             var serviceManager = new ServiceManager(quizService, userRepository, logger);
