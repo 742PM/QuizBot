@@ -46,6 +46,9 @@ namespace QuizWebHookBot.Services
                 case UpdateType.Message:
                     userId = update.Message.Chat.Id;
                     break;
+                case UpdateType.ChannelPost:
+                    userId = update.ChannelPost.Chat.Id;
+                    break;
             }
             
             var userEntity = userRepository.FindByTelegramId(userId) ??
