@@ -22,7 +22,7 @@ namespace QuizBotCore.Commands
             var user = serviceManager.userRepository.FindByTelegramId(chat.Id);
             var reportUserInfo = $"Report message from: {chat.Id};\n" +
                                  $"UserId: {user.Id};\n" +
-                                 $"TopicId: {reportState.TopicDto.Id}" +
+                                 $"TopicId: {reportState.TopicDto.Id}\n" +
                                  $"LevelId: {reportState.LevelDto.Id}";
             
             await client.SendTextMessageAsync(ReportContact, reportUserInfo);
