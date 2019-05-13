@@ -54,7 +54,7 @@ namespace QuizBotCore
                 case ShowHintTransition _:
                     return (state, new ShowHintCommand());
                 case ReportTransition _:
-                    return (new ReportState(), new ReportTaskCommand());
+                    return (new ReportState(state.TopicDto,state.LevelDto), new ReportTaskCommand());
                 case ReplyReportTransition reportMessageTransition:
                     return (new TopicSelectionState(), new SendReportTaskCommand(reportMessageTransition.MessageId));
                 case CorrectTransition correctTransition:

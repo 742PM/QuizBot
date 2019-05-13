@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using QuizBotCore.States;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
@@ -17,8 +18,11 @@ namespace QuizBotCore.Commands
         public async Task ExecuteAsync(Chat chat, TelegramBotClient client, ServiceManager serviceManager)
         {
             var user = serviceManager.userRepository.FindByTelegramId(chat.Id);
+            var reportState = user.CurrentState as ReportState;
             var reportUserInfo = $"Report message from: {chat.Id};\n" +
-                                 $"UserId: {user.Id};\n ";
+                                 $"UserId: {user.Id};\n" +
+                                 $"TopicId: {reportState.TopicDto.Id}" +
+                                 $"LevelId: {reportState.LevelDto.Id}";
             await client.SendTextMessageAsync(ReportContact, reportUserInfo);
             await client.ForwardMessageAsync(ReportContact, chat.Id, messageId);
             await client.ForwardMessageAsync(ReportContact, chat.Id, user.MessageId);
