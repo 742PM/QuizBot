@@ -7,22 +7,24 @@ namespace QuizBotCore.Commands
 {
     public class SendReportTaskCommand : ICommand
     {
+        private readonly ReportState reportState;
         private readonly int messageId;
         private const string ReportContact = "@quibblereport";
 
-        public SendReportTaskCommand(int messageId)
+        public SendReportTaskCommand(ReportState reportState, int messageId)
         {
+            this.reportState = reportState;
             this.messageId = messageId;
         }
 
         public async Task ExecuteAsync(Chat chat, TelegramBotClient client, ServiceManager serviceManager)
         {
             var user = serviceManager.userRepository.FindByTelegramId(chat.Id);
-            var reportState = user.CurrentState as ReportState;
             var reportUserInfo = $"Report message from: {chat.Id};\n" +
                                  $"UserId: {user.Id};\n" +
                                  $"TopicId: {reportState.TopicDto.Id}" +
                                  $"LevelId: {reportState.LevelDto.Id}";
+            
             await client.SendTextMessageAsync(ReportContact, reportUserInfo);
             await client.ForwardMessageAsync(ReportContact, chat.Id, messageId);
             await client.ForwardMessageAsync(ReportContact, chat.Id, user.MessageId);

@@ -3,7 +3,7 @@ using QuizRequestService.DTO;
 
 namespace QuizBotCore.States
 {
-    class ReportState : State
+    public class ReportState : State
     {
         [BsonElement]
         public readonly TopicDTO TopicDto;

@@ -32,8 +32,8 @@ namespace QuizBotCore
                     return (new TopicSelectionState(), new FeedBackCommand()); 
                 case var t when t.state is UnknownUserState:
                     return (new TopicSelectionState(), new SelectTopicCommand());
-                case var t when t.state is ReportState && t.transition is ReplyReportTransition reportTransition:
-                    return (new TopicSelectionState(), new SendReportTaskCommand(reportTransition.MessageId));
+                case var t when t.state is ReportState reportState && t.transition is ReplyReportTransition reportTransition:
+                    return (new TopicSelectionState(), new SendReportTaskCommand(reportState, reportTransition.MessageId));
                 case var t when t.state is TopicSelectionState topicSelectionState:
                     return ProcessTopicSelectionState(topicSelectionState, t.transition);
                 case var t when t.state is LevelSelectionState levelSelectionState:
@@ -55,8 +55,6 @@ namespace QuizBotCore
                     return (state, new ShowHintCommand());
                 case ReportTransition _:
                     return (new ReportState(state.TopicDto,state.LevelDto), new ReportTaskCommand());
-                case ReplyReportTransition reportMessageTransition:
-                    return (new TopicSelectionState(), new SendReportTaskCommand(reportMessageTransition.MessageId));
                 case CorrectTransition correctTransition:
                     return (state, new CheckTaskCommand(state.TopicDto, state.LevelDto, correctTransition.Content));
             }
